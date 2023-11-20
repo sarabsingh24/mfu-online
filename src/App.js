@@ -22,9 +22,7 @@ function App() {
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm();
   return (
