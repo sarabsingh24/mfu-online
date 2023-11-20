@@ -1,0 +1,40 @@
+
+.btn-right-align {
+  display: flex;
+  justify-content: right;
+
+}
+
+
+
+
+.proof-table-header,.proof-table-row{
+  display:grid; 
+grid-template-columns: 1fr 2fr 1fr 4fr 1fr 2fr ; 
+align-items: center;
+  
+  
+}
+.proof-table-header * {
+  color: #1f5b89;
+  font-size: 14px;
+  padding:6px 8px;
+  background: #ebebeb;
+  box-shadow: 0 2px 2px 0 rgb(87 151 228 / 16%);
+}
+
+.proof-table-row {
+   font-size: 14px;
+  padding:6px 8px;
+  background: #f2dede;
+}
+
+.no-image-found{
+
+   font-size: 14px;
+ 
+  background: #f2dede;
+  text-align: center;
+  line-height: 48px;
+}
+
