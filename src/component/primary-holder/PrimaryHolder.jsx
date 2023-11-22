@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
-import { useForm } from 'react-hook-form';
 
+import { useFormContext } from 'react-hook-form';
+import useFormPersist from 'react-hook-form-persist';
 //components
 import StakeHolder from "../../common/stake-holder/StakeHolder";
 import { tabUpdate, pageCount } from "../../reducer/Reducer/tab/tabSlice";
@@ -10,21 +11,25 @@ import { commonFormField } from "../../common/stake-holder/stakeHolderData";
 import { validateForm } from "../../common/stake-holder/StakeHolderValidation";
 import { primeHolderForm } from "../../reducer/Reducer/account/accountSlice";
 
-function PrimaryHolder() {
+function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
-  const [ errorsOld, setErrors] = useState({});
+  const [errorsOld, setErrors] = useState({});
+  const [IsmisMatched, setISMisMatched] = useState(false);
 
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
 
   const { stepsCount, primeHolderObj, dispatch } = useCommonReducer();
 
-    const {
-      register,
-      handleSubmit,
-      watch,
-      formState: { errors },
-    } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useFormContext();
+  useFormPersist('form-name', { watch, setValue });
 
   useEffect(() => {
     if (Object.keys(primeHolderObj).length) {
@@ -35,7 +40,17 @@ function PrimaryHolder() {
   }, [primeHolderObj]);
 
   const formSubmitHandeler = (data) => {
-    data.preventDefault();
+    // data.preventDefault();
+
+
+
+if (data.panPekrnNo !== data.confirmpanPekrnNo) {
+ 
+  setISMisMatched(true);
+}else{
+  setISMisMatched(false);
+}
+
 
     const formErrors = validateForm(form, networthRadio, grossIncomeRadio);
     if (Object.keys(formErrors).length > 0) {
@@ -72,11 +87,14 @@ function PrimaryHolder() {
           errorsOld={errorsOld}
           register={register}
           errors={errors}
+          watch={watch}
+          setValue={setValue}
           setErrors={setErrors}
           networthRadio={networthRadio}
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
+          IsmisMatched={IsmisMatched}
         />
       </Form>
     </React.Fragment>

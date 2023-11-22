@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { Form } from 'react-bootstrap';
-
+import { useFormContext } from 'react-hook-form';
+import useFormPersist from 'react-hook-form-persist';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
@@ -52,7 +53,7 @@ const errorFontStyle = {
   marginBottom: '6px',
 };
 
-function CanCriteria({ handleSubmit, register, setValue, errors }) {
+function CanCriteria() {
   const [form, setForm] = useState({});
   const [errorsOLD, setErrors] = useState({});
 
@@ -63,6 +64,16 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
   const { stepsCount, tabsCreater, canCriteriaObj, dispatch } =
     useCommonReducer();
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    formState:{errors}
+  } = useFormContext();
+   useFormPersist('form-name', { watch, setValue });
+
   const formHandeler = (e) => {
     let name = e.target.name;
     let val = e.target.value;
@@ -70,11 +81,11 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
     setForm({ ...form, [name]: val });
     errors[name].message = '';
 
-    console.log(val);
-    if (val === 'JO' || val === 'AS') {
-      setValue('investorCategory', 'I');
-      errors.investorCategory.message = '';
-    }
+    // console.log(val);
+    // if (val === 'JO' || val === 'AS') {
+    //   setValue('investorCategory', 'I');
+    //   errors.investorCategory.message = '';
+    // }
     if (!!errorsOLD[name]) {
       setErrors({ ...errorsOLD, [name]: null });
     }
@@ -294,15 +305,7 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
                 <small style={errorFontStyle}>
                   {errors?.holdingNature?.message}
                 </small>
-                {/* <SelectOption
-                  name="holdingNature"
-                  label="Holding Nature"
-                  value={form?.holdingNature || ''}
-                  options={natureOptions}
-                  changeFun={formHandeler}
-                  mandatory="*"
-                  errors={errorsOLD}
-                /> */}
+                
               </Col>
               <Col xs={12} md={6}>
                 <SelectOptionHook
@@ -322,15 +325,7 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
                 <small style={errorFontStyle}>
                   {errors?.investorCategory?.message}
                 </small>
-                {/* <SelectOption
-                  name="investorCategory"
-                  label="Investor Category"
-                  value={form?.investorCategory || ''}
-                  options={investorList.length ? investorList : investorOptions}
-                  changeFun={formHandeler}
-                  mandatory="*"
-                  errors={errorsOLD}
-                /> */}
+               
               </Col>
             </Row>
             <Row>
@@ -352,15 +347,7 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
                 <small style={errorFontStyle}>
                   {errors?.taxStatus?.message}
                 </small>
-                {/* <SelectOption
-                  name="taxStatus"
-                  label="Tax Status"
-                  value={form?.taxStatus || ''}
-                  options={taxList.length ? taxList : singleIndividualOptions}
-                  changeFun={formHandeler}
-                  mandatory="*"
-                  errors={errorsOLD}
-                /> */}
+               
               </Col>
               <Col xs={12} md={6}>
                 <SelectOptionHook
@@ -375,28 +362,7 @@ function CanCriteria({ handleSubmit, register, setValue, errors }) {
                   value={form?.holderCount || 1}
                   changeFun={formHandeler}
                 />
-                <small style={errorFontStyle}>
-                  {errors?.holderCount?.message}
-                </small>
-
-                {/* <SelectOption
-                  name="holderCount"
-                  label="Holders"
-                  value={form?.holderCount || 1}
-                  options={holderOptions}
-                  changeFun={formHandeler}
-                  mandatory=""
-                  errors={errorsOLD}
-                /> */}
-                {/* <InputText
-                  name="holderCount"
-                  label="Holders"
-                  value={holderCount || ""}
-                  changeFun={formHandeler}
-                  disabled={false}
-                  mandatory="*"
-                  errors={errorsOLD}
-                /> */}
+                
               </Col>
             </Row>
           </GridCustom>

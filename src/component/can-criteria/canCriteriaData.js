@@ -44,10 +44,13 @@ export const singleOptions = [
 ];
  
 export const jointOptions = [
-
   {
-    value: "I",
-    label: "Individual",
+    value: '',
+    label: 'Select',
+  },
+  {
+    value: 'I',
+    label: 'Individual',
   },
 ];
 

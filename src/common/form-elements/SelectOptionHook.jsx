@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Form } from 'react-bootstrap';
 function SelectOptionHook({
   type,
@@ -30,17 +30,14 @@ function SelectOptionHook({
           required: reqText,
         })}
         disabled={disabled ? true : false}
-        onChange={changeFun  }
+        onChange={changeFun}
         value={value}
       >
-        
-        {listOptions.map((options,index) => {
+        {listOptions.map((options, index) => {
           return (
-           
-              <option key={index} value={options.value}>
-                {options.label}
-              </option>
-           
+            <option key={index} value={options.value}>
+              {options.label}
+            </option>
           );
         })}
       </Form.Select>
@@ -48,6 +45,6 @@ function SelectOptionHook({
   );
 }
 
-export default SelectOptionHook
+export default SelectOptionHook;
 
 // disabled selected hidden
