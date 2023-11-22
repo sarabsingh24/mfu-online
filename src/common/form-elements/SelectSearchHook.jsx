@@ -24,7 +24,7 @@ function SelectSearchHook({
   condition,
   setValue,
   sts,
-  depend
+  depend,
 }) {
   const [isCountryList, setIsCountryList] = useState(false);
   const [countryList, setCountryList] = useState([]);
@@ -48,8 +48,8 @@ function SelectSearchHook({
   };
 
   const selectCountryHandeler = (inputFieldName, name) => {
-console.log(inputFieldName, name);
-setValue(inputFieldName, name);
+    // console.log(inputFieldName, name);
+    // setValue(inputFieldName, name);
 
     if (
       inputFieldName === 'birthCountry' ||
@@ -86,31 +86,6 @@ setValue(inputFieldName, name);
     }
   }, [blanket]);
 
-
-//   useEffect(() => {
-  
-//      setValue('birthCountry', 'Select Country');
-//      setValue('citizenshipCountry', 'Select Country');
-//      setValue('nationalityCountry', 'Select Country');
-//      setValue('taxCountry', 'Select Country');
-//      setValue('identityType', 'Select Country');
-   
-//   },[flag] );
-
- 
-//     if (!flag) {
-
-//       setValue('birthCountry', 'India');
-//       setValue('citizenshipCountry', 'India');
-//       setValue('nationalityCountry', 'India');
-//       setValue('taxCountry', 'India');
-//       setValue('identityType', 'India');
-//     }
- 
-   
-
-  console.log(errorBorder);
-
   return (
     <article
       className="country-wrapper"
@@ -121,15 +96,15 @@ setValue(inputFieldName, name);
           register={register}
           name={name}
           label={label}
-          placeholder={countryName}
-          value={flag === 'N' ? 'India' : value || countryName}
+          placeholder={'countryName'}
+          value={flag === 'N' ? 'India' : value || ''}
           clickFun={countryListHandeler}
           changeFun={changeFun}
-          errors={errorBorder}
+          errorBorder={errorBorder}
           disabled={flag === 'N' ? true : false}
           reqText={reqText}
-          sts={sts}
-          depend={depend}
+          sts={flag === 'N' ? true : false}
+          depend={name}
         />
         {/* <InputText
           name={name}

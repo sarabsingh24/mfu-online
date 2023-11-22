@@ -8,13 +8,11 @@ import Row from 'react-bootstrap/Row';
 import InputTextHook from '../form-elements/InputTextHook';
 import SelectOptionHook from '../form-elements/SelectOptionHook';
 import MobileOptionHook from '../form-elements/MobileOptionHook';
-import SelectSearchHook from '../form-elements/SelectSearchHook'
+import SelectSearchHook from '../form-elements/SelectSearchHook';
 import Section from '../section/Section';
 import InputText from '../form-elements/InputText';
 import GridCustom from '../grid-custom/GridCustom';
-import DatePicker from '../form-elements/DatePicker';
-import SelectSearchOption from '../form-elements/SelectSearchOption';
-import SelectOption from '../form-elements/SelectOption';
+
 import FooterSection from '../footerSection/FooterSection';
 import { btnHandeler } from '../helper/Helper';
 import { pageCount } from '../../reducer/Reducer/tab/tabSlice';
@@ -76,9 +74,16 @@ function StakeHolder({
     let name = e.target.name;
     let val = e.target.value;
 
-   
-
     //  errors[name].message = "";
+
+    if (name === 'sourceOfWealth' && val === '') {
+      console.log(['sourceOfWealthOthers'].value);
+      setValue('sourceOfWealthOthers', '');
+    }
+
+    if (name === 'occupation' && val === '') {
+      setValue('occupationOthers', '');
+    }
 
     if (name === 'panPekrnNo' || name === 'confirmpanPekrnNo') {
       let valueCase = val.toUpperCase();
@@ -230,16 +235,6 @@ function StakeHolder({
         },
       });
     }
-
-    if (name === 'occupation' && val === '99') {
-      setIsOtherOccupation(false);
-    } else if (name === 'occupation' && val !== '99') {
-      setIsOtherOccupation(true);
-      setForm({
-        ...form,
-        otherDetail: { ...form.otherDetail, [name]: val, occupationOthers: '' },
-      });
-    }
   };
 
   // radio btn show hide
@@ -275,70 +270,7 @@ function StakeHolder({
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  useEffect(() => {
-    if (form?.fatcaDetail?.birthCountry) {
-      if (!!errorsOld['birthCountry']) {
-        setErrors({ ...errorsOld, birthCountry: null });
-      }
-    }
-    if (form?.fatcaDetail?.citizenshipCountry) {
-      if (!!errorsOld['citizenshipCountry']) {
-        setErrors({ ...errorsOld, citizenshipCountry: null });
-      }
-    }
-    if (form?.fatcaDetail?.nationalityCountry) {
-      if (!!errorsOld['nationalityCountry']) {
-        setErrors({ ...errorsOld, nationalityCountry: null });
-      }
-    }
-    if (form?.fatcaDetail?.taxRecords[0]?.taxCountry) {
-      if (!!errorsOld['taxCountry']) {
-        setErrors({ ...errorsOld, taxCountry: null });
-      }
-    }
-
-    if (form?.fatcaDetail?.taxRecords[0]?.identityType) {
-      if (!!errorsOld['identityType']) {
-        setErrors({ ...errorsOld, identityType: null });
-      }
-    }
-  }, [
-    errorsOld,
-    form?.fatcaDetail?.birthCountry,
-    form?.fatcaDetail?.citizenshipCountry,
-    form?.fatcaDetail?.nationalityCountry,
-    form?.fatcaDetail?.taxRecords[0]?.identityType,
-    form?.fatcaDetail?.taxRecords[0]?.taxCountry,
-    setErrors,
-  ]);
-
-  useEffect(() => {
-    if (form?.fatcaDetail?.taxResidencyFlag === 'N') {
-      setForm({
-        ...form,
-        fatcaDetail: {
-          ...form?.fatcaDetail,
-          birthCountry: 'India',
-          citizenshipCountry: 'India',
-          nationalityCountry: 'India',
-        },
-      });
-    } else {
-      setForm({
-        ...form,
-        fatcaDetail: {
-          ...form?.fatcaDetail,
-          birthCountry: '',
-          citizenshipCountry: '',
-          nationalityCountry: '',
-        },
-      });
-    }
-  }, [form?.fatcaDetail?.taxResidencyFlag]);
-
   const panPekrnNo = watch('panPekrnNo');
-
-  console.log(errors);
 
   return (
     <React.Fragment>
@@ -368,15 +300,6 @@ function StakeHolder({
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>{errors?.name?.message}</small>
-
-              {/* <InputText
-                name="name"
-                label="Name"
-                mandatory="*"
-                value={form?.name || ''}
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={4}>
               <InputTextHook
@@ -394,16 +317,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.dateOfBirth?.message}
               </small>
-
-              {/* <DatePicker
-                name="dateOfBirth"
-                label="Date of Birth"
-                value={form?.dateOfBirth}
-                mandatory="*"
-                changeFun={formHandeler}
-                errors={errorsOld}
-                dob={true}
-              /> */}
             </Col>
             <Col xs={12} md={4}>
               <InputTextHook
@@ -411,6 +324,7 @@ function StakeHolder({
                 register={register}
                 name="panPekrnNo"
                 label="PAN / PEKRN"
+                placeholder="PAN/PEKRN no."
                 reqText="PAN/PEKRN required"
                 disabled={false}
                 errorBorder={errors?.panPekrnNo?.message}
@@ -421,21 +335,13 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.panPekrnNo?.message}
               </small>
-              {/* <InputText
-                name="panPekrnNo"
-                label="PAN / PEKRN"
-                type="password"
-                value={form?.panPekrnNo.toUpperCase() || ''}
-                mandatory="*"
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={{ span: 4, offset: 8 }}>
               <InputTextHook
                 register={register}
                 name="confirmpanPekrnNo"
                 label="Re-Enter PAN / PEKRN"
+                placeholder="PAN/PEKRN no."
                 reqText="please re-enter PAN/PEKRN"
                 disabled={false}
                 errorBorder={errors?.confirmpanPekrnNo?.message}
@@ -447,51 +353,11 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.confirmpanPekrnNo?.message}
               </small>
-              {/* <InputText
-                name="confirmpanPekrnNo"
-                label="Re-Enter PAN / PEKRN"
-                value={form?.confirmpanPekrnNo.toUpperCase() || ''}
-                mandatory="*"
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
 
           <Row>
             <Col xs={12} md={4} style={{ display: 'flex' }}>
-              {/* <div>
-                <InputTextHook
-                  register={register}
-                  name="mobileIsdCode"
-                  label="Mobile (ISD-Mobile)"
-                  reqText=" ISD code required"
-                  disabled={false}
-                  errorBorder={errors?.mobileIsdCode?.message}
-                  mandatory="*"
-                  value={form?.contactDetail?.mobileIsdCode || ''}
-                  changeFun={formHandeler}
-                />
-                <small style={errorFontStyle}>
-                  {errors?.mobileIsdCode?.message}
-                </small>
-              </div> */}
-              {/* <div>
-                <InputTextHook
-                  register={register}
-                  name="primaryMobileNo"
-                  label={'Mobile No.'}
-                  reqText="mobile info required"
-                  disabled={false}
-                  errorBorder={errors?.primaryMobileNo?.message}
-                  mandatory=""
-                  value={form?.contactDetail?.primaryMobileNo || ''}
-                  changeFun={formHandeler}
-                />
-                <small style={errorFontStyle}>
-                  {errors?.primaryMobileNo?.message}
-                </small>
-              </div> */}
               <Form.Group className="mb-4">
                 <Form.Label>
                   Mobile (ISD-Mobile)<span className="red">*</span>
@@ -527,79 +393,7 @@ function StakeHolder({
                     }}
                     boxWidth={'80%'}
                   />
-                  {/* <Form.Control
-                    register={register}
-                    name="mobileIsdCode"
-                    maxLength={2}
-                    className={`border border-1 rounded-1 ${
-                      errors?.mobileIsdCode?.message !== undefined
-                        ? ' border-danger '
-                        : null
-                    }`}
-                    // value={form?.contactDetail?.primaryMobileNo || ''}
-                    onChange={formHandeler}
-                    {...register('mobileIsdCode', {
-                      required: 'ISD code required',
-                      pattern: {
-                        value: /^\d{2}?$/gm,
-                        message: '2 digit number required',
-                      },
-                    })}
-                    style={{ width: '10%' }}
-                  /> */}
-                  {/* <Form.Control
-                    type="text"
-                    register={register}
-                    name="primaryMobileNo"
-                    maxLength={10}
-                    className={`border border-1 rounded-1 ${
-                      errors?.primaryMobileNo?.message !== undefined
-                        ? 'border-danger '
-                        : null
-                    }`}
-                    // value={form?.contactDetail?.primaryMobileNo || ''}
-                    onChange={formHandeler}
-                    {...register('primaryMobileNo', {
-                      required: 'mobile no. required',
-                      pattern: {
-                        value: /[(]?\d{3}[)]?\s?-?\s?\d{3}\s?-?\s?\d{4}/g,
-                        message: '10 digit number required',
-                      },
-                    })}
-                    style={{ width: '80%' }}
-                  /> */}
-                  <small style={errorFontStyle}>
-                    {errors?.mobileIsdCode?.message}
-                    {errors?.mobileIsdCode?.message !== undefined && '; '}
-                    {errors?.primaryMobileNo?.message}
-                  </small>
-                  {/* <Form.Control
-                    name="mobileIsdCode"
-                    maxLength={2}
-                    value={form?.contactDetail?.mobileIsdCode || ''}
-                    onChange={formHandeler}
-                    errors={errorsOld}
-                    className={!!errorsOld?.mobileIsdCode && 'redBorder'}
-                    isInvalid={!!errorsOld?.name}
-                  /> */}
-                  {/* <Form.Control
-                    name="primaryMobileNo"
-                    maxLength={10}
-                    style={{ flex: '8', marginLeft: '1px' }}
-                    value={form?.contactDetail?.primaryMobileNo || ''}
-                    onChange={formHandeler}
-                    errors={errorsOld}
-                    className={!!errorsOld?.primaryMobileNo && 'redBorder'}
-                    isInvalid={!!errorsOld?.name}
-                  /> */}
                 </InputGroup>
-                {/* <div className="red">
-                  {errorsOld?.mobileIsdCode && errorsOld?.primaryMobileNo
-                    ? 'mobile info required'
-                    : errorsOld?.mobileIsdCode
-                    ? errorsOld?.mobileIsdCode
-                    : errorsOld?.primaryMobileNo}
-                </div> */}
               </Form.Group>
             </Col>
             <Col xs={12} md={4}>
@@ -611,20 +405,18 @@ function StakeHolder({
                 disabled={false}
                 errorBorder={errors?.primaryEmail?.message}
                 mandatory="*"
+                pattern={true}
+                condition={{
+                  value:
+                    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+                  message: 'email is invalid',
+                }}
                 // value={form?.contactDetail.primaryEmail || ''}
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
                 {errors?.primaryEmail?.message}
               </small>
-              {/* <InputText
-                name="primaryEmail"
-                label="Email"
-                value={form?.contactDetail?.primaryEmail || ''}
-                mandatory="*"
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
 
@@ -680,24 +472,20 @@ function StakeHolder({
                 label="Gross Annual Income "
                 reqText="please select Gross Annual Income"
                 disabled={false}
+                sts={!grossIncomeRadio}
                 mandatory="*"
-                errorBorder={errors?.grossIncome?.message}
+                errorBorder={
+                  !form?.otherDetail?.grossIncome &&
+                  errors?.grossIncome?.message
+                }
                 listOptions={grossAnnualIncomeOptions}
                 value={form?.otherDetail?.grossIncome || ''}
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {errors?.grossIncome?.message}
+                {!form?.otherDetail?.grossIncome &&
+                  errors?.grossIncome?.message}
               </small>
-              {/* <SelectOption
-                name="grossIncome"
-                label="Gross Annual Income"
-                value={form?.otherDetail?.grossIncome || ''}
-                options={grossAnnualIncomeOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
           <Row
@@ -713,20 +501,14 @@ function StakeHolder({
                 label="Networth (in Rs.)"
                 reqText="please enter Networth (in Rs.)"
                 disabled={false}
+                sts={!networthRadio}
+                depend="netWorth"
                 errorBorder={errors?.netWorth?.message}
                 mandatory="*"
                 // value={form?.otherDetail?.netWorth || ''}
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>{errors?.netWorth?.message}</small>
-              {/* <InputText
-                name="netWorth"
-                label="Networth (in Rs.)"
-                value={form?.otherDetail?.netWorth || ''}
-                mandatory="*"
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={4}>
               <InputTextHook
@@ -736,6 +518,8 @@ function StakeHolder({
                 label="As on date"
                 reqText="pleas select date"
                 disabled={false}
+                sts={!networthRadio}
+                depend="netWorthDate"
                 errorBorder={errors?.netWorthDate?.message}
                 mandatory="*"
                 // value={form?.otherDetail?.netWorthDate || ''}
@@ -744,14 +528,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.netWorthDate?.message}
               </small>
-              {/* <DatePicker
-                name="netWorthDate"
-                label="As on date"
-                value={form?.otherDetail?.netWorthDate || ''}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
           <Row>
@@ -775,13 +551,6 @@ function StakeHolder({
                 {!form?.otherDetail?.sourceOfWealth &&
                   errors?.sourceOfWealth?.message}
               </small>
-              {/* <SelectOption
-                name="sourceOfWealth"
-                label="Source of Wealth"
-                value={form?.otherDetail?.sourceOfWealth || ''}
-                options={sourceOfWealthOptions}
-                changeFun={formHandeler}
-              /> */}
             </Col>
             <Col xs={12} md={4}>
               <InputTextHook
@@ -800,13 +569,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.sourceOfWealthOthers?.message}
               </small>
-              {/* <InputText
-                name="sourceOfWealthOthers"
-                label="Other"
-                value={form?.otherDetail?.sourceOfWealthOthers || ''}
-                disabled={isOtherSourceOfWealth}
-                changeFun={formHandeler}
-              /> */}
             </Col>
           </Row>
           <Row>
@@ -828,15 +590,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {!form?.otherDetail?.occupation && errors?.occupation?.message}
               </small>
-              {/* <SelectOption
-                name="occupation"
-                label="Occupation"
-                value={form?.otherDetail?.occupation || ''}
-                options={occupationOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={4}>
               <InputTextHook
@@ -855,14 +608,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.occupationOthers?.message}
               </small>
-              {/* <InputText
-                name="occupationOthers"
-                label="Other"
-                value={form?.otherDetail?.occupationOthers || ''}
-                disabled={isOtherOccupation}
-                changeFun={formHandeler}
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
           <Row>
@@ -874,21 +619,14 @@ function StakeHolder({
                 reqText="please select Political Exposure"
                 disabled={false}
                 mandatory="*"
-                errorBorder={errors?.pep?.message}
+                errorBorder={!form?.otherDetail?.pep && errors?.pep?.message}
                 listOptions={politicalExposureOptions}
-                value={form?.otherDetail?.pep || ''}
+                // value={form?.otherDetail?.pep || ''}
                 changeFun={formHandeler}
               />
-              <small style={errorFontStyle}>{errors?.pep?.message}</small>
-              {/* <SelectOption
-                name="pep"
-                label="Political Exposure"
-                value={form?.otherDetail?.pep || ''}
-                options={politicalExposureOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
+              <small style={errorFontStyle}>
+                {!form?.otherDetail?.pep && errors?.pep?.message}
+              </small>
             </Col>
             <Col xs={12} md={4}>
               <SelectOptionHook
@@ -898,23 +636,18 @@ function StakeHolder({
                 reqText="please select KRA Address Type"
                 disabled={false}
                 mandatory="*"
-                errorBorder={errors?.kraAddressType?.message}
+                errorBorder={
+                  !form?.otherDetail?.kraAddressType &&
+                  errors?.kraAddressType?.message
+                }
                 listOptions={addressTypeOptions}
-                value={form?.otherDetail?.kraAddressType || ''}
+                // value={form?.otherDetail?.kraAddressType || ''}
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {errors?.kraAddressType?.message}
+                {!form?.otherDetail?.kraAddressType &&
+                  errors?.kraAddressType?.message}
               </small>
-              {/* <SelectOption
-                name="kraAddressType"
-                label="KRA Address Type"
-                value={form?.otherDetail?.kraAddressType || ''}
-                options={addressTypeOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
         </GridCustom>
@@ -939,15 +672,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.taxResidencyFlag?.message}
               </small>
-              {/* <SelectOption
-                name="taxResidencyFlag"
-                label="Tax Residency in a country other than India? "
-                value={form?.fatcaDetail?.taxResidencyFlag || ''}
-                options={taxResidencyOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
           <Row>
@@ -964,14 +688,6 @@ function StakeHolder({
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>{errors?.birthCity?.message}</small>
-              {/* <InputText
-                name="birthCity"
-                label="Place of Birth"
-                value={form?.fatcaDetail?.birthCity || ''}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={3}>
               <SelectSearchHook
@@ -980,7 +696,10 @@ function StakeHolder({
                 label="Country of Birth"
                 reqText="country of Birth required"
                 mandatory="*"
-                errorBorder={errors?.birthCountry?.message}
+                errorBorder={
+                  !form?.fatcaDetail?.birthCountry &&
+                  errors?.birthCountry?.message
+                }
                 options={countryListOptions}
                 value={form?.fatcaDetail?.birthCountry || ''}
                 setBlanket={setBlanket}
@@ -994,23 +713,9 @@ function StakeHolder({
                 depend="birthCountry"
               />
               <small style={errorFontStyle}>
-                {errors?.birthCountry?.message}
+                {!form?.fatcaDetail?.birthCountry &&
+                  errors?.birthCountry?.message}
               </small>
-
-              {/* <SelectSearchOption
-                name="birthCountry"
-                label="Country of Birth "
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                value={form?.fatcaDetail?.birthCountry || ''}
-                options={countryListOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={3}>
               <SelectSearchHook
@@ -1019,7 +724,10 @@ function StakeHolder({
                 label="Country of Citizenship"
                 reqText="country of citizenship required"
                 mandatory="*"
-                errorBorder={errors?.citizenshipCountry?.message}
+                errorBorder={
+                  !form?.fatcaDetail?.citizenshipCountry &&
+                  errors?.citizenshipCountry?.message
+                }
                 options={countryListOptions}
                 value={form?.fatcaDetail?.citizenshipCountry || ''}
                 setBlanket={setBlanket}
@@ -1033,23 +741,9 @@ function StakeHolder({
                 depend="citizenshipCountry"
               />
               <small style={errorFontStyle}>
-                {errors?.citizenshipCountry?.message}
+                {!form?.fatcaDetail?.citizenshipCountry &&
+                  errors?.citizenshipCountry?.message}
               </small>
-
-              {/* <SelectSearchOption
-                name="citizenshipCountry"
-                label="Country of Citizenship "
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                value={form?.fatcaDetail?.citizenshipCountry || ''}
-                options={countryListOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={3}>
               <SelectSearchHook
@@ -1058,7 +752,10 @@ function StakeHolder({
                 label="Country of Nationality"
                 reqText="country of nationality required"
                 mandatory="*"
-                errorBorder={errors?.nationalityCountry?.message}
+                errorBorder={
+                  !form?.fatcaDetail?.nationalityCountry &&
+                  errors?.nationalityCountry?.message
+                }
                 options={countryListOptions}
                 value={form?.fatcaDetail?.nationalityCountry || ''}
                 setBlanket={setBlanket}
@@ -1072,23 +769,9 @@ function StakeHolder({
                 depend="citizenshipCountry"
               />
               <small style={errorFontStyle}>
-                {errors?.nationalityCountry?.message}
+                {!form?.fatcaDetail?.nationalityCountry &&
+                  errors?.nationalityCountry?.message}
               </small>
-
-              {/* <SelectSearchOption
-                name="nationalityCountry"
-                label="Country of Nationality"
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                value={form?.fatcaDetail?.nationalityCountry || ''}
-                options={countryListOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
           <Row>
@@ -1099,7 +782,10 @@ function StakeHolder({
                 label="Countries of Tax Residency"
                 reqText="Countries of Tax Residency required"
                 mandatory="*"
-                errorBorder={errors?.taxCountry?.message}
+                errorBorder={
+                  !form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                  errors?.taxCountry?.message
+                }
                 options={countryListOptions}
                 value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
                 setBlanket={setBlanket}
@@ -1113,23 +799,9 @@ function StakeHolder({
                 depend="taxCountry"
               />
               <small style={errorFontStyle}>
-                {errors?.taxCountry?.message}
+                {!form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                  errors?.taxCountry?.message}
               </small>
-
-              {/* <SelectSearchOption
-                name="taxCountry"
-                label="Countries of Tax Residency"
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
-                options={countryListOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={3}>
               <InputTextHook
@@ -1146,14 +818,6 @@ function StakeHolder({
               <small style={errorFontStyle}>
                 {errors?.taxReferenceNo?.message}
               </small>
-              {/* <InputText
-                name="taxReferenceNo"
-                label="Tax Identification Numbers"
-                value={form?.fatcaDetail?.taxRecords[0]?.taxReferenceNo || ''}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
             <Col xs={12} md={3}>
               <SelectSearchHook
@@ -1162,7 +826,10 @@ function StakeHolder({
                 label="Tax Identification Types"
                 reqText="Tax Identification Types required"
                 mandatory="*"
-                errorBorder={errors?.identityType?.message}
+                errorBorder={
+                  !form?.fatcaDetail?.taxRecords[0]?.identityType &&
+                  errors?.identityType?.message
+                }
                 options={countryListOptions}
                 value={form?.fatcaDetail?.taxRecords[0]?.identityType || ''}
                 setBlanket={setBlanket}
@@ -1176,23 +843,9 @@ function StakeHolder({
                 depend="identityType"
               />
               <small style={errorFontStyle}>
-                {errors?.identityType?.message}
+                {!form?.fatcaDetail?.taxRecords[0]?.identityType &&
+                  errors?.identityType?.message}
               </small>
-
-              {/* <SelectSearchOption
-                name="identityType"
-                label="Tax Identification Types"
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                value={form?.fatcaDetail?.taxRecords[0]?.identityType || ''}
-                options={countryListOptions}
-                changeFun={formHandeler}
-                mandatory="*"
-                errors={errorsOld}
-              /> */}
             </Col>
           </Row>
         </GridCustom>

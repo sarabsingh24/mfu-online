@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
 //components
-import StakeHolder from "../../common/stake-holder/StakeHolder";
-import { tabUpdate, pageCount } from "../../reducer/Reducer/tab/tabSlice";
-import useCommonReducer from "../../common/customComp/useCommonReducer";
-import { commonFormField } from "../../common/stake-holder/stakeHolderData";
-import { validateForm } from "../../common/stake-holder/StakeHolderValidation";
-import { primeHolderForm } from "../../reducer/Reducer/account/accountSlice";
+import StakeHolder from '../../common/stake-holder/StakeHolder';
+import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
+import useCommonReducer from '../../common/customComp/useCommonReducer';
+import { commonFormField } from '../../common/stake-holder/stakeHolderData';
+import { primeHolderForm } from '../../reducer/Reducer/account/accountSlice';
 
 function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
@@ -40,48 +39,32 @@ function PrimaryHolder({ methods }) {
   }, [primeHolderObj]);
 
   const formSubmitHandeler = (data) => {
-    // data.preventDefault();
+    
+    dispatch(
+      primeHolderForm({
+        ...primeHolderObj,
+        holderType: 'PR',
+        panExemptFlag: 'Y',
+        residencePhoneNo: '',
+        relationship: '01',
+        relationshipProof: '01',
+        ...form,
+      })
+    );
+    dispatch(pageCount(stepsCount + 1));
 
-
-
-if (data.panPekrnNo !== data.confirmpanPekrnNo) {
- 
-  setISMisMatched(true);
-}else{
-  setISMisMatched(false);
-}
-
-
-    const formErrors = validateForm(form, networthRadio, grossIncomeRadio);
-    if (Object.keys(formErrors).length > 0) {
-      // alert("error");
-      setErrors(formErrors);
-    } else {
-      // alert("success");
-      // if (primeHolderObj.confirmpanPekrnNo) {
-      //   delete primeHolderObj.confirmpanPekrnNo;
-      // }
-
-      dispatch(
-        primeHolderForm({
-          ...primeHolderObj,
-          holderType: 'PR',
-          panExemptFlag: 'Y',
-          residencePhoneNo: '',
-          relationship: '01',
-          relationshipProof: '01',
-          ...form,
-        })
-      );
-      dispatch(pageCount(stepsCount + 1));
-    }
+    console.log(data);
+    // delete primeHolderObj.confirmpanPekrnNo;
   };
+
+  console.log(primeHolderObj.sourceOfWealth);
 
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <StakeHolder
           form={form}
+          sliceData={primeHolderObj}
           setForm={setForm}
           holderType={'Primary Holder'}
           errorsOld={errorsOld}

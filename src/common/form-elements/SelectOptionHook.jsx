@@ -14,6 +14,7 @@ function SelectOptionHook({
   mandatory,
   value,
   changeFun,
+  sts
 }) {
   return (
     <Form.Group className="mb-0">
@@ -28,8 +29,9 @@ function SelectOptionHook({
         id="country"
         {...register(name, {
           required: reqText,
+          disabled: sts ? true : false,
         })}
-        disabled={disabled ? true : false}
+        
         onChange={changeFun}
         value={value}
       >

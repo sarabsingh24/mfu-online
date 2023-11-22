@@ -81,18 +81,11 @@ function CanCriteria() {
     setForm({ ...form, [name]: val });
     errors[name].message = '';
 
-    // console.log(val);
-    // if (val === 'JO' || val === 'AS') {
-    //   setValue('investorCategory', 'I');
-    //   errors.investorCategory.message = '';
-    // }
+   
     if (!!errorsOLD[name]) {
       setErrors({ ...errorsOLD, [name]: null });
     }
-    // if (name === "holdingNature") {
-    //       setForm({...defaultValue,investorCategory: "",
-    //   taxStatus: "",});
-    // }
+   
   };
 
   const tabShoHideHandeler = (tabList, listName) => {
