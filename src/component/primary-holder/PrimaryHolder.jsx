@@ -10,6 +10,34 @@ import useCommonReducer from '../../common/customComp/useCommonReducer';
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { primeHolderForm } from '../../reducer/Reducer/account/accountSlice';
 
+const fieldName = [
+  'primary-name',
+  'primary-dateOfBirth',
+  'primary-panPekrnNo',
+  'primary-confirmpanPekrnNo',
+  'primary-mobileIsdCode',
+  'primary-primaryMobileNo',
+  'primary-primaryEmail',
+  'primary-grossIncome',
+  'primary-netWorth',
+  'primary-netWorthDate',
+  'primary-sourceOfWealth',
+  'primary-sourceOfWealthOthers',
+  'primary-occupation',
+  'primary-occupationOthers',
+  'primary-pep',
+  'primary-kraAddressType',
+  'primary-taxResidencyFlag',
+  'primary-birthCity',
+  'primary-birthCountry',
+  'primary-citizenshipCountry',
+  'primary-nationalityCountry',
+  'primary-taxCountry',
+  'primary-taxReferenceNo',
+  'primary-identityType',
+];
+
+
 function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
   const [errorsOld, setErrors] = useState({});
@@ -39,7 +67,14 @@ function PrimaryHolder({ methods }) {
   }, [primeHolderObj]);
 
   const formSubmitHandeler = (data) => {
-    
+    // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
+    const obj = {}
+
+    for(let k in data){
+      let lab = k.split('-')[1]
+      obj[lab] = data[k];
+    }
+
     dispatch(
       primeHolderForm({
         ...primeHolderObj,
@@ -48,22 +83,59 @@ function PrimaryHolder({ methods }) {
         residencePhoneNo: '',
         relationship: '01',
         relationshipProof: '01',
-        ...form,
+        panPekrnNo: obj.panPekrnNo,
+        confirmpanPekrnNo: obj.confirmpanPekrnNo,
+        name: obj.name,
+        dateOfBirth: obj.dateOfBirth,
+        contactDetail: {
+          primaryEmail: obj.primaryEmail,
+          mobileIsdCode: obj.mobileIsdCode,
+          primaryMobileNo: obj.primaryMobileNo,
+        },
+        otherDetail: {
+          otherInfo: 'string',
+          grossIncome: obj.grossIncome ? obj.grossIncome : '',
+          netWorth: obj.netWorth ? obj.netWorth : '',
+          netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
+          sourceOfWealth: obj.sourceOfWealth,
+          sourceOfWealthOthers: obj.sourceOfWealthOthers,
+          occupation: obj.occupation,
+          occupationOthers: obj.occupationOthers,
+          kraAddressType: obj.kraAddressType,
+          pep: obj.pep,
+        },
+        fatcaDetail: {
+          taxResidencyFlag: obj.taxResidencyFlag,
+          birthCity: obj.birthCity,
+          birthCountry: obj.birthCountry,
+          citizenshipCountry: obj.citizenshipCountry,
+          nationalityCountry: obj.nationalityCountry,
+          taxReferenceNo: obj.taxReferenceNo,
+          taxRecords: [
+            {
+              taxCountry: obj.taxCountry,
+              taxReferenceNo: obj.taxReferenceNo,
+              identityType: obj.identityType,
+            },
+          ],
+        },
+        // ...data,
       })
     );
     dispatch(pageCount(stepsCount + 1));
 
-    console.log(data);
+  
     // delete primeHolderObj.confirmpanPekrnNo;
   };
 
-  console.log(primeHolderObj.sourceOfWealth);
+  
 
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <StakeHolder
           form={form}
+          fieldName={fieldName}
           sliceData={primeHolderObj}
           setForm={setForm}
           holderType={'Primary Holder'}
@@ -72,12 +144,12 @@ function PrimaryHolder({ methods }) {
           errors={errors}
           watch={watch}
           setValue={setValue}
+          getValues={getValues}
           setErrors={setErrors}
           networthRadio={networthRadio}
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
-          IsmisMatched={IsmisMatched}
         />
       </Form>
     </React.Fragment>

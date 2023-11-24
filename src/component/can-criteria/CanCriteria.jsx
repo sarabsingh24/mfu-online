@@ -79,7 +79,7 @@ function CanCriteria() {
     let val = e.target.value;
 
     setForm({ ...form, [name]: val });
-    errors[name].message = '';
+    // errors[name].message = '';
 
    
     if (!!errorsOLD[name]) {

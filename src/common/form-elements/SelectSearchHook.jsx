@@ -49,7 +49,7 @@ function SelectSearchHook({
 
   const selectCountryHandeler = (inputFieldName, name) => {
     // console.log(inputFieldName, name);
-    // setValue(inputFieldName, name);
+    setValue(inputFieldName, name);
 
     if (
       inputFieldName === 'birthCountry' ||
@@ -86,6 +86,8 @@ function SelectSearchHook({
     }
   }, [blanket]);
 
+  
+
   return (
     <article
       className="country-wrapper"
@@ -97,13 +99,13 @@ function SelectSearchHook({
           name={name}
           label={label}
           placeholder={'countryName'}
-          value={flag === 'N' ? 'India' : value || ''}
+          value={sts ? 'India' : value || ''}
           clickFun={countryListHandeler}
           changeFun={changeFun}
           errorBorder={errorBorder}
           disabled={flag === 'N' ? true : false}
           reqText={reqText}
-          sts={flag === 'N' ? true : false}
+          sts={sts ? true : false}
           depend={name}
         />
         {/* <InputText
@@ -146,7 +148,9 @@ function SelectSearchHook({
               <div
                 key={country.label}
                 style={{ textTransform: 'capitalize' }}
-                onClick={() => selectCountryHandeler(name, country.label)}
+                onClick={() =>
+                  selectCountryHandeler(name.split('-')[1], country.label)
+                }
               >
                 {country.label}
               </div>

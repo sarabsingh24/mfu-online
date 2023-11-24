@@ -87,12 +87,12 @@ function SelectSearchOption({
           name={name}
           label={label}
           placeholder={countryName}
-          value={flag === 'N' ? 'India': value || countryName}
+          value={flag  ? 'India': value || countryName}
           clickFun={countryListHandeler}
           changeFun={changeFun}
           mandatory="*"
           errors={errors}
-          disabled ={flag === 'N' ? true: false}
+          disabled ={flag ? true: false}
         />
 
         <span className="country-arrow">

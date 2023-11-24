@@ -25,7 +25,7 @@ function MobileOptionHook({
         errorBorder ? ' border-danger ' : null
       }`}
       maxLength={maxLength}
-      onChange={changeFun}
+      // onChange={changeFun}
       {...register(name, {
         required: reqText,
         pattern: pattern && {
