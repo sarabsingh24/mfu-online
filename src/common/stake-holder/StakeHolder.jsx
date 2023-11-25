@@ -152,7 +152,19 @@ function StakeHolder({
      } else {
        setNotIndian(true);
      }
+
+     
+      //  if (sliceData?.otherDetail?.sourceOfWealthOthers === '') {
+      //    setIsOtherSourceOfWealth(false);
+      //  } else {
+      //    setIsOtherSourceOfWealth(true);
+      //    setValue(fieldName[11], '');
+      //  }
+     
    }, []);
+
+
+   console.log(sliceData?.otherDetail?.sourceOfWealthOthers);
 
   return (
     <React.Fragment>
@@ -435,7 +447,7 @@ function StakeHolder({
                 disabled={false}
                 mandatory="*"
                 errorBorder={
-                  !form?.otherDetail?.sourceOfWealth &&
+                  // !form?.otherDetail?.sourceOfWealth &&
                   errors[fieldName[10]]?.message
                 }
                 listOptions={sourceOfWealthOptions}
@@ -443,7 +455,8 @@ function StakeHolder({
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {!form?.otherDetail?.sourceOfWealth &&
+                {
+                // !form?.otherDetail?.sourceOfWealth &&
                   errors[fieldName[10]]?.message}
               </small>
             </Col>
@@ -478,7 +491,7 @@ function StakeHolder({
                 disabled={false}
                 mandatory="*"
                 errorBorder={
-                  !form?.otherDetail?.occupation &&
+                  // !form?.otherDetail?.occupation &&
                   errors[fieldName[12]]?.message
                 }
                 listOptions={occupationOptions}
@@ -486,7 +499,8 @@ function StakeHolder({
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {!form?.otherDetail?.occupation &&
+                {
+                // !form?.otherDetail?.occupation &&
                   errors[fieldName[12]]?.message}
               </small>
             </Col>
@@ -765,12 +779,12 @@ function StakeHolder({
         </GridCustom>
       </Section>
       <br></br>
-      <FooterSection
+      {/* <FooterSection
         backBtn={true}
         nextBtn={true}
         btnFun={btnFun}
         cls="btn-right-align"
-      />
+      /> */}
     </React.Fragment>
   );
 }

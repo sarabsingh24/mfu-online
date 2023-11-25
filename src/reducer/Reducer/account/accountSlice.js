@@ -58,9 +58,11 @@ export const accountSlice = createSlice({
       state.canCriteriaObj = action.payload;
     },
     primeHolderForm: (state, action) => {
+      console.log('primeSlice', action.payload);
       state.primeHolderObj = action.payload;
     },
     secondHolderForm: (state, action) => {
+      console.log('secondSlice', action.payload);
       state.secondHolderObj = action.payload;
     },
     thirdHolderForm: (state, action) => {

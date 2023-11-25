@@ -9,6 +9,7 @@ import '../Style.css';
 import InputGroup from 'react-bootstrap/InputGroup';
 
 //component
+import ButtonCustom from '../../common/button/ButtonCustom';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
 import Section from '../../common/section/Section';
@@ -72,7 +73,7 @@ function CanCriteria() {
     getValues,
     formState:{errors}
   } = useFormContext();
-   useFormPersist('form-name', { watch, setValue });
+   useFormPersist('form-name-canCriteria', { watch, setValue });
 
   const formHandeler = (e) => {
     let name = e.target.name;
@@ -248,33 +249,43 @@ function CanCriteria() {
 
   const formSubmitHandeler = (data) => {
     // e.preventDefault();
+      // console.log('canCriteria', data);
+    dispatch(pageCount(stepsCount + 1));
+    dispatch(
+      criteriaForm({
+        holdingNature: data.holdingNature,
+        investorCategory: data.investorCategory,
+        taxStatus: data.taxStatus,
+        holderCount: data.holderCount,
+      })
+    );
 
-    const formErrors = validateForm(form);
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-    } else {
-      tabsCreater.map((tab) => {
-        if (tab.short === 'PRIM' && !tab.show) {
-          dispatch(primeHolderForm({}));
-        } else if (tab.short === 'SEC' && !tab.show) {
-          dispatch(secondHolderForm({}));
-        } else if (tab.short === 'THIR' && !tab.show) {
-          dispatch(thirdHolderForm({}));
-        } else if (tab.short === 'GUAR' && !tab.show) {
-          dispatch(guardianHolderForm({}));
-        } else if (tab.short === 'NOMI' && !tab.show) {
-          dispatch(nomineesForm({}));
-        }
-        return tab;
-      });
-      dispatch(criteriaForm(form));
-      dispatch(pageCount(stepsCount + 1));
-    }
+    // const formErrors = validateForm(form);
+    // if (Object.keys(formErrors).length > 0) {
+    //   setErrors(formErrors);
+    // } else {
+    //   tabsCreater.map((tab) => {
+    //     if (tab.short === 'PRIM' && !tab.show) {
+    //       dispatch(primeHolderForm({}));
+    //     } else if (tab.short === 'SEC' && !tab.show) {
+    //       dispatch(secondHolderForm({}));
+    //     } else if (tab.short === 'THIR' && !tab.show) {
+    //       dispatch(thirdHolderForm({}));
+    //     } else if (tab.short === 'GUAR' && !tab.show) {
+    //       dispatch(guardianHolderForm({}));
+    //     } else if (tab.short === 'NOMI' && !tab.show) {
+    //       dispatch(nomineesForm({}));
+    //     }
+    //     return tab;
+    //   });
+    //   dispatch(criteriaForm(form));
+    //   dispatch(pageCount(stepsCount + 1));
+    // }
   };
 
-  useEffect(() => {
-    setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
-  }, [dispatch, stepsCount]);
+  // useEffect(() => {
+  //   setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
+  // }, [dispatch, stepsCount]);
 
   return (
     <React.Fragment>
@@ -298,7 +309,6 @@ function CanCriteria() {
                 <small style={errorFontStyle}>
                   {errors?.holdingNature?.message}
                 </small>
-                
               </Col>
               <Col xs={12} md={6}>
                 <SelectOptionHook
@@ -318,7 +328,6 @@ function CanCriteria() {
                 <small style={errorFontStyle}>
                   {errors?.investorCategory?.message}
                 </small>
-               
               </Col>
             </Row>
             <Row>
@@ -340,7 +349,6 @@ function CanCriteria() {
                 <small style={errorFontStyle}>
                   {errors?.taxStatus?.message}
                 </small>
-               
               </Col>
               <Col xs={12} md={6}>
                 <SelectOptionHook
@@ -355,18 +363,21 @@ function CanCriteria() {
                   value={form?.holderCount || 1}
                   changeFun={formHandeler}
                 />
-                
               </Col>
             </Row>
           </GridCustom>
         </Section>
 
-        <FooterSection
+        <button type='submit'>
+          Next
+        </button>
+
+        {/* <FooterSection
           backBtn={false}
           nextBtn={true}
           btnFun={btnFun}
           cls="btn-right-align"
-        />
+        /> */}
       </Form>
     </React.Fragment>
   );

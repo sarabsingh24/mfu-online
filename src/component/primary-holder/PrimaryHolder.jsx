@@ -37,7 +37,6 @@ const fieldName = [
   'primary-identityType',
 ];
 
-
 function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
   const [errorsOld, setErrors] = useState({});
@@ -56,7 +55,7 @@ function PrimaryHolder({ methods }) {
     getValues,
     formState: { errors },
   } = useFormContext();
-  useFormPersist('form-name', { watch, setValue });
+  useFormPersist('form-name-primary', { watch, setValue });
 
   useEffect(() => {
     if (Object.keys(primeHolderObj).length) {
@@ -68,16 +67,20 @@ function PrimaryHolder({ methods }) {
 
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
-    const obj = {}
+    console.log('priamry', data);
+    const obj = {};
 
-    for(let k in data){
-      let lab = k.split('-')[1]
-      obj[lab] = data[k];
+    for (let k in data) {
+      if (k.includes('primary')) {
+        let lab = k.split('-')[1];
+        obj[lab] = data[k];
+        console.log(k, '====', data[k]);
+      }
     }
 
     dispatch(
       primeHolderForm({
-        ...primeHolderObj,
+        // ...primeHolderObj,
         holderType: 'PR',
         panExemptFlag: 'Y',
         residencePhoneNo: '',
@@ -119,16 +122,16 @@ function PrimaryHolder({ methods }) {
             },
           ],
         },
-        // ...data,
       })
     );
     dispatch(pageCount(stepsCount + 1));
 
-  
     // delete primeHolderObj.confirmpanPekrnNo;
   };
 
-  
+  const backBtnHandeler = () => {
+    dispatch(pageCount(stepsCount - 1));
+  };
 
   return (
     <React.Fragment>
@@ -151,6 +154,10 @@ function PrimaryHolder({ methods }) {
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
         />
+        <button type="button" onClick={backBtnHandeler}>
+          Back
+        </button>
+        <button type="submit">Next</button>
       </Form>
     </React.Fragment>
   );

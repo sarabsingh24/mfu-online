@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
 //components
-import StakeHolder from "../../common/stake-holder/StakeHolder";
-import { tabUpdate, pageCount } from "../../reducer/Reducer/tab/tabSlice";
-import useCommonReducer from "../../common/customComp/useCommonReducer";
-import { commonFormField } from "../../common/stake-holder/stakeHolderData";
-import { validateForm } from "../../common/stake-holder/StakeHolderValidation";
-import { secondHolderForm } from "../../reducer/Reducer/account/accountSlice";
-
+import StakeHolder from '../../common/stake-holder/StakeHolder';
+import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
+import useCommonReducer from '../../common/customComp/useCommonReducer';
+import { commonFormField } from '../../common/stake-holder/stakeHolderData';
+import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
+import { secondHolderForm } from '../../reducer/Reducer/account/accountSlice';
 
 const fieldName = [
   'secondary-name',
@@ -53,7 +52,7 @@ function SecondHolder() {
     getValues,
     formState: { errors },
   } = useFormContext();
-  useFormPersist('form-name2', { watch, setValue });
+  useFormPersist('form-name-second', { watch, setValue });
 
   useEffect(() => {
     if (Object.keys(secondHolderObj).length) {
@@ -62,61 +61,69 @@ function SecondHolder() {
   }, [secondHolderObj]);
 
   const formSubmitHandeler = (data) => {
+    console.log('secondary', data);
+
     const obj = {};
 
     for (let k in data) {
-      let lab = k.split('-')[1];
-      obj[lab] = data[k];
+      if (k.includes('secondary')) {
+        let lab = k.split('-')[1];
+        obj[lab] = data[k];
+        console.log(k, '====', data[k]);
+      }
     }
-     dispatch(
-       secondHolderForm({
-         ...secondHolderObj,
-         holderType: 'PR',
-         panExemptFlag: 'Y',
-         residencePhoneNo: '',
-         relationship: '01',
-         relationshipProof: '01',
-         panPekrnNo: obj.panPekrnNo,
-         confirmpanPekrnNo: obj.confirmpanPekrnNo,
-         name: obj.name,
-         dateOfBirth: obj.dateOfBirth,
-         contactDetail: {
-           primaryEmail: obj.primaryEmail,
-           mobileIsdCode: obj.mobileIsdCode,
-           primaryMobileNo: obj.primaryMobileNo,
-         },
-         otherDetail: {
-           otherInfo: 'string',
-           grossIncome: obj.grossIncome ? obj.grossIncome : '',
-           netWorth: obj.netWorth ? obj.netWorth : '',
-           netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
-           sourceOfWealth: obj.sourceOfWealth,
-           sourceOfWealthOthers: obj.sourceOfWealthOthers,
-           occupation: obj.occupation,
-           occupationOthers: obj.occupationOthers,
-           kraAddressType: obj.kraAddressType,
-           pep: obj.pep,
-         },
-         fatcaDetail: {
-           taxResidencyFlag: obj.taxResidencyFlag,
-           birthCity: obj.birthCity,
-           birthCountry: obj.birthCountry,
-           citizenshipCountry: obj.citizenshipCountry,
-           nationalityCountry: obj.nationalityCountry,
-           taxReferenceNo: obj.taxReferenceNo,
-           taxRecords: [
-             {
-               taxCountry: obj.taxCountry,
-               taxReferenceNo: obj.taxReferenceNo,
-               identityType: obj.identityType,
-             },
-           ],
-         },
-         // ...data,
-       })
-     );
-     dispatch(pageCount(stepsCount + 1));
-    
+    dispatch(
+      secondHolderForm({
+        // ...secondHolderObj,
+        holderType: 'PR',
+        panExemptFlag: 'Y',
+        residencePhoneNo: '',
+        relationship: '01',
+        relationshipProof: '01',
+        panPekrnNo: obj.panPekrnNo,
+        confirmpanPekrnNo: obj.confirmpanPekrnNo,
+        name: obj.name,
+        dateOfBirth: obj.dateOfBirth,
+        contactDetail: {
+          primaryEmail: obj.primaryEmail,
+          mobileIsdCode: obj.mobileIsdCode,
+          primaryMobileNo: obj.primaryMobileNo,
+        },
+        otherDetail: {
+          otherInfo: 'string',
+          grossIncome: obj.grossIncome ? obj.grossIncome : '',
+          netWorth: obj.netWorth ? obj.netWorth : '',
+          netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
+          sourceOfWealth: obj.sourceOfWealth,
+          sourceOfWealthOthers: obj.sourceOfWealthOthers,
+          occupation: obj.occupation,
+          occupationOthers: obj.occupationOthers,
+          kraAddressType: obj.kraAddressType,
+          pep: obj.pep,
+        },
+        fatcaDetail: {
+          taxResidencyFlag: obj.taxResidencyFlag,
+          birthCity: obj.birthCity,
+          birthCountry: obj.birthCountry,
+          citizenshipCountry: obj.citizenshipCountry,
+          nationalityCountry: obj.nationalityCountry,
+          taxReferenceNo: obj.taxReferenceNo,
+          taxRecords: [
+            {
+              taxCountry: obj.taxCountry,
+              taxReferenceNo: obj.taxReferenceNo,
+              identityType: obj.identityType,
+            },
+          ],
+        },
+        // ...data,
+      })
+    );
+    dispatch(pageCount(stepsCount + 1));
+  };
+
+  const backBtnHandeler = () => {
+    dispatch(pageCount(stepsCount - 1));
   };
 
   return (
@@ -140,6 +147,10 @@ function SecondHolder() {
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
         />
+        <button type="button" onClick={backBtnHandeler}>
+          Back
+        </button>
+        <button type="submit">Next</button>
       </Form>
     </React.Fragment>
   );
