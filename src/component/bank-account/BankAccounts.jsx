@@ -120,13 +120,13 @@ function BankAccounts() {
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  useEffect(() => {
-    if (Object.keys(bankAccountsObj).length) {
-      setForm(bankAccountsObj);
-    } else {
-      setForm([bankRecord]);
-    }
-  }, [bankAccountsObj]);
+  // useEffect(() => {
+  //   if (Object.keys(bankAccountsObj).length) {
+  //     setForm(bankAccountsObj);
+  //   } else {
+  //     setForm([bankRecord]);
+  //   }
+  // }, [bankAccountsObj]);
 
   const formSubmitHandeler = (data) => {
     let newObj = [];

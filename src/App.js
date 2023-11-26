@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useSelector,useDispatch } from 'react-redux';
+import {getCriteriaFormAsync} from './component/can-criteria/canCriteriaSlice'
 
 
 //
@@ -21,6 +23,17 @@ import CheckNavigate from './common/check-navigate/CheckNavigate';
 
 function App() {
   const methods = useForm();
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    console.log(userId);
+    dispatch(getCriteriaFormAsync(userId));
+  }, [userId]);
+
+
+
  
 
   return (

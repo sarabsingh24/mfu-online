@@ -2,14 +2,12 @@
   "canCriteriaObj": [
     {
       "userId": 1,
-      "holdingNature": "SI",
-      "investorCategory": "S",
-      "taxStatus": "RS",
-      "holderCount": "1",
+      "holdingNature": "AS",
+      "investorCategory": "I",
+      "taxStatus": "PMO",
+      "holderCount": "3",
       "id": 1
     }
-    
-   
   ],
   "primeHolderObj": [],
   "secondHolderObj": [],

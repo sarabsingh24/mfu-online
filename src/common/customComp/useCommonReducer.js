@@ -8,13 +8,17 @@ function useCommonReducer() {
    
   } = useSelector((state) => state.tab);
 
+
+  const { canCriteriaObj } = useSelector((state) => state.criteria);
+  const { primeHolderObj } = useSelector((state) => state.primary);
+  const { secondHolderObj } = useSelector((state) => state.second);
+   const { thirdHolderObj } = useSelector((state) => state.third);
+    const { bankAccountsObj } = useSelector((state) => state.bankAccount);
+
   const {
-    canCriteriaObj,
-    primeHolderObj,
-    secondHolderObj,
-    thirdHolderObj,
+ 
     guardianHolderObj,
-    bankAccountsObj,
+  
     nomineeObj,
     proofUploadObj,
     account,

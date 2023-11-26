@@ -39,6 +39,7 @@ function BankAccountSection({
   useEffect(() => {
     setValue(`${accountCount}-accountNo`, formObj?.accountNo);
     setValue(`${accountCount}-bankId`, formObj?.bankId);
+    
   }, []);
 
   let labelName = `${accountCount}-accountNo`;

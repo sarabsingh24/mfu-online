@@ -12,6 +12,7 @@ const initialState = {
   isLoading: false,
   message: '',
   canId: '',
+  userId:1
 };
 
 export const createAccount = createAsyncThunk(

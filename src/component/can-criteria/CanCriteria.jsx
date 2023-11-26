@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { useSelector } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { criteriaFormAsync } from './canCriteriaSlice';
+import { criteriaFormAsync, updateCriteriaFormAsync } from './canCriteriaSlice';
 
 //component
 import ButtonCustom from '../../common/button/ButtonCustom';
@@ -63,8 +63,9 @@ function CanCriteria() {
   const [investorList, setInvestorList] = useState([]);
   const [btnFun, setBtnFun] = useState({});
 
-  const { stepsCount, tabsCreater, canCriteriaObj, dispatch } =
-    useCommonReducer();
+  const { stepsCount, tabsCreater, dispatch } = useCommonReducer();
+
+  const { canCriteriaObj } = useSelector((state) => state.criteria);
 
   const {
     register,
@@ -72,7 +73,7 @@ function CanCriteria() {
     watch,
     setValue,
     getValues,
-    formState:{errors}
+    formState: { errors },
   } = useFormContext();
   //  useFormPersist('form-name-canCriteria', { watch, setValue });
 
@@ -83,11 +84,9 @@ function CanCriteria() {
     setForm({ ...form, [name]: val });
     // errors[name].message = '';
 
-   
     if (!!errorsOLD[name]) {
       setErrors({ ...errorsOLD, [name]: null });
     }
-   
   };
 
   const tabShoHideHandeler = (tabList, listName) => {
@@ -103,13 +102,12 @@ function CanCriteria() {
     dispatch(tabUpdate(updateArray));
   };
 
-  useEffect(() => {
-    if (Object.keys(canCriteriaObj).length > 0) {
-      setForm(canCriteriaObj);
-    } else {
-      setForm(defaultValue);
-    }
-  }, [canCriteriaObj]);
+  // useEffect(() => {
+  //   if (Object.keys(canCriteriaObj).length > 0) {
+  //     setValue('holdingNature', canCriteriaObj.holdingNature);
+  //     console.log(canCriteriaObj);
+  //   }
+  // }, [canCriteriaObj]);
 
   useEffect(() => {
     tabShoHideHandeler(tabsCreater, ['NOMI']);
@@ -250,16 +248,30 @@ function CanCriteria() {
 
   const formSubmitHandeler = (data) => {
     // e.preventDefault();
-      // console.log('canCriteria', data);
-    dispatch(pageCount(stepsCount + 1));
-    dispatch(
-      criteriaFormAsync({
+    // console.log('canCriteria', data);
+    console.log(canCriteriaObj);
+    if (canCriteriaObj.hasOwnProperty('id')) {
+      const obj = {
+        userId: canCriteriaObj.userId,
         holdingNature: data.holdingNature,
         investorCategory: data.investorCategory,
         taxStatus: data.taxStatus,
         holderCount: data.holderCount,
-      })
-    );
+      };
+
+      dispatch(updateCriteriaFormAsync(obj));
+    } else {
+      dispatch(
+        criteriaFormAsync({
+          holdingNature: data.holdingNature,
+          investorCategory: data.investorCategory,
+          taxStatus: data.taxStatus,
+          holderCount: data.holderCount,
+        })
+      );
+    }
+
+    dispatch(pageCount(stepsCount + 1));
 
     // const formErrors = validateForm(form);
     // if (Object.keys(formErrors).length > 0) {
@@ -304,7 +316,7 @@ function CanCriteria() {
                   mandatory="*"
                   errorBorder={errors?.holdingNature?.message}
                   listOptions={natureOptions}
-                  value={form?.holdingNature || ''}
+                  // value={form?.holdingNature || ''}
                   changeFun={formHandeler}
                 />
                 <small style={errorFontStyle}>
@@ -369,9 +381,7 @@ function CanCriteria() {
           </GridCustom>
         </Section>
 
-        <button type='submit'>
-          Next
-        </button>
+        <button type="submit">Next</button>
 
         {/* <FooterSection
           backBtn={false}

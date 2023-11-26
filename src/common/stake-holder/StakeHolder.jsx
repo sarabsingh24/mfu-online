@@ -164,7 +164,7 @@ function StakeHolder({
    }, []);
 
 
-   console.log(sliceData?.otherDetail?.sourceOfWealthOthers);
+   
 
   return (
     <React.Fragment>

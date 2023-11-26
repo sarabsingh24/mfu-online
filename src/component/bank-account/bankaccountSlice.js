@@ -28,6 +28,23 @@ export const bankAccountFormAsync = createAsyncThunk(
     }
   }
 );
+export const updateBankAccountAsync = createAsyncThunk(
+  'bankAccount/update',
+  async (obj, thunkAPI) => {
+    console.log('slice', obj);
+    try {
+      return await bankAccountAPI.updateBankAccount(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const bankAccountSlice = createSlice({
   name: 'bankAccount',
@@ -47,7 +64,7 @@ export const bankAccountSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //push can creteria form
+      //create bank account
       .addCase(bankAccountFormAsync.pending, (state) => {
         state.isLoading = true;
       })
@@ -56,6 +73,19 @@ export const bankAccountSlice = createSlice({
         state.bankAccountsObj = action.payload;
       })
       .addCase(bankAccountFormAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //update bank account
+      .addCase(updateBankAccountAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateBankAccountAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.bankAccountsObj = action.payload;
+      })
+      .addCase(updateBankAccountAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
