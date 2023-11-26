@@ -1,11 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import accountService from "./accountService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import accountService from './accountService';
 
 const initialState = {
-  canCriteriaObj: {},
-  primeHolderObj: {},
-  secondHolderObj: {},
-  thirdHolderObj: {},
   guardianHolderObj: {},
   bankAccountsObj: [],
   nomineeObj: {},
@@ -14,12 +10,12 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
-  canId:"",
+  message: '',
+  canId: '',
 };
 
 export const createAccount = createAsyncThunk(
-  "account/create",
+  'account/create',
   async (data, thunkAPI) => {
     try {
       return await accountService.createAccount(data);
@@ -36,14 +32,10 @@ export const createAccount = createAsyncThunk(
 );
 
 export const accountSlice = createSlice({
-  name: "account",
+  name: 'account',
   initialState,
   reducers: {
     reset: (state) => {
-      state.canCriteriaObj = {};
-      state.primeHolderObj = {};
-      state.secondHolderObj = {};
-      state.thirdHolderObj = {};
       state.guardianHolderObj = {};
       state.bankAccountsObj = [];
       state.nomineeObj = {};
@@ -52,22 +44,9 @@ export const accountSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
-      state.message = "";
+      state.message = '';
     },
-    criteriaForm: (state, action) => {
-      state.canCriteriaObj = action.payload;
-    },
-    primeHolderForm: (state, action) => {
-      console.log('primeSlice', action.payload);
-      state.primeHolderObj = action.payload;
-    },
-    secondHolderForm: (state, action) => {
-      console.log('secondSlice', action.payload);
-      state.secondHolderObj = action.payload;
-    },
-    thirdHolderForm: (state, action) => {
-      state.thirdHolderObj = action.payload;
-    },
+
     guardianHolderForm: (state, action) => {
       state.guardianHolderObj = action.payload;
     },
@@ -82,33 +61,31 @@ export const accountSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createAccount.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(createAccount.fulfilled, (state, action) => {
-      console.log("payload===",action.payload);
-      console.log("can ===", action.payload.can);
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.canId = action.payload.can && action.payload.can;
-      state.account.push(action.payload);
-    });
-    builder.addCase(createAccount.rejected, (state, action) => {
-      console.log(action.payload);
-      state.isLoading = false;
-      state.isError = true;
-      state.message = action.payload;
-      // state.account= null
-    });
+    builder
+      .addCase(createAccount.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createAccount.fulfilled, (state, action) => {
+        console.log('payload===', action.payload);
+        console.log('can ===', action.payload.can);
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.canId = action.payload.can && action.payload.can;
+        state.account.push(action.payload);
+      })
+      .addCase(createAccount.rejected, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        // state.account= null
+      });
   },
 });
 
 export const {
   reset,
-  criteriaForm,
-  primeHolderForm,
-  secondHolderForm,
-  thirdHolderForm,
+
   guardianHolderForm,
   bankAccountForm,
   nomineesForm,

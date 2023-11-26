@@ -44,7 +44,7 @@ function InputTextHook({
               message: condition.message,
             },
           })}
-          disabled={disabled ? true : false}
+          // disabled={disabled ? true : false}
         />
       ) : depend?.length ? (
         <Form.Control

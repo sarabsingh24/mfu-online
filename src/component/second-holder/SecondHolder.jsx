@@ -8,7 +8,7 @@ import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import useCommonReducer from '../../common/customComp/useCommonReducer';
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import { secondHolderForm } from '../../reducer/Reducer/account/accountSlice';
+import { secondHolderCreateAsync } from './SecondSlice';
 
 const fieldName = [
   'secondary-name',
@@ -52,13 +52,13 @@ function SecondHolder() {
     getValues,
     formState: { errors },
   } = useFormContext();
-  useFormPersist('form-name-second', { watch, setValue });
+  // useFormPersist('form-name-second', { watch, setValue });
 
-  useEffect(() => {
-    if (Object.keys(secondHolderObj).length) {
-      setForm(secondHolderObj);
-    }
-  }, [secondHolderObj]);
+  // useEffect(() => {
+  //   if (Object.keys(secondHolderObj).length) {
+  //     setForm(secondHolderObj);
+  //   }
+  // }, [secondHolderObj]);
 
   const formSubmitHandeler = (data) => {
     console.log('secondary', data);
@@ -73,7 +73,7 @@ function SecondHolder() {
       }
     }
     dispatch(
-      secondHolderForm({
+      secondHolderCreateAsync({
         // ...secondHolderObj,
         holderType: 'PR',
         panExemptFlag: 'Y',

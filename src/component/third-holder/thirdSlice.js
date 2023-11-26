@@ -1,0 +1,64 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import thirdAPI from './thirdAPI';
+
+const initialState = {
+  thirdHolderObj: {},
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: '',
+  canId: '',
+};
+
+export const thirdHolderCreateAsync = createAsyncThunk(
+  'third/create',
+  async (obj, thunkAPI) => {
+    
+    try {
+      return await thirdAPI.createThirdHolder(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const thirdSlice = createSlice({
+  name: 'third',
+  initialState,
+  reducers: {
+    reset: (state) => {
+      state.thirdHolderObj = {};
+      state.isError = false;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = '';
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      //push can creteria form
+      .addCase(thirdHolderCreateAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(thirdHolderCreateAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.thirdHolderObj = action.payload;
+      })
+      .addCase(thirdHolderCreateAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      });
+  },
+});
+
+const { actions, reducer } = thirdSlice;
+
+export const { reset } = actions;
+export default reducer;

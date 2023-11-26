@@ -1,45 +1,68 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import "../Style.css";
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import '../Style.css';
+import { useFormContext } from 'react-hook-form';
+import useFormPersist from 'react-hook-form-persist';
 
 //component
 
-import Section from "../../common/section/Section";
-import GridCustom from "../../common/grid-custom/GridCustom";
-import SelectOption from "../../common/form-elements/SelectOption";
-import { accountCount } from "./accountData";
-import BankAccountSection from "./BankAccountSection";
-import FooterSection from "../../common/footerSection/FooterSection";
-import { btnHandeler } from "../../common/helper/Helper";
-import useCommonReducer from "../../common/customComp/useCommonReducer";
-import { tabUpdate, pageCount } from "../../reducer/Reducer/tab/tabSlice";
-import { validateForm } from "./BankAccountValidation";
-import { bankAccountForm } from "../../reducer/Reducer/account/accountSlice";
+import Section from '../../common/section/Section';
+import GridCustom from '../../common/grid-custom/GridCustom';
+import SelectOption from '../../common/form-elements/SelectOption';
+import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
+import { accountCount } from './accountData';
+import BankAccountSection from './BankAccountSection';
+import FooterSection from '../../common/footerSection/FooterSection';
+import { btnHandeler } from '../../common/helper/Helper';
+import useCommonReducer from '../../common/customComp/useCommonReducer';
+import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
+import { validateForm } from './BankAccountValidation';
+import { bankAccountFormAsync } from './bankaccountSlice';
+import { useSelector } from 'react-redux';
+import { accountsFun } from './bankaccountSlice';
 
 const bankRecord = {
-  sequenceNo: "1",
+  sequenceNo: '1',
   defaultAccountFlag: true,
-  accountNo: "",
-  accountType: "",
-  bankId: "",
-  micrCode: "",
-  ifscCode: "",
-  bankProof: "",
-  reAccountNo: "",
+  accountNo: '',
+  accountType: '',
+  bankId: '',
+  micrCode: '',
+  ifscCode: '',
+  bankProof: '',
+  reAccountNo: '',
 };
 
 function BankAccounts() {
   const [form, setForm] = useState([]);
-  const [number, setNumber] = useState("0");
+  const [number, setNumber] = useState('0');
   const [btnFun, setBtnFun] = useState({});
-  const [errors, setErrors] = useState([]);
-  const { stepsCount, bankAccountsObj, dispatch } = useCommonReducer();
+  const [errorsOld, setErrors] = useState([]);
+  const { stepsCount, dispatch } = useCommonReducer();
+  const [bankAccount, setBankAccount] = useState([]);
+
+  const { accountCountNum, bankAccountsObj } = useSelector(
+    (state) => state.bankAccount
+  );
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useFormContext();
+  useFormPersist('form-name-bankAccount', { watch, setValue });
 
   const numberHandeler = (e) => {
     let val = e.target.value;
+
     setNumber(val);
+    dispatch(accountsFun(val));
   };
 
   const thisAccountHandeler = (e, num) => {
@@ -54,7 +77,7 @@ function BankAccounts() {
       return obj;
     });
 
-    let newError = errors.map((item, index) => {
+    let newError = errorsOld.map((item, index) => {
       if (index + 1 === +count) {
         if (!!item[name]) {
           return { ...item, [name]: null };
@@ -69,50 +92,29 @@ function BankAccounts() {
   };
 
   useEffect(() => {
-    if (+number === 1) {
-      setForm([...form.slice(0, 1)]);
-    }
-    if (+number === 2) {
-      if (form.length > 2) {
-        setForm([...form.slice(0, 2)]);
-      } else {
-        setForm([...form, { ...bankRecord, sequenceNo: "2" }]);
-      }
-    }
-    if (+number === 3) {
-      if (form.length === 2) {
-        setForm([...form, { ...bankRecord, sequenceNo: "3" }]);
-      } else {
-        setForm([
-          ...form,
-          { ...bankRecord, sequenceNo: "2" },
-          { ...bankRecord, sequenceNo: "3" },
-        ]);
-      }
-    }
+   
+    // if (+number === 1) {
+    //   setForm([...form.slice(0, 1)]);
+    // }
+    // if (+number === 2) {
+    //   if (form.length > 2) {
+    //     setForm([...form.slice(0, 2)]);
+    //   } else {
+    //     setForm([...form, { ...bankRecord, sequenceNo: '2' }]);
+    //   }
+    // }
+    // if (+number === 3) {
+    //   if (form.length === 2) {
+    //     setForm([...form, { ...bankRecord, sequenceNo: '3' }]);
+    //   } else {
+    //     setForm([
+    //       ...form,
+    //       { ...bankRecord, sequenceNo: '2' },
+    //       { ...bankRecord, sequenceNo: '3' },
+    //     ]);
+    //   }
+    // }
   }, [number]);
-
-  const formSubmitHandeler = (e) => {
-    e.preventDefault();
-
-    const formErrors = validateForm(form);
-    const account = (e) => {
-      if (!Object.keys(e).length) {
-        return true;
-      }
-      return false;
-    };
-    let isAccount = formErrors.every(account);
-    if (!isAccount) {
-      // alert("error");
-      setErrors(formErrors);
-    } else {
-      // alert("success");
-      // form.map((item) => delete item.reAccountNo);
-      dispatch(bankAccountForm(form));
-      dispatch(pageCount(stepsCount + 1));
-    }
-  };
 
   useEffect(() => {
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
@@ -126,6 +128,36 @@ function BankAccounts() {
     }
   }, [bankAccountsObj]);
 
+  const formSubmitHandeler = (data) => {
+    let newObj = [];
+
+    for (let k in data) {
+      if (k.includes('Default')) {
+        let lab = k.split('-')[1];
+        newObj[0] = { ...newObj[0], [lab]: data[k] };
+      }
+
+      if (k.includes('Second')) {
+        let lab = k.split('-')[1];
+        newObj[1] = { ...newObj[1], [lab]: data[k] };
+      }
+      if (k.includes('Third')) {
+        let lab = k.split('-')[1];
+        newObj[2] = { ...newObj[2], [lab]: data[k] };
+      }
+    }
+    console.log(newObj);
+
+    setBankAccount(newObj);
+    dispatch(bankAccountFormAsync(newObj.slice(0, accountCountNum)));
+
+    //   dispatch(pageCount(stepsCount + 1));
+  };
+
+  const backBtnHandeler = () => {
+    dispatch(pageCount(stepsCount - 1));
+  };
+
   console.log(form);
 
   return (
@@ -136,43 +168,73 @@ function BankAccounts() {
         btnFun={btnFun}
         cls="btn-left-align"
       />
-      <Form onSubmit={formSubmitHandeler}>
+      <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Number of bank account">
           <GridCustom>
             <Row>
               <Col xs={12} md={4}>
-                <SelectOption
+                <SelectOptionHook
+                  register={register}
                   name="accounts"
                   label="Bank Account(s)"
-                  value={number || ""}
-                  options={accountCount}
+                  // reqText=""
+                  disabled={false}
+                  mandatory="*"
+                  // errorBorder={errors?.holdingNature?.message}
+                  listOptions={accountCount}
+                  // value={form?.holdingNature || ''}
+                  changeFun={numberHandeler}
+                />
+
+                {/* <SelectOption
+                  name="accounts"
+                  label="Bank Account(s)"
+                  value={number}
+                  options={accountCount || ''}
                   changeFun={numberHandeler}
                   mandatory=""
-                />
+                /> */}
               </Col>
             </Row>
           </GridCustom>
         </Section>
 
-        {form?.map((detail, index) => {
+        {Array.from({ length: accountCountNum }).map((detail, index) => {
           return (
             <BankAccountSection
               key={index}
-              formObj={detail}
+              formObj={bankAccountsObj[index]}
               setForm={setForm}
               count={index}
               thisAccountHandeler={thisAccountHandeler}
+              errorsOld={errorsOld}
+              register={register}
               errors={errors}
+              setValue={setValue}
+              watch={watch}
             />
           );
         })}
 
-        <FooterSection
+        <button type="button" onClick={backBtnHandeler}>
+          Back
+        </button>
+        <button type="submit">Next</button>
+
+        <button
+          type="button"
+          onClick={() => {
+            reset();
+          }}
+        >
+          Reset
+        </button>
+        {/* <FooterSection
           backBtn={true}
           nextBtn={true}
           btnFun={btnFun}
           cls="btn-right-align"
-        />
+        />*/}
       </Form>
     </React.Fragment>
   );

@@ -1,4 +1,6 @@
 import axios from "axios";
+// import {BASE_URL } from '../../../../utilis/constants'
+const BASE_URL = 'http://localhost:8084';
 
 // post request
 export const createAccount = async (data) => {
@@ -9,6 +11,10 @@ export const createAccount = async (data) => {
    return response.data;
  
 };
+
+
+
+
 
 const accountService = { createAccount };
 export default accountService;

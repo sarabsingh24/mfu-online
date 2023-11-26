@@ -12,6 +12,11 @@ import storage from 'redux-persist/lib/storage';
 
 import tabReducer from "./Reducer/tab/tabSlice";
 import accountReducer from "./Reducer/account/accountSlice";
+import criteriaReducer from "../component/can-criteria/canCriteriaSlice"
+import primaryReducer from '../component/primary-holder/primarySlice'
+import secondSlice from '../component/second-holder/SecondSlice'
+import thirdReducer from '../component/third-holder/thirdSlice'
+import bankAccountReducer from '../component/bank-account/bankaccountSlice'
 
 const persistConfig = {
   key: 'root',
@@ -22,6 +27,11 @@ const persistConfig = {
 const reducer = combineReducers({
   tab: tabReducer,
   account: accountReducer,
+  criteria: criteriaReducer,
+  primary: primaryReducer,
+  second: secondSlice,
+  third: thirdReducer,
+  bankAccount: bankAccountReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

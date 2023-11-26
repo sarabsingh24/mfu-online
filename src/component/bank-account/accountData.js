@@ -1,5 +1,5 @@
 export const accountType = [
-  { value: "00", label: "Select Account Type" },
+  { value: "", label: "Select Account Type" },
   { value: "CA", label: "Current Account" },
   { value: "CC", label: "Cash Credit" },
   { value: "FCNR", label: "Foreign Currency Non Resident" },
@@ -14,7 +14,7 @@ export const accountType = [
 ];
 
 export const bankProofOptions = [
-  { value: "00", label: "Select Proof" },
+  { value: "", label: "Select Proof" },
   { value: "14", label: "Latest Bank Passbook" },
   { value: "15", label: "Latest Bank Account Statement" },
   { value: "77", label: "Cheque Copy" },

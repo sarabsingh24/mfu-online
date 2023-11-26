@@ -8,7 +8,7 @@ import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import useCommonReducer from '../../common/customComp/useCommonReducer';
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
-import { primeHolderForm } from '../../reducer/Reducer/account/accountSlice';
+import { primaryHolderCreateAsync } from './primarySlice';
 
 const fieldName = [
   'primary-name',
@@ -55,15 +55,15 @@ function PrimaryHolder({ methods }) {
     getValues,
     formState: { errors },
   } = useFormContext();
-  useFormPersist('form-name-primary', { watch, setValue });
+  // useFormPersist('form-name-primary', { watch, setValue });
 
-  useEffect(() => {
-    if (Object.keys(primeHolderObj).length) {
-      setForm(primeHolderObj);
-    } else {
-      setForm(commonFormField);
-    }
-  }, [primeHolderObj]);
+  // useEffect(() => {
+  //   if (Object.keys(primeHolderObj).length) {
+  //     setForm(primeHolderObj);
+  //   } else {
+  //     setForm(commonFormField);
+  //   }
+  // }, [primeHolderObj]);
 
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
@@ -79,7 +79,7 @@ function PrimaryHolder({ methods }) {
     }
 
     dispatch(
-      primeHolderForm({
+      primaryHolderCreateAsync({
         // ...primeHolderObj,
         holderType: 'PR',
         panExemptFlag: 'Y',

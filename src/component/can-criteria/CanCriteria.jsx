@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { criteriaFormAsync } from './canCriteriaSlice';
 
 //component
 import ButtonCustom from '../../common/button/ButtonCustom';
@@ -73,7 +74,7 @@ function CanCriteria() {
     getValues,
     formState:{errors}
   } = useFormContext();
-   useFormPersist('form-name-canCriteria', { watch, setValue });
+  //  useFormPersist('form-name-canCriteria', { watch, setValue });
 
   const formHandeler = (e) => {
     let name = e.target.name;
@@ -125,7 +126,7 @@ function CanCriteria() {
         holderCount: 1,
       });
     } else if (form.holdingNature === 'JO') {
-      console.log(form);
+      // console.log(form);
       setInvestorList(jointOptions);
       setTaxList(singleIndividualOptions);
       tabShoHideHandeler(tabsCreater, ['SEC', 'NOMI']);
@@ -252,7 +253,7 @@ function CanCriteria() {
       // console.log('canCriteria', data);
     dispatch(pageCount(stepsCount + 1));
     dispatch(
-      criteriaForm({
+      criteriaFormAsync({
         holdingNature: data.holdingNature,
         investorCategory: data.investorCategory,
         taxStatus: data.taxStatus,
