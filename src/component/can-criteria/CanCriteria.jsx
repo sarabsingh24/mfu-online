@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import { useSelector,useDispatch } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { criteriaFormAsync, updateCriteriaFormAsync } from './canCriteriaSlice';
+import { createCanCriteriaAsync, updateCriteriaFormAsync } from './canCriteriaSlice';
 
 //component
 import ButtonCustom from '../../common/button/ButtonCustom';
@@ -18,7 +18,7 @@ import InputText from '../../common/form-elements/InputText';
 import SelectOption from '../../common/form-elements/SelectOption';
 import FooterSection from '../../common/footerSection/FooterSection';
 import { btnHandeler } from '../../common/helper/Helper';
-import useCommonReducer from '../../common/customComp/useCommonReducer';
+
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import {
   criteriaForm,
@@ -63,9 +63,12 @@ function CanCriteria() {
   const [investorList, setInvestorList] = useState([]);
   const [btnFun, setBtnFun] = useState({});
 
-  const { stepsCount, tabsCreater, dispatch } = useCommonReducer();
+
 
   const { canCriteriaObj } = useSelector((state) => state.criteria);
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -84,9 +87,11 @@ function CanCriteria() {
     setForm({ ...form, [name]: val });
     // errors[name].message = '';
 
-    if (!!errorsOLD[name]) {
-      setErrors({ ...errorsOLD, [name]: null });
-    }
+    
+
+    // if (!!errorsOLD[name]) {
+    //   setErrors({ ...errorsOLD, [name]: null });
+    // }
   };
 
   const tabShoHideHandeler = (tabList, listName) => {
@@ -102,19 +107,25 @@ function CanCriteria() {
     dispatch(tabUpdate(updateArray));
   };
 
-  // useEffect(() => {
-  //   if (Object.keys(canCriteriaObj).length > 0) {
-  //     setValue('holdingNature', canCriteriaObj.holdingNature);
-  //     console.log(canCriteriaObj);
-  //   }
-  // }, [canCriteriaObj]);
+  useEffect(() => {
+    if (Object.keys(canCriteriaObj).length > 0) {
+      setForm(canCriteriaObj);
+    } else {
+      setForm(defaultValue);
+    }
+  }, [canCriteriaObj]);
 
   useEffect(() => {
     tabShoHideHandeler(tabsCreater, ['NOMI']);
+    
   }, []);
 
+  
+
+
+ 
   useEffect(() => {
-    if (form.holdingNature === 'SI') {
+    if (form?.holdingNature === 'SI') {
       setInvestorList(singleOptions);
       tabShoHideHandeler(tabsCreater, ['NOMI']);
       setForm({
@@ -262,7 +273,8 @@ function CanCriteria() {
       dispatch(updateCriteriaFormAsync(obj));
     } else {
       dispatch(
-        criteriaFormAsync({
+        createCanCriteriaAsync({
+          userId: userId,
           holdingNature: data.holdingNature,
           investorCategory: data.investorCategory,
           taxStatus: data.taxStatus,
@@ -300,6 +312,7 @@ function CanCriteria() {
   //   setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   // }, [dispatch, stepsCount]);
 
+
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
@@ -316,7 +329,7 @@ function CanCriteria() {
                   mandatory="*"
                   errorBorder={errors?.holdingNature?.message}
                   listOptions={natureOptions}
-                  // value={form?.holdingNature || ''}
+                  value={form?.holdingNature || ''}
                   changeFun={formHandeler}
                 />
                 <small style={errorFontStyle}>

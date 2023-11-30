@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useWatch } from 'react-hook-form';
 import { Form } from 'react-bootstrap';
 //errorBorder
@@ -22,6 +22,9 @@ function InputTextHook({
   sts,
 }) {
 
+  
+
+ 
  
   return (
     <Form.Group className="mb-1">

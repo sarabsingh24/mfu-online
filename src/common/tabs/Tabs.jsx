@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { StepperContainer, StepperLine, Steps } from "./CommonTab-style";
 import Tab from "./Tab";
-
+import { useSelector, useDispatch } from 'react-redux';
 //component
 import { stepsList } from "./Data";
 
 
 import{tabUpdate} from '../../reducer/Reducer/tab/tabSlice'
-import useCommonReducer from "../customComp/useCommonReducer";
+// import useCommonReducer from "../customComp/useCommonReducer";
 
 function Tabs() {
   const [tabs, setTabs] = useState([]);
 
-  const { stepsCount, tabsCreater, dispatch } = useCommonReducer();
+  // const {  tabsCreater } = useCommonReducer();
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const dispatch = useDispatch();
  
 
   useEffect(() => {
+   
     let copyTab = tabsCreater.filter((tab) => tab.show === true);
    
     let currentTab = copyTab.slice(0, stepsCount + 1);

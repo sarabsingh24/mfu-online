@@ -10,7 +10,7 @@ const initialState = {
   canId: '',
 };
 
-export const secondHolderCreateAsync = createAsyncThunk(
+export const createSecondHolderAsync = createAsyncThunk(
   'second/create',
   async (obj, thunkAPI) => {
     console.log('slice', obj);
@@ -28,6 +28,44 @@ export const secondHolderCreateAsync = createAsyncThunk(
   }
 );
 
+
+export const getSecondHolderAsync = createAsyncThunk(
+  'second/get',
+  async (userId, thunkAPI) => {
+    console.log('slice', userId);
+    try {
+      return await secondAPI.getSecondHolder(userId);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateSecondHolderAsync = createAsyncThunk(
+  'second/update',
+  async (obj, thunkAPI) => {
+    console.log('slice', obj);
+    try {
+      return await secondAPI.updateSecondHolder(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+
 export const secondSlice = createSlice({
   name: 'second',
   initialState,
@@ -42,15 +80,47 @@ export const secondSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //push can creteria form
-      .addCase(secondHolderCreateAsync.pending, (state) => {
+      //POST secondary holder
+      .addCase(createSecondHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(secondHolderCreateAsync.fulfilled, (state, action) => {
+      .addCase(createSecondHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.secondHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
       })
-      .addCase(secondHolderCreateAsync.rejected, (state, action) => {
+      .addCase(createSecondHolderAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //GET secondary holder
+      .addCase(getSecondHolderAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSecondHolderAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.secondHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(getSecondHolderAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //UPDATE secondary holder
+      .addCase(updateSecondHolderAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateSecondHolderAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.secondHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(updateSecondHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

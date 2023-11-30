@@ -1,48 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
-import useFormPersist from 'react-hook-form-persist';
+
+import { useSelector, useDispatch } from 'react-redux';
 //components
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import useCommonReducer from '../../common/customComp/useCommonReducer';
+
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import { secondHolderCreateAsync } from './SecondSlice';
+import {
+  createSecondHolderAsync,
+  updateSecondHolderAsync,
+} from './SecondSlice';
+import {secondaryFormFields} from './secondaryData'
 
-const fieldName = [
-  'secondary-name',
-  'secondary-dateOfBirth',
-  'secondary-panPekrnNo',
-  'secondary-confirmpanPekrnNo',
-  'secondary-mobileIsdCode',
-  'secondary-primaryMobileNo',
-  'secondary-primaryEmail',
-  'secondary-grossIncome',
-  'secondary-netWorth',
-  'secondary-netWorthDate',
-  'secondary-sourceOfWealth',
-  'secondary-sourceOfWealthOthers',
-  'secondary-occupation',
-  'secondary-occupationOthers',
-  'secondary-pep',
-  'secondary-kraAddressType',
-  'secondary-taxResidencyFlag',
-  'secondary-birthCity',
-  'secondary-birthCountry',
-  'secondary-citizenshipCountry',
-  'secondary-nationalityCountry',
-  'secondary-taxCountry',
-  'secondary-taxReferenceNo',
-  'secondary-identityType',
-];
+const fieldName = Object.keys(secondaryFormFields);
 
 function SecondHolder() {
   const [form, setForm] = useState(commonFormField);
   const [errorsOld, setErrors] = useState({});
   const [networthRadio, setNetworthRadio] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
-  const { stepsCount, secondHolderObj, dispatch } = useCommonReducer();
+
+ const { secondHolderObj } = useSelector((state) => state.second);
+ const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+ const { userId } = useSelector((state) => state.account);
+ const dispatch = useDispatch();
 
   const {
     register,
@@ -60,6 +44,38 @@ function SecondHolder() {
   //   }
   // }, [secondHolderObj]);
 
+    useEffect(() => {
+      const newObj = {};
+
+      if (secondHolderObj?.userId) {
+        for (let fstLevel in secondHolderObj) {
+          if (fstLevel === 'contactDetail') {
+            for (let secLev in secondHolderObj[fstLevel]) {
+              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+            }
+          } else if (fstLevel === 'otherDetail') {
+            for (let secLev in secondHolderObj[fstLevel]) {
+              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+            }
+          } else if (fstLevel === 'fatcaDetail') {
+            for (let secLev in secondHolderObj[fstLevel]) {
+              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+            }
+          } else if (fstLevel === 'taxRecords') {
+            for (let secLev in secondHolderObj[fstLevel]) {
+              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+            }
+          } else {
+            newObj[`secondary-${fstLevel}`] = secondHolderObj[fstLevel];
+          }
+        }
+        // console.log(newObj);
+        setForm(newObj);
+      } else {
+        setForm(secondaryFormFields);
+      }
+    }, [secondHolderObj]);
+
   const formSubmitHandeler = (data) => {
     console.log('secondary', data);
 
@@ -72,59 +88,70 @@ function SecondHolder() {
         console.log(k, '====', data[k]);
       }
     }
-    dispatch(
-      secondHolderCreateAsync({
-        // ...secondHolderObj,
-        holderType: 'PR',
-        panExemptFlag: 'Y',
-        residencePhoneNo: '',
-        relationship: '01',
-        relationshipProof: '01',
-        panPekrnNo: obj.panPekrnNo,
-        confirmpanPekrnNo: obj.confirmpanPekrnNo,
-        name: obj.name,
-        dateOfBirth: obj.dateOfBirth,
-        contactDetail: {
-          primaryEmail: obj.primaryEmail,
-          mobileIsdCode: obj.mobileIsdCode,
-          primaryMobileNo: obj.primaryMobileNo,
-        },
-        otherDetail: {
-          otherInfo: 'string',
-          grossIncome: obj.grossIncome ? obj.grossIncome : '',
-          netWorth: obj.netWorth ? obj.netWorth : '',
-          netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
-          sourceOfWealth: obj.sourceOfWealth,
-          sourceOfWealthOthers: obj.sourceOfWealthOthers,
-          occupation: obj.occupation,
-          occupationOthers: obj.occupationOthers,
-          kraAddressType: obj.kraAddressType,
-          pep: obj.pep,
-        },
-        fatcaDetail: {
-          taxResidencyFlag: obj.taxResidencyFlag,
-          birthCity: obj.birthCity,
-          birthCountry: obj.birthCountry,
-          citizenshipCountry: obj.citizenshipCountry,
-          nationalityCountry: obj.nationalityCountry,
-          taxReferenceNo: obj.taxReferenceNo,
-          taxRecords: [
-            {
-              taxCountry: obj.taxCountry,
-              taxReferenceNo: obj.taxReferenceNo,
-              identityType: obj.identityType,
-            },
-          ],
-        },
-        // ...data,
-      })
-    );
+   
+    
+    const submitObj = {
+      
+      userId: userId,
+      holderType: 'PR',
+      panExemptFlag: 'Y',
+      residencePhoneNo: '',
+      relationship: '01',
+      relationshipProof: '01',
+      panPekrnNo: obj.panPekrnNo,
+      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      name: obj.name,
+      dateOfBirth: obj.dateOfBirth,
+      contactDetail: {
+        primaryEmail: obj.primaryEmail,
+        mobileIsdCode: obj.mobileIsdCode,
+        primaryMobileNo: obj.primaryMobileNo,
+      },
+      otherDetail: {
+        otherInfo: 'string',
+        grossIncome: obj.grossIncome ? obj.grossIncome : '',
+        netWorth: obj.netWorth ? obj.netWorth : '',
+        netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
+        sourceOfWealth: obj.sourceOfWealth,
+        sourceOfWealthOthers: obj.sourceOfWealthOthers,
+        occupation: obj.occupation,
+        occupationOthers: obj.occupationOthers,
+        kraAddressType: obj.kraAddressType,
+        pep: obj.pep,
+      },
+      fatcaDetail: {
+        taxResidencyFlag: obj.taxResidencyFlag,
+        birthCity: obj.birthCity,
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
+        taxReferenceNo: obj.taxReferenceNo,
+        taxRecords: [
+          {
+            taxCountry: obj.taxCountry,
+            taxReferenceNo: obj.taxReferenceNo,
+            identityType: obj.identityType,
+          },
+        ],
+      },
+    };
+
+    if (secondHolderObj?.userId) {
+      console.log('update');
+
+      dispatch(updateSecondHolderAsync({ ...submitObj, userId: userId }));
+    } else {
+      console.log('create');
+      dispatch(createSecondHolderAsync({ ...submitObj }));
+    }
     dispatch(pageCount(stepsCount + 1));
   };
 
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+  console.log(secondHolderObj);
 
   return (
     <React.Fragment>

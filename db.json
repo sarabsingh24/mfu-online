@@ -2,16 +2,139 @@
   "canCriteriaObj": [
     {
       "userId": 1,
-      "holdingNature": "AS",
+      "holdingNature": "JO",
       "investorCategory": "I",
-      "taxStatus": "PMO",
+      "taxStatus": "NRI",
       "holderCount": "3",
       "id": 1
     }
   ],
-  "primeHolderObj": [],
-  "secondHolderObj": [],
-  "thirdHolderObj": [],
+  "primeHolderObj": [
+    {
+      "userId": 1,
+      "holderType": "PR",
+      "panExemptFlag": "Y",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "123",
+      "confirmpanPekrnNo": "123",
+      "name": "sarab preet singh33",
+      "dateOfBirth": "2023-11-09",
+      "contactDetail": {
+        "primaryEmail": "dd@jj.com",
+        "mobileIsdCode": "55",
+        "primaryMobileNo": "6666666666"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "gift",
+        "occupation": "03",
+        "occupationOthers": "business",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "amb",
+        "taxReferenceNo": "dd",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "dd"
+          }
+        ]
+      },
+      "id": 1
+    }
+  ],
+  "secondHolderObj": [
+    {
+      "userId": 1,
+      "holderType": "PR",
+      "panExemptFlag": "Y",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "456",
+      "confirmpanPekrnNo": "456",
+      "name": "Preeti kaur",
+      "dateOfBirth": "2023-11-15",
+      "contactDetail": {
+        "primaryEmail": "dd@g.com",
+        "mobileIsdCode": "88",
+        "primaryMobileNo": "7777777777"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "gg",
+        "occupation": "02",
+        "occupationOthers": "ff",
+        "kraAddressType": "PEP",
+        "pep": "2"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "del",
+        "taxReferenceNo": "gg",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "gg"
+          }
+        ]
+      },
+      "id": 1
+    }
+  ],
+  "thirdHolderObj": [
+    {
+      "userId": 1,
+      "holderType": "PR",
+      "panExemptFlag": "Y",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "678",
+      "confirmpanPekrnNo": "678",
+      "name": "kamal preet",
+      "dateOfBirth": "2023-11-15",
+      "contactDetail": {
+        "primaryEmail": "gg@hh.com",
+        "mobileIsdCode": "99",
+        "primaryMobileNo": "3333333333"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "02",
+        "sourceOfWealthOthers": "bn",
+        "occupation": "02",
+        "occupationOthers": "dn",
+        "kraAddressType": "PEP",
+        "pep": "2"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "bh",
+        "taxReferenceNo": "gh",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "gh"
+          }
+        ]
+      },
+      "id": 1
+    }
+  ],
   "guardianHolderObj": [],
   "bankAccountsObj": [],
   "nomineeObj": [],

@@ -15,8 +15,9 @@ export const createCriteria = async (obj) => {
 
 // get
 export const getCriteria = async (userId) => {
+  
   const response = await axios.get(
-    `${BASE_URL}/canCriteriaObj?userId=${userId}`
+    `${BASE_URL}/canCriteriaObj/?userId=${userId}`
   );
   const data = await response.data[0];
 

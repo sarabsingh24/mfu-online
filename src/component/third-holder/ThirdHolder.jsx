@@ -1,55 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
+import { useSelector, useDispatch } from 'react-redux';
 
 //components
-import StakeHolder from "../../common/stake-holder/StakeHolder";
-import { tabUpdate, pageCount } from "../../reducer/Reducer/tab/tabSlice";
-import useCommonReducer from "../../common/customComp/useCommonReducer";
-import { commonFormField } from "../../common/stake-holder/stakeHolderData";
-import { validateForm } from "../../common/stake-holder/StakeHolderValidation";
-import { thirdHolderCreateAsync } from './thirdSlice';
+import StakeHolder from '../../common/stake-holder/StakeHolder';
+import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
+import { commonFormField } from '../../common/stake-holder/stakeHolderData';
+import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
+import { createThirdHolderAsync, updateThirdHolderAsync } from './thirdSlice';
+import { thirdFormFields } from './thirdData';
 
-
-const fieldName = [
-  'third-name',
-  'third-dateOfBirth',
-  'third-panPekrnNo',
-  'third-confirmpanPekrnNo',
-  'third-mobileIsdCode',
-  'third-primaryMobileNo',
-  'third-primaryEmail',
-  'third-grossIncome',
-  'third-netWorth',
-  'third-netWorthDate',
-  'third-sourceOfWealth',
-  'third-sourceOfWealthOthers',
-  'third-occupation',
-  'third-occupationOthers',
-  'third-pep',
-  'third-kraAddressType',
-  'third-taxResidencyFlag',
-  'third-birthCity',
-  'third-birthCountry',
-  'third-citizenshipCountry',
-  'third-nationalityCountry',
-  'third-taxCountry',
-  'third-taxReferenceNo',
-  'third-identityType',
-];
-
-
+const fieldName = Object.keys(thirdFormFields);
 
 function ThirdHolder() {
-  const [form, setForm] = useState(commonFormField);
+  const [form, setForm] = useState();
   const [errorsOld, setErrors] = useState({});
-  const [networthRadio, setNetworthRadio] = useState(false);
-  const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
 
-  const { stepsCount, thirdHolderObj, dispatch } = useCommonReducer();
-const {
+  const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
+  const [networthRadio, setNetworthRadio] = useState(false);
+
+  const { thirdHolderObj, isSuccess } = useSelector((state) => state.third);
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
+  const {
     register,
     handleSubmit,
     watch,
@@ -58,16 +35,47 @@ const {
     formState: { errors },
   } = useFormContext();
 
-  useFormPersist('form-name-third', { watch, setValue });
+  // useFormPersist('form-name-third', { watch, setValue });
 
-  // useEffect(() => {
-  //   if (Object.keys(thirdHolderObj).length) {
-  //     setForm(thirdHolderObj);
-  //   }
-  // }, [thirdHolderObj]);
+  useEffect(() => {
+    const newObj = {};
+console.log('zero');
+    if (thirdHolderObj?.userId) {
+      console.log('one')
+      for (let fstLevel in thirdHolderObj) {
+        console.log('two');
+        if (fstLevel === 'contactDetail') {
+          for (let secLev in thirdHolderObj[fstLevel]) {
+            newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'otherDetail') {
+          for (let secLev in thirdHolderObj[fstLevel]) {
+            newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'fatcaDetail') {
+          for (let secLev in thirdHolderObj[fstLevel]) {
+            newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'taxRecords') {
+          for (let secLev in thirdHolderObj[fstLevel]) {
+            newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
+          }
+        } else {
+          newObj[`third-${fstLevel}`] = thirdHolderObj[fstLevel];
+        }
+      }
+      // console.log(newObj);
+      setForm(newObj);
+    } else {
+      console.log('three');
+      setForm(thirdFormFields);
+    }
+  }, [thirdHolderObj]);
+
+ 
 
   const formSubmitHandeler = (data) => {
-   console.log('third', data);
+    
     const obj = {};
 
     for (let k in data) {
@@ -78,63 +86,72 @@ const {
       }
     }
 
-   
-      dispatch(
-        thirdHolderCreateAsync({
-          // ...thirdHolderObj,
-         holderType: 'PR',
-        panExemptFlag: 'Y',
-        residencePhoneNo: '',
-        relationship: '01',
-        relationshipProof: '01',
-        panPekrnNo: obj.panPekrnNo,
-        confirmpanPekrnNo: obj.confirmpanPekrnNo,
-        name: obj.name,
-        dateOfBirth: obj.dateOfBirth,
-        contactDetail: {
-          primaryEmail: obj.primaryEmail,
-          mobileIsdCode: obj.mobileIsdCode,
-          primaryMobileNo: obj.primaryMobileNo,
-        },
-        otherDetail: {
-          otherInfo: 'string',
-          grossIncome: obj.grossIncome ? obj.grossIncome : '',
-          netWorth: obj.netWorth ? obj.netWorth : '',
-          netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
-          sourceOfWealth: obj.sourceOfWealth,
-          sourceOfWealthOthers: obj.sourceOfWealthOthers,
-          occupation: obj.occupation,
-          occupationOthers: obj.occupationOthers,
-          kraAddressType: obj.kraAddressType,
-          pep: obj.pep,
-        },
-        fatcaDetail: {
-          taxResidencyFlag: obj.taxResidencyFlag,
-          birthCity: obj.birthCity,
-          birthCountry: obj.birthCountry,
-          citizenshipCountry: obj.citizenshipCountry,
-          nationalityCountry: obj.nationalityCountry,
-          taxReferenceNo: obj.taxReferenceNo,
-          taxRecords: [
-            {
-              taxCountry: obj.taxCountry,
-              taxReferenceNo: obj.taxReferenceNo,
-              identityType: obj.identityType,
-            },
-          ],
-        },
-         
-        })
-      );
-      dispatch(pageCount(stepsCount + 1));
-    
+    const submitObj = {
+      userId: userId,
+      holderType: 'PR',
+      panExemptFlag: 'Y',
+      residencePhoneNo: '',
+      relationship: '01',
+      relationshipProof: '01',
+      panPekrnNo: obj.panPekrnNo,
+      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      name: obj.name,
+      dateOfBirth: obj.dateOfBirth,
+      contactDetail: {
+        primaryEmail: obj.primaryEmail,
+        mobileIsdCode: obj.mobileIsdCode,
+        primaryMobileNo: obj.primaryMobileNo,
+      },
+      otherDetail: {
+        otherInfo: 'string',
+        grossIncome: obj.grossIncome ? obj.grossIncome : '',
+        netWorth: obj.netWorth ? obj.netWorth : '',
+        netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
+        sourceOfWealth: obj.sourceOfWealth,
+        sourceOfWealthOthers: obj.sourceOfWealthOthers,
+        occupation: obj.occupation,
+        occupationOthers: obj.occupationOthers,
+        kraAddressType: obj.kraAddressType,
+        pep: obj.pep,
+      },
+      fatcaDetail: {
+        taxResidencyFlag: obj.taxResidencyFlag,
+        birthCity: obj.birthCity,
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
+        taxReferenceNo: obj.taxReferenceNo,
+        taxRecords: [
+          {
+            taxCountry: obj.taxCountry,
+            taxReferenceNo: obj.taxReferenceNo,
+            identityType: obj.identityType,
+          },
+        ],
+      },
+    };
+
+    if (thirdHolderObj?.userId) {
+      console.log('update');
+
+      dispatch(updateThirdHolderAsync({ ...submitObj, userId: userId }));
+    } else {
+      console.log('create');
+      dispatch(createThirdHolderAsync({ ...submitObj }));
+    }
+
+    dispatch(pageCount(stepsCount + 1));
   };
 
-const backBtnHandeler = () => {
+  const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+
+  console.log('Form', form);
   return (
     <React.Fragment>
+      
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <StakeHolder
           form={form}

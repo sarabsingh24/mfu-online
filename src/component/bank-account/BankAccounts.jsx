@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
+import { useSelector, useDispatch } from 'react-redux';
 
 //component
 
@@ -20,7 +21,7 @@ import useCommonReducer from '../../common/customComp/useCommonReducer';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import { validateForm } from './BankAccountValidation';
 import { bankAccountFormAsync } from './bankaccountSlice';
-import { useSelector } from 'react-redux';
+
 import { accountsFun } from './bankaccountSlice';
 
 const bankRecord = {
@@ -40,12 +41,14 @@ function BankAccounts() {
   const [number, setNumber] = useState('0');
   const [btnFun, setBtnFun] = useState({});
   const [errorsOld, setErrors] = useState([]);
-  const { stepsCount, dispatch } = useCommonReducer();
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   const [bankAccount, setBankAccount] = useState([]);
 
   const { accountCountNum, bankAccountsObj } = useSelector(
     (state) => state.bankAccount
   );
+
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -56,7 +59,7 @@ function BankAccounts() {
     reset,
     formState: { errors },
   } = useFormContext();
-  useFormPersist('form-name-bankAccount', { watch, setValue });
+  // useFormPersist('form-name-bankAccount', { watch, setValue });
 
   const numberHandeler = (e) => {
     let val = e.target.value;

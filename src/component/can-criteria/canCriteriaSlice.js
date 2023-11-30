@@ -12,7 +12,7 @@ const initialState = {
 
 
 
-export const criteriaFormAsync = createAsyncThunk(
+export const createCanCriteriaAsync = createAsyncThunk(
   'criteria/create',
   async (obj, thunkAPI) => {
     console.log('slice', obj);
@@ -84,14 +84,14 @@ export const canCriteriaSlice = createSlice({
   extraReducers: (builder) => {
     builder
       //create can creteria form
-      .addCase(criteriaFormAsync.pending, (state) => {
+      .addCase(createCanCriteriaAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(criteriaFormAsync.fulfilled, (state, action) => {
+      .addCase(createCanCriteriaAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.canCriteriaObj = action.payload;
       })
-      .addCase(criteriaFormAsync.rejected, (state, action) => {
+      .addCase(createCanCriteriaAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

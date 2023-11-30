@@ -3,13 +3,13 @@ import { Form } from 'react-bootstrap';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-
+import { useSelector, useDispatch } from 'react-redux';
 //components
 import InputTextHook from '../form-elements/InputTextHook';
 import SelectOptionHook from '../form-elements/SelectOptionHook';
 import MobileOptionHook from '../form-elements/MobileOptionHook';
 import SelectSearchHook from '../form-elements/SelectSearchHook';
-import SelectSearchOption from '../form-elements/SelectSearchOption'
+import SelectSearchOption from '../form-elements/SelectSearchOption';
 import Section from '../section/Section';
 import InputText from '../form-elements/InputText';
 import GridCustom from '../grid-custom/GridCustom';
@@ -17,7 +17,7 @@ import GridCustom from '../grid-custom/GridCustom';
 import FooterSection from '../footerSection/FooterSection';
 import { btnHandeler } from '../helper/Helper';
 import { pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import useCommonReducer from '../customComp/useCommonReducer';
+
 import {
   sourceOfWealthOptions,
   occupationOptions,
@@ -57,7 +57,10 @@ function StakeHolder({
   const [isOtherSourceOfWealth, setIsOtherSourceOfWealth] = useState(true);
   const [isOtherOccupation, setIsOtherOccupation] = useState(true);
   const [notIndian, setNotIndian] = useState(true);
-  const { stepsCount, dispatch } = useCommonReducer();
+  const { stepsCount } = useSelector((state) => state.tab);
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
+
   const [blanket, setBlanket] = useState(false);
 
   const closeBlanketHandeler = () => {
@@ -145,26 +148,36 @@ function StakeHolder({
 
   const panPekrnNo = watch(fieldName[2]);
 
-  
-   useEffect(() => {
-     if (sliceData?.fatcaDetail?.taxResidencyFlag === 'Y') {
-       setNotIndian(false);
-     } else {
-       setNotIndian(true);
-     }
+  useEffect(() => {
+    console.log('sliceData', sliceData);
+    if (userId) {
+      if (sliceData?.fatcaDetail?.taxResidencyFlag === 'Y') {
+        setNotIndian(false);
+      } else {
+        setNotIndian(true);
+      }
 
-     
-      //  if (sliceData?.otherDetail?.sourceOfWealthOthers === '') {
-      //    setIsOtherSourceOfWealth(false);
-      //  } else {
-      //    setIsOtherSourceOfWealth(true);
-      //    setValue(fieldName[11], '');
-      //  }
-     
-   }, []);
+      if (Object.keys(sliceData)?.length > 0) {
+        setIsOtherSourceOfWealth(false);
+      } else {
+        setIsOtherSourceOfWealth(true);
+        setValue(fieldName[11], '');
+      }
 
+      if (Object.keys(sliceData).length > 0) {
+        setIsOtherOccupation(false);
+      } else {
+        setIsOtherOccupation(true);
+        setValue(fieldName[13], '');
+      }
+    }
+  }, [userId]);
 
-   
+  useEffect(() => {
+    for (let k in form) {
+      setValue(k, form[k]);
+    }
+  }, [form]);
 
   return (
     <React.Fragment>
@@ -267,7 +280,7 @@ function StakeHolder({
                     name={fieldName[4]}
                     maxLength={2}
                     errorBorder={errors[fieldName[4]]?.message}
-                    value={form?.contactDetail?.primaryMobileNo || ''}
+                    // value={form?.mobileIsdCode || ''}
                     // changeFun={formHandeler}
                     reqText="ISD code required"
                     pattern={true}
@@ -283,7 +296,7 @@ function StakeHolder({
                     name={fieldName[5]}
                     maxLength={10}
                     errorBorder={errors[fieldName[5]]?.message}
-                    value={form?.contactDetail?.primaryMobileNo || ''}
+                    // value={form?.primaryMobileNo || ''}
                     // changeFun={formHandeler}
                     reqText="mobile no. required"
                     pattern={true}
@@ -456,8 +469,9 @@ function StakeHolder({
               />
               <small style={errorFontStyle}>
                 {
-                // !form?.otherDetail?.sourceOfWealth &&
-                  errors[fieldName[10]]?.message}
+                  // !form?.otherDetail?.sourceOfWealth &&
+                  errors[fieldName[10]]?.message
+                }
               </small>
             </Col>
             <Col xs={12} md={4}>
@@ -500,8 +514,9 @@ function StakeHolder({
               />
               <small style={errorFontStyle}>
                 {
-                // !form?.otherDetail?.occupation &&
-                  errors[fieldName[12]]?.message}
+                  // !form?.otherDetail?.occupation &&
+                  errors[fieldName[12]]?.message
+                }
               </small>
             </Col>
             <Col xs={12} md={4}>

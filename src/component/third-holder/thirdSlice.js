@@ -10,12 +10,46 @@ const initialState = {
   canId: '',
 };
 
-export const thirdHolderCreateAsync = createAsyncThunk(
+export const createThirdHolderAsync = createAsyncThunk(
   'third/create',
   async (obj, thunkAPI) => {
     
     try {
       return await thirdAPI.createThirdHolder(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getThirdHolderAsync = createAsyncThunk(
+  'third/get',
+  async (userId, thunkAPI) => {
+    try {
+      return await thirdAPI.getThirdHolder(userId);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateThirdHolderAsync = createAsyncThunk(
+  'third/update',
+  async (obj, thunkAPI) => {
+    try {
+      return await thirdAPI.updateThirdHolder(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -42,15 +76,49 @@ export const thirdSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //push can creteria form
-      .addCase(thirdHolderCreateAsync.pending, (state) => {
+      //POST can creteria form
+      .addCase(createThirdHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(thirdHolderCreateAsync.fulfilled, (state, action) => {
+      .addCase(createThirdHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
         state.thirdHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
       })
-      .addCase(thirdHolderCreateAsync.rejected, (state, action) => {
+      .addCase(createThirdHolderAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //GET can creteria form
+      .addCase(getThirdHolderAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getThirdHolderAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.thirdHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(getThirdHolderAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //UPDATE can creteria form
+      .addCase(updateThirdHolderAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateThirdHolderAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.thirdHolderObj = action.payload;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(updateThirdHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

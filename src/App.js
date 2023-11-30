@@ -5,9 +5,11 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useSelector,useDispatch } from 'react-redux';
-import {getCriteriaFormAsync} from './component/can-criteria/canCriteriaSlice'
-
+import { useSelector, useDispatch } from 'react-redux';
+import { getCriteriaFormAsync } from './component/can-criteria/canCriteriaSlice';
+import { getPrimaryHolderAsync } from './component/primary-holder/primarySlice';
+import { getSecondHolderAsync } from './component/second-holder/SecondSlice';
+import { getThirdHolderAsync } from './component/third-holder/thirdSlice';
 
 //
 import Tabs from './common/tabs/Tabs';
@@ -20,21 +22,25 @@ import ThirdHolder from './component/third-holder/ThirdHolder';
 import ProofUpload from './component/proof-upload/ProofUpload';
 import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
+import Test from './component/Test'
 
 function App() {
   const methods = useForm();
   const { userId } = useSelector((state) => state.account);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(userId);
-    dispatch(getCriteriaFormAsync(userId));
-  }, [userId]);
+    if (userId) {
+      dispatch(getCriteriaFormAsync(userId));
+      dispatch(getPrimaryHolderAsync(userId));
+      dispatch(getSecondHolderAsync(userId));
+      dispatch(getThirdHolderAsync(userId));
+    }
+  }, []);
 
-
-
- 
+  console.log('userId', userId);
 
   return (
     <React.Fragment>
@@ -52,12 +58,21 @@ function App() {
                 path="/primary-holder"
                 element={<PrimaryHolder methods={methods} />}
               />
-              <Route path="/second-holder" element={<SecondHolder />} />
-              <Route path="/third-holder" element={<ThirdHolder />} />
+              <Route
+                path="/second-holder"
+                element={<SecondHolder methods={methods} />}
+              />
+              <Route
+                path="/third-holder"
+                element={<ThirdHolder methods={methods} />}
+              />
               <Route path="/guardian-holder" element={<GuardianHolder />} />
-              <Route path="/bank-accounts" element={<BankAccounts />} />
+              <Route
+                path="/bank-accounts"
+                element={<BankAccounts methods={methods} />}
+              />
               <Route path="/nominees" element={<Nominees />} />
-              <Route path="/proof-upload" element={<ProofUpload />} />
+              {/* <Route path="/proof-upload" element={<ProofUpload />} /> */}
             </Routes>
           </Router>
         </FormProvider>

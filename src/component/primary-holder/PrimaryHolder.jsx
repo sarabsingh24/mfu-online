@@ -2,40 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
 import { useFormContext } from 'react-hook-form';
-import useFormPersist from 'react-hook-form-persist';
 //components
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import useCommonReducer from '../../common/customComp/useCommonReducer';
-import { commonFormField } from '../../common/stake-holder/stakeHolderData';
-import { primaryHolderCreateAsync } from './primarySlice';
 
-const fieldName = [
-  'primary-name',
-  'primary-dateOfBirth',
-  'primary-panPekrnNo',
-  'primary-confirmpanPekrnNo',
-  'primary-mobileIsdCode',
-  'primary-primaryMobileNo',
-  'primary-primaryEmail',
-  'primary-grossIncome',
-  'primary-netWorth',
-  'primary-netWorthDate',
-  'primary-sourceOfWealth',
-  'primary-sourceOfWealthOthers',
-  'primary-occupation',
-  'primary-occupationOthers',
-  'primary-pep',
-  'primary-kraAddressType',
-  'primary-taxResidencyFlag',
-  'primary-birthCity',
-  'primary-birthCountry',
-  'primary-citizenshipCountry',
-  'primary-nationalityCountry',
-  'primary-taxCountry',
-  'primary-taxReferenceNo',
-  'primary-identityType',
-];
+import {
+  createPrimaryHolderAsync,
+  updatePrimaryHolderAsync,
+} from './primarySlice';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { primaryFormFields } from './primaryData';
+
+const fieldName = Object.keys(primaryFormFields);
 
 function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
@@ -45,8 +24,10 @@ function PrimaryHolder({ methods }) {
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
 
-  const { stepsCount, primeHolderObj, dispatch } = useCommonReducer();
-
+  const { primeHolderObj, isSuccess } = useSelector((state) => state.primary);
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -57,13 +38,37 @@ function PrimaryHolder({ methods }) {
   } = useFormContext();
   // useFormPersist('form-name-primary', { watch, setValue });
 
-  // useEffect(() => {
-  //   if (Object.keys(primeHolderObj).length) {
-  //     setForm(primeHolderObj);
-  //   } else {
-  //     setForm(commonFormField);
-  //   }
-  // }, [primeHolderObj]);
+  useEffect(() => {
+    const newObj = {};
+
+    if (primeHolderObj?.userId) {
+      for (let fstLevel in primeHolderObj) {
+        if (fstLevel === 'contactDetail') {
+          for (let secLev in primeHolderObj[fstLevel]) {
+            newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'otherDetail') {
+          for (let secLev in primeHolderObj[fstLevel]) {
+            newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'fatcaDetail') {
+          for (let secLev in primeHolderObj[fstLevel]) {
+            newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'taxRecords') {
+          for (let secLev in primeHolderObj[fstLevel]) {
+            newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
+          }
+        } else {
+          newObj[`primary-${fstLevel}`] = primeHolderObj[fstLevel];
+        }
+      }
+      // console.log(newObj);
+      setForm(newObj);
+    } else {
+      setForm(primaryFormFields);
+    }
+  }, [primeHolderObj]);
 
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
@@ -78,52 +83,61 @@ function PrimaryHolder({ methods }) {
       }
     }
 
-    dispatch(
-      primaryHolderCreateAsync({
-        // ...primeHolderObj,
-        holderType: 'PR',
-        panExemptFlag: 'Y',
-        residencePhoneNo: '',
-        relationship: '01',
-        relationshipProof: '01',
-        panPekrnNo: obj.panPekrnNo,
-        confirmpanPekrnNo: obj.confirmpanPekrnNo,
-        name: obj.name,
-        dateOfBirth: obj.dateOfBirth,
-        contactDetail: {
-          primaryEmail: obj.primaryEmail,
-          mobileIsdCode: obj.mobileIsdCode,
-          primaryMobileNo: obj.primaryMobileNo,
-        },
-        otherDetail: {
-          otherInfo: 'string',
-          grossIncome: obj.grossIncome ? obj.grossIncome : '',
-          netWorth: obj.netWorth ? obj.netWorth : '',
-          netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
-          sourceOfWealth: obj.sourceOfWealth,
-          sourceOfWealthOthers: obj.sourceOfWealthOthers,
-          occupation: obj.occupation,
-          occupationOthers: obj.occupationOthers,
-          kraAddressType: obj.kraAddressType,
-          pep: obj.pep,
-        },
-        fatcaDetail: {
-          taxResidencyFlag: obj.taxResidencyFlag,
-          birthCity: obj.birthCity,
-          birthCountry: obj.birthCountry,
-          citizenshipCountry: obj.citizenshipCountry,
-          nationalityCountry: obj.nationalityCountry,
-          taxReferenceNo: obj.taxReferenceNo,
-          taxRecords: [
-            {
-              taxCountry: obj.taxCountry,
-              taxReferenceNo: obj.taxReferenceNo,
-              identityType: obj.identityType,
-            },
-          ],
-        },
-      })
-    );
+    const submitObj = {
+      // ...primeHolderObj,
+      userId: userId,
+      holderType: 'PR',
+      panExemptFlag: 'Y',
+      residencePhoneNo: '',
+      relationship: '01',
+      relationshipProof: '01',
+      panPekrnNo: obj.panPekrnNo,
+      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      name: obj.name,
+      dateOfBirth: obj.dateOfBirth,
+      contactDetail: {
+        primaryEmail: obj.primaryEmail,
+        mobileIsdCode: obj.mobileIsdCode,
+        primaryMobileNo: obj.primaryMobileNo,
+      },
+      otherDetail: {
+        otherInfo: 'string',
+        grossIncome: obj.grossIncome ? obj.grossIncome : '',
+        netWorth: obj.netWorth ? obj.netWorth : '',
+        netWorthDate: obj.netWorthDate ? obj.netWorthDate : '',
+        sourceOfWealth: obj.sourceOfWealth,
+        sourceOfWealthOthers: obj.sourceOfWealthOthers,
+        occupation: obj.occupation,
+        occupationOthers: obj.occupationOthers,
+        kraAddressType: obj.kraAddressType,
+        pep: obj.pep,
+      },
+      fatcaDetail: {
+        taxResidencyFlag: obj.taxResidencyFlag,
+        birthCity: obj.birthCity,
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
+        taxReferenceNo: obj.taxReferenceNo,
+        taxRecords: [
+          {
+            taxCountry: obj.taxCountry,
+            taxReferenceNo: obj.taxReferenceNo,
+            identityType: obj.identityType,
+          },
+        ],
+      },
+    };
+
+    if (primeHolderObj?.userId) {
+      console.log('update');
+
+      dispatch(updatePrimaryHolderAsync({ ...submitObj, userId: userId }));
+    } else {
+      console.log('create');
+      dispatch(createPrimaryHolderAsync({ ...submitObj }));
+    }
+
     dispatch(pageCount(stepsCount + 1));
 
     // delete primeHolderObj.confirmpanPekrnNo;
