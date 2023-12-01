@@ -10,7 +10,7 @@ import { getCriteriaFormAsync } from './component/can-criteria/canCriteriaSlice'
 import { getPrimaryHolderAsync } from './component/primary-holder/primarySlice';
 import { getSecondHolderAsync } from './component/second-holder/SecondSlice';
 import { getThirdHolderAsync } from './component/third-holder/thirdSlice';
-
+import { getBankAccountAsync } from './component/bank-account/bankaccountSlice';
 //
 import Tabs from './common/tabs/Tabs';
 import BankAccounts from './component/bank-account/BankAccounts';
@@ -22,7 +22,6 @@ import ThirdHolder from './component/third-holder/ThirdHolder';
 import ProofUpload from './component/proof-upload/ProofUpload';
 import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
-import Test from './component/Test'
 
 function App() {
   const methods = useForm();
@@ -31,16 +30,14 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(userId);
     if (userId) {
       dispatch(getCriteriaFormAsync(userId));
       dispatch(getPrimaryHolderAsync(userId));
       dispatch(getSecondHolderAsync(userId));
       dispatch(getThirdHolderAsync(userId));
+      dispatch(getBankAccountAsync(userId));
     }
   }, []);
-
-  console.log('userId', userId);
 
   return (
     <React.Fragment>
@@ -71,7 +68,10 @@ function App() {
                 path="/bank-accounts"
                 element={<BankAccounts methods={methods} />}
               />
-              <Route path="/nominees" element={<Nominees />} />
+              <Route
+                path="/nominees"
+                element={<Nominees methods={methods} />}
+              />
               {/* <Route path="/proof-upload" element={<ProofUpload />} /> */}
             </Routes>
           </Router>

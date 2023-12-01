@@ -15,30 +15,32 @@ export const createPrimaryHolder = async (obj) => {
 
 // GET
 export const getPrimaryHolder = async (userId) => {
-  
   const response = await axios.get(
-    `${BASE_URL}/primeHolderObj/?userId=${userId}`,
+    `${BASE_URL}/primeHolderObj/?userId=${userId}`
   );
   const data = await response.data[0];
   console.log('api', data);
-  if (data) {return data};
+  if (data) {
+    return data;
+  }
+  return {};
 };
 
 // PUT
 export const updatePrimaryHolder = async (obj) => {
- 
   const response = await axios.put(
-    `${BASE_URL}/primeHolderObj/${obj.userId}`, obj, {
-      headers:{
-        'content-type':'application/json'
-      }
+    `${BASE_URL}/primeHolderObj/${obj.userId}`,
+    obj,
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
     }
   );
   const data = await response.data;
   console.log('api', data);
   return data;
 };
-
 
 const primaryAPI = {
   createPrimaryHolder,

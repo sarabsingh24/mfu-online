@@ -136,7 +136,59 @@
     }
   ],
   "guardianHolderObj": [],
-  "bankAccountsObj": [],
-  "nomineeObj": [],
+  "bankAccountsObj": [
+    {
+      "accountDetails": [
+        {
+          "accountNo": "3456",
+          "reAccountNo": "3456",
+          "accountType": "FCNR",
+          "bankId": "ddf 66",
+          "micrCode": "ggg",
+          "ifscCode": "kk",
+          "bankProof": "77"
+        },
+        {
+          "accountNo": "8888",
+          "reAccountNo": "8888",
+          "accountType": "CC",
+          "bankId": "hdfc 33",
+          "micrCode": "ujuj",
+          "ifscCode": "pop",
+          "bankProof": "14"
+        }
+      ],
+      "userId": 1,
+      "id": 1
+    }
+  ],
+  "nomineeObj": [
+    {
+      "nomineeOption": "Y",
+      "noOfNominees": "3",
+      "nomineeDetail": [
+        {
+          "nomineeName": "kamal",
+          "relation": "preet",
+          "percentage": "10",
+          "dateOfBirth": "2023-12-26"
+        },
+        {
+          "nomineeName": "sss",
+          "relation": "44",
+          "percentage": "70",
+          "dateOfBirth": "2023-12-27"
+        },
+        {
+          "nomineeName": "dd",
+          "relation": "kk",
+          "percentage": "20",
+          "dateOfBirth": "2023-12-29"
+        }
+      ],
+      "userId": 1,
+      "id": 1
+    }
+  ],
   "proofUploadObj": []
 }

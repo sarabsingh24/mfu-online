@@ -17,6 +17,7 @@ import primaryReducer from '../component/primary-holder/primarySlice'
 import secondSlice from '../component/second-holder/SecondSlice'
 import thirdReducer from '../component/third-holder/thirdSlice'
 import bankAccountReducer from '../component/bank-account/bankaccountSlice'
+import nomineeObj from '../component/nominees/nomineeSlice'
 
 const persistConfig = {
   key: 'root',
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   second: secondSlice,
   third: thirdReducer,
   bankAccount: bankAccountReducer,
+  nominee: nomineeObj,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

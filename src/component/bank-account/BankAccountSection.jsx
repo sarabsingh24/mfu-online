@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import "../Style.css";
+import React, { useState, useEffect } from 'react';
+import { Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import '../Style.css';
 
 //component
-import Section from "../../common/section/Section";
-import InputText from "../../common/form-elements/InputText";
+import Section from '../../common/section/Section';
+import InputText from '../../common/form-elements/InputText';
 import InputTextHook from '../../common/form-elements/InputTextHook';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 
-import GridCustom from "../../common/grid-custom/GridCustom";
-import SelectOption from "../../common/form-elements/SelectOption";
-import { accountType, bankProofOptions } from "./accountData";
-
+import GridCustom from '../../common/grid-custom/GridCustom';
+import SelectOption from '../../common/form-elements/SelectOption';
+import { accountType, bankProofOptions } from './accountData';
 
 const errorFontStyle = {
   color: 'red',
@@ -38,8 +37,12 @@ function BankAccountSection({
 
   useEffect(() => {
     setValue(`${accountCount}-accountNo`, formObj?.accountNo);
+    setValue(`${accountCount}-reAccountNo`, formObj?.reAccountNo);
+    setValue(`${accountCount}-accountType`, formObj?.accountType);
     setValue(`${accountCount}-bankId`, formObj?.bankId);
-    
+    setValue(`${accountCount}-micrCode`, formObj?.micrCode);
+    setValue(`${accountCount}-ifscCode`, formObj?.ifscCode);
+    setValue(`${accountCount}-bankProof`, formObj?.bankProof);
   }, []);
 
   let labelName = `${accountCount}-accountNo`;
@@ -71,16 +74,6 @@ function BankAccountSection({
             <small style={errorFontStyle}>
               {errors[`${accountCount}-accountNo`]?.message}
             </small>
-            {/* <InputText
-              name="accountNo"
-              label="Bank A/c No"
-              type="password"
-              value={formObj?.accountNo || ''}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
           <Col xs={12} md={4}>
             <InputTextHook
@@ -100,16 +93,6 @@ function BankAccountSection({
             <small style={errorFontStyle}>
               {errors[`${accountCount}-reAccountNo`]?.message}
             </small>
-            {/* <InputText
-              name="reAccountNo"
-              label="Re-Enter Bank A/c No"
-              type="text"
-              value={formObj?.reAccountNo || ''}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
           <Col xs={12} md={4}>
             <SelectOptionHook
@@ -134,16 +117,6 @@ function BankAccountSection({
                 errors[`${accountCount}-accountType`]?.message
               }
             </small>
-            {/* <SelectOption
-              name="accountType"
-              label="Account Type"
-              value={formObj?.accountType || ''}
-              options={accountType}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
         </Row>
         <Row>
@@ -165,16 +138,6 @@ function BankAccountSection({
             <small style={errorFontStyle}>
               {errors[`${accountCount}-bankId`]?.message}
             </small>
-            {/* <InputText
-              name="bankId"
-              label="Bank"
-              type="text"
-              value={formObj?.bankId || ''}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
           <Col xs={12} md={4}>
             <InputTextHook
@@ -194,16 +157,6 @@ function BankAccountSection({
             <small style={errorFontStyle}>
               {errors[`${accountCount}-micrCode`]?.message}
             </small>
-            {/* <InputText
-              name="micrCode"
-              label="MICR"
-              type="text"
-              value={formObj?.micrCode || ''}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
           <Col xs={12} md={4}>
             <InputTextHook
@@ -223,16 +176,6 @@ function BankAccountSection({
             <small style={errorFontStyle}>
               {errors[`${accountCount}-ifscCode`]?.message}
             </small>
-            {/* <InputText
-              name="ifscCode"
-              label="IFSC"
-              type="text"
-              value={formObj?.ifscCode || ''}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
         </Row>
         <Row>
@@ -259,16 +202,6 @@ function BankAccountSection({
                 errors[`${accountCount}-bankProof`]?.message
               }
             </small>
-            {/* <SelectOption
-              name="bankProof"
-              label="Bank Proof"
-              value={formObj?.bankProof || ''}
-              options={bankProofOptions}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              errors={errorsOld[count]}
-            /> */}
           </Col>
         </Row>
       </GridCustom>

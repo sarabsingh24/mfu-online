@@ -14,17 +14,33 @@ export const createBankAccount = async (obj) => {
 };
 
 
+// GET
+export const getBankAccount = async (userId) => {
+  const response = await axios.get(`${BASE_URL}/bankAccountsObj/?${userId}`);
+  const data = await response.data[0];
+  console.log('api', data);
+  if (data) {
+    return data;
+  }
+  return {};
+};
+
+
 //update
 export const updateBankAccount = async (obj) => {
-  const response = await axios.put(`${BASE_URL}/bankAccountsObj`, obj, {
-    headers: {
-      'content-type': 'application/json',
-    },
-  });
+  const response = await axios.put(
+    `${BASE_URL}/bankAccountsObj/${obj.userId}`,
+    obj,
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
+    }
+  );
   const data = await response.data;
   console.log('api', data);
   return data;
 };
 
-const bankAccountAPI = { createBankAccount, updateBankAccount };
+const bankAccountAPI = { createBankAccount,getBankAccount, updateBankAccount };
 export default bankAccountAPI;
