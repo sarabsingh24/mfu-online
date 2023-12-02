@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
- 
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+
 // component
 import InputTextHook from '../../common/form-elements/InputTextHook';
-import GridCustom from "../../common/grid-custom/GridCustom";
-import Section from "../../common/section/Section";
-import InputText from "../../common/form-elements/InputText";
-import DatePicker from "../../common/form-elements/DatePicker";
-
+import GridCustom from '../../common/grid-custom/GridCustom';
+import Section from '../../common/section/Section';
+import InputText from '../../common/form-elements/InputText';
+import DatePicker from '../../common/form-elements/DatePicker';
 
 const errorFontStyle = {
   color: 'red',
@@ -36,11 +35,6 @@ export default function AddNominee({
     setValue(`${order}-dateOfBirth`, formObj?.dateOfBirth);
   }, []);
 
- 
-
-console.log(errors);
-
-
   return (
     <Section heading={`${order} Nominee`}>
       <GridCustom>
@@ -61,15 +55,7 @@ console.log(errors);
             <small style={errorFontStyle}>
               {errors[`${order}-nomineeName`]?.message}
             </small>
-            {/* <InputText
-              name="nomineeName"
-              label="Name of Nominee"
-              // value={formObj?.nomineeName || ""}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              // errors={errors[count]}
-            /> */}
+            
           </Col>
           <Col xs={12} md={3}>
             <InputTextHook
@@ -87,15 +73,7 @@ console.log(errors);
             <small style={errorFontStyle}>
               {errors[`${order}-relation`]?.message}
             </small>
-            {/* <InputText
-              name="relation"
-              label="Relationship"
-              // value={formObj?.relation || ""}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              // errors={errors[count]}
-            /> */}
+            
           </Col>
           <Col xs={12} md={3}>
             <InputTextHook
@@ -115,16 +93,7 @@ console.log(errors);
 
               {errors[`${order}-percentage`]?.message}
             </small>
-            {/* <InputText
-              name="percentage"
-              label="Percent(%)"
-              // value={formObj?.percentage || ""}
-              // value={100}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              // errors={errors[count]}
-            /> */}
+           
           </Col>
           <Col xs={12} md={3}>
             <InputTextHook
@@ -142,16 +111,7 @@ console.log(errors);
             <small style={errorFontStyle}>
               {errors[`${order}-dateOfBirth`]?.message}
             </small>
-            {/* <DatePicker
-              name="dateOfBirth"
-              label="Date of Birth"
-              // value={formObj?.dateOfBirth || ""}
-              count={count + 1}
-              changeFun={thisAccountHandeler}
-              mandatory="*"
-              // errors={errors[count]}
-              dob={true}
-            /> */}
+            
           </Col>
         </Row>
       </GridCustom>

@@ -227,7 +227,7 @@ export default function Nominees() {
     //   };
 
     // dispatch(nomineesForm(obj));
-    // dispatch(pageCount(stepsCount + 1));
+    dispatch(pageCount(stepsCount + 1));
     // }
   };
 
