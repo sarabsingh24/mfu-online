@@ -125,13 +125,11 @@ function BankAccounts() {
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  // useEffect(() => {
-  //   if (Object.keys(bankAccountsObj).length) {
-  //     setForm(bankAccountsObj);
-  //   } else {
-  //     setForm([bankRecord]);
-  //   }
-  // }, [bankAccountsObj]);
+  useEffect(() => {
+    if (Object.keys(bankAccountsObj).length) {
+      setForm(bankAccountsObj);
+    } 
+  }, [bankAccountsObj]);
 
   const formSubmitHandeler = (data) => {
     let newObj = [];
@@ -179,8 +177,18 @@ function BankAccounts() {
   };
 
   useEffect(()=>{
-    setValue('accounts', bankAccountsObj.length || accountCountNum);
-  })
+    setValue(
+      'accounts',
+      bankAccountsObj.accountDetails.length 
+    );
+  },[])
+
+  useEffect(() => {
+    dispatch(accountsFun(bankAccountsObj.accountDetails.length));
+  }, [bankAccountsObj.accountDetails.length]);
+
+
+
 
   return (
     <React.Fragment>
@@ -207,31 +215,29 @@ function BankAccounts() {
                   // value={form?.holdingNature || ''}
                   changeFun={numberHandeler}
                 />
-
-              
               </Col>
             </Row>
           </GridCustom>
         </Section>
 
-        {Array.from({ length: bankAccountsObj.length || accountCountNum }).map(
-          (detail, index) => {
-            return (
-              <BankAccountSection
-                key={index}
-                formObj={bankAccountsObj.accountDetails[index]}
-                setForm={setForm}
-                count={index}
-                thisAccountHandeler={thisAccountHandeler}
-                errorsOld={errorsOld}
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                watch={watch}
-              />
-            );
-          }
-        )}
+        {Array.from({
+          length:  accountCountNum,
+        }).map((detail, index) => {
+          return (
+            <BankAccountSection
+              key={index}
+              formObj={bankAccountsObj.accountDetails[index]}
+              setForm={setForm}
+              count={index}
+              thisAccountHandeler={thisAccountHandeler}
+              errorsOld={errorsOld}
+              register={register}
+              errors={errors}
+              setValue={setValue}
+              watch={watch}
+            />
+          );
+        })}
 
         <button type="button" onClick={backBtnHandeler}>
           Back

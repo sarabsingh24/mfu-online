@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import nomineeAPI from './nomineeAPI';
+import proofAPI from './proofAPI';
 
 const initialState = {
-  nomineeObj: {},
+  proofUploadObj: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
-  canId: '',
-  nomineeCountNum:1
+
 };
 
-export const createNomineeAsync = createAsyncThunk(
-  'nominee/create',
+export const createProofDataAsync = createAsyncThunk(
+  'proof/create',
   async (obj, thunkAPI) => {
+    console.log('slice', obj);
     try {
-      return await nomineeAPI.createNominee(obj);
+      return await proofAPI.createProofData(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -28,11 +28,11 @@ export const createNomineeAsync = createAsyncThunk(
   }
 );
 
-export const getNomineeAsync = createAsyncThunk(
-  'nominee/get',
+export const getProofDataAsync = createAsyncThunk(
+  'proof/get',
   async (userId, thunkAPI) => {
     try {
-      return await nomineeAPI.getNominee(userId);
+      return await proofAPI.getProofData(userId);
     } catch (error) {
       const message =
         (error.response &&
@@ -45,12 +45,11 @@ export const getNomineeAsync = createAsyncThunk(
   }
 );
 
-export const updateNomineeAsync = createAsyncThunk(
-  'nominee/update',
+export const updateProofDataAsync = createAsyncThunk(
+  'proof/update',
   async (obj, thunkAPI) => {
-    console.log('slice', obj)
     try {
-      return await nomineeAPI.updateNominee(obj);
+      return await proofAPI.updateProofData(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -63,67 +62,61 @@ export const updateNomineeAsync = createAsyncThunk(
   }
 );
 
-export const nomineeSlice = createSlice({
-  name: 'nominee',
+export const proofSlice = createSlice({
+  name: 'proof',
   initialState,
   reducers: {
     reset: (state) => {
-      state.thirdHolderObj = {};
+      state.proofUploadObj = {};
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
     },
-    nomineeCountAction:(state,action) =>{
-        state.nomineeCountNum= action.payload
-    }
   },
   extraReducers: (builder) => {
     builder
-      //POST can creteria form
-      .addCase(createNomineeAsync.pending, (state) => {
+      //create primary form
+      .addCase(createProofDataAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createNomineeAsync.fulfilled, (state, action) => {
+      .addCase(createProofDataAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.nomineeObj = action.payload;
+        state.proofUploadObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(createNomineeAsync.rejected, (state, action) => {
+      .addCase(createProofDataAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-
-      //GET can creteria form
-      .addCase(getNomineeAsync.pending, (state) => {
+      //get primary form
+      .addCase(getProofDataAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getNomineeAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+      .addCase(getProofDataAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.nomineeObj = action.payload;
-        state.nomineeCountNum = action.payload.nomineeDetail.length;
+        state.proofUploadObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(getNomineeAsync.rejected, (state, action) => {
+      .addCase(getProofDataAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      //UPDATE can creteria form
-      .addCase(updateNomineeAsync.pending, (state) => {
+      //update primary form
+      .addCase(updateProofDataAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateNomineeAsync.fulfilled, (state, action) => {
+      .addCase(updateProofDataAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.nomineeObj = action.payload;
+        state.proofUploadObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(updateNomineeAsync.rejected, (state, action) => {
+      .addCase(updateProofDataAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -131,7 +124,7 @@ export const nomineeSlice = createSlice({
   },
 });
 
-const { actions, reducer } = nomineeSlice;
+const { actions, reducer } = proofSlice;
 
-export const { reset, nomineeCountAction } = actions;
+export const { reset } = actions;
 export default reducer;

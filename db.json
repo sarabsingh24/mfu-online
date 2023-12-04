@@ -143,18 +143,22 @@
           "accountNo": "3456",
           "reAccountNo": "3456",
           "accountType": "FCNR",
-          "bankId": "ddf 66",
+          "bankId": "icici",
           "micrCode": "ggg",
           "ifscCode": "kk",
           "bankProof": "77"
         },
         {
+          "nomineeName": "sss",
+          "relation": "44",
+          "percentage": "70",
+          "dateOfBirth": "2023-12-27",
           "accountNo": "8888",
           "reAccountNo": "8888",
           "accountType": "CC",
-          "bankId": "hdfc 33",
-          "micrCode": "ujuj",
-          "ifscCode": "pop",
+          "bankId": "axex",
+          "micrCode": "rty",
+          "ifscCode": "hjk",
           "bankProof": "14"
         }
       ],
@@ -165,30 +169,34 @@
   "nomineeObj": [
     {
       "nomineeOption": "Y",
-      "noOfNominees": "0",
       "nomineeDetail": [
         {
           "nomineeName": "kamal",
           "relation": "preet",
-          "percentage": "10",
+          "percentage": "30",
           "dateOfBirth": "2023-12-26"
         },
         {
+          "accountNo": "567",
+          "reAccountNo": "567",
+          "accountType": "CA",
+          "bankId": "hdfc",
+          "micrCode": "888",
+          "ifscCode": "sss",
+          "bankProof": "14",
           "nomineeName": "sss",
           "relation": "44",
           "percentage": "70",
           "dateOfBirth": "2023-12-27"
-        },
-        {
-          "nomineeName": "dd",
-          "relation": "kk",
-          "percentage": "20",
-          "dateOfBirth": "2023-12-29"
         }
       ],
       "userId": 1,
       "id": 1
     }
   ],
-  "proofUploadObj": []
+  "proofUploadObj": [
+    {
+      "id": 1
+    }
+  ]
 }

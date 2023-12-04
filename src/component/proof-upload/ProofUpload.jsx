@@ -7,6 +7,8 @@ import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { useFormContext } from 'react-hook-form';
 import "../Style.css";
 
 import { BsCheckCircleFill } from "react-icons/bs";
@@ -29,39 +31,47 @@ function ProofUpload() {
   const [btnFun, setBtnFun] = useState({});
   const [imagesList, setImagesList] = useState([]);
   const [bankAccount, setBankAccount] = useState([]);
-  const [recCanID, setRecCanID] = useState("");
+  const [recCanID, setRecCanID] = useState(true);
   const [nomineeApi, setNomineeApi] = useState([]);
   const [canNominee, setCanNominee] = useState([]);
 
   const [status, setStatus] = useState(false);
+
+const { bankAccountsObj } = useSelector((state) => state.bankAccount);
+const { nomineeObj } = useSelector((state) => state.nominee);
+const { proofUploadObj } = useSelector((state) => state.proof);
+const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+const { userId } = useSelector((state) => state.account);
+const dispatch = useDispatch();
+
+
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    stepsCount,
-    tabsCreater,
-    proofUploadObj,
-    combinedForm,
-    isSuccess,
-    isError,
-    message,
-    nomineeObj,
-    account,
-    bankAccountsObj,
-    canId,
-    dispatch,
-  } = useCommonReducer();
+ const {
+   register,
+   handleSubmit,
+   watch,
+   setValue,
+   getValues,
+   formState: { errors },
+ } = useFormContext();
+
+  
+
+
+
+
+  // useEffect(() => {
+  //   if (proofUploadObj.length) {
+  //     setImagesList(proofUploadObj);
+  //   }
+  // }, [proofUploadObj]);
 
   useEffect(() => {
-    if (proofUploadObj.length) {
-      setImagesList(proofUploadObj);
-    }
-  }, [proofUploadObj]);
+    // let banksName = bankAccountsObj.map((bank) => bank.bankId);
+    // setBankAccount(banksName);
 
-  useEffect(() => {
-    let banksName = bankAccountsObj.map((bank) => bank.bankId);
-    setBankAccount(banksName);
-
-    setCanNominee(nomineeObj.nomineeRecords.length);
+    setCanNominee(nomineeObj.length);
     // console.log(nomineeObj);
     // setRecCanID(canId);
   }, [bankAccountsObj, nomineeObj]);
@@ -82,63 +92,68 @@ function ProofUpload() {
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  const formSubmitHandeler = async (e) => {
-    e.preventDefault();
+  const formSubmitHandeler = async (data) => {
+console.log(data)
+    // e.preventDefault();
+    // let reponse = await fetch("http://api.finnsysonline.com:81/mfu/v1/cans", {
+    //   method: "POST",
+    //   body: JSON.stringify(combinedForm),
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // });
+    // reponse = await reponse.json();
 
-    let reponse = await fetch("http://api.finnsysonline.com:81/mfu/v1/cans", {
-      method: "POST",
-      body: JSON.stringify(combinedForm),
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    reponse = await reponse.json();
-
-    if (reponse.success) {
-      toast.success(reponse.message);
-      setRecCanID(reponse.can);
-    } else {
-      toast.error(reponse.message);
-      // setRecCanID("30069GS001");
-    }
+    // if (reponse.success) {
+    //   toast.success(reponse.message);
+    //   setRecCanID(reponse.can);
+    // } else {
+    //   toast.error(reponse.message);
+    //   // setRecCanID("30069GS001");
+    // }
 
     if (true) {
-      dispatch(createAccount(combinedForm));
+      // dispatch(createAccount(combinedForm));............sarab
     }
   };
 
   useEffect(() => {
-    console.log(nomineeApi);
-    let requestInterval;
-    if (canNominee && recCanID !== "") {
-      requestInterval = setInterval(async () => {
-        let reponse = await fetch(
-          `http://api.finnsysonline.com:81/mfu/v1/cans/${recCanID}/status`,
-          {
-            method: "get",
-            headers: {
-              "content-type": "application/json",
-            },
-          }
-        );
-        reponse = await reponse.json();
-        console.log(reponse);
-        if (reponse.success) {
-          let nomineeList = reponse.nomineeVerificationLinks;
-          setNomineeApi(nomineeList);
-          //   toast.success(reponse.message);
-        } else {
-          toast.error(reponse.message);
-        }
-      }, 3000);
-    }
-    return () => {
-      clearInterval(requestInterval);
+    console.log(bankAccountsObj);
+    // let requestInterval;
+    // if (canNominee && recCanID !== "") {
+    //   requestInterval = setInterval(async () => {
+    //     let reponse = await fetch(
+    //       `http://api.finnsysonline.com:81/mfu/v1/cans/${recCanID}/status`,
+    //       {
+    //         method: "get",
+    //         headers: {
+    //           "content-type": "application/json",
+    //         },
+    //       }
+    //     );
+    //     reponse = await reponse.json();
+    //     console.log(reponse);
+    //     if (reponse.success) {
+    //       let nomineeList = reponse.nomineeVerificationLinks;
+    //       setNomineeApi(nomineeList);
+    //       //   toast.success(reponse.message);
+    //     } else {
+    //       toast.error(reponse.message);
+    //     }
+    //   }, 3000);
+    // }
+    // return () => {
+    //   clearInterval(requestInterval);
+    // };
+  }, [bankAccountsObj]);
+
+
+    const backBtnHandeler = () => {
+      dispatch(pageCount(stepsCount - 1));
     };
-  });
 
   return (
-    <>
+    <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
       <FooterSection
         backBtn={true}
         nextBtn={false}
@@ -159,17 +174,13 @@ function ProofUpload() {
           </Row>
           <Row className=" mb-4">
             <Col xs={12} md={6}>
-              <h5 className={recCanID ? "text-success" : "text-secondary"}>
+              <h5 className={recCanID ? 'text-success' : 'text-secondary'}>
                 Step 1: Submit Can Criteria Form &nbsp;
                 {recCanID && <BsCheckCircleFill />}
               </h5>
 
               {!recCanID && (
-                <button
-                  type="button"
-                  onClick={formSubmitHandeler}
-                  className="btn  btn-success me-2  btn-sm"
-                >
+                <button type="submit" className="btn  btn-success me-2  btn-sm">
                   Submit Can Criteria Form
                 </button>
               )}
@@ -181,17 +192,17 @@ function ProofUpload() {
                 Step 2: Proof Upload
               </h5>
 
-              {bankAccount.length > 0 && recCanID !== ""
-                ? bankAccount.map((name, index) => {
-                    return (
-                      <UploadSection
-                        key={index}
-                        bankName={name}
-                        recCanID={recCanID}
-                      />
-                    );
-                  })
-                : ""}
+              {bankAccountsObj?.accountDetails?.map((bank, index) => {
+                return (
+                  // <div>{name}</div>
+                  <UploadSection
+                    key={`${index}r`}
+                    bankName={bank.bankId}
+                    recCanID={recCanID}
+                    proofUploadObj={proofUploadObj}
+                  />
+                );
+              })}
             </Col>
           </Row>
           {canNominee ? (
@@ -199,7 +210,7 @@ function ProofUpload() {
               <Col xs={12}>
                 <h5 className="text-secondary">step 3: Nominee Varification</h5>
 
-                {nomineeApi.length > 0 && recCanID !== ""
+                {nomineeApi.length > 0 && recCanID !== ''
                   ? nomineeApi.map((item, index) => {
                       return (
                         <a
@@ -214,23 +225,25 @@ function ProofUpload() {
                         </a>
                       );
                     })
-                  : ""}
+                  : ''}
               </Col>
             </Row>
           ) : (
-            ""
+            ''
           )}
         </GridCustom>
       </Section>
-
-      <FooterSection
+      <button type="button" onClick={backBtnHandeler}>
+        Back
+      </button>
+      {/* <FooterSection
         backBtn={recCanID ? false : true}
         nextBtn={false}
         submitBtn={false}
         btnFun={btnFun}
         cls="btn-right-align"
-      />
-    </>
+      /> */}
+    </Form>
   );
 }
 

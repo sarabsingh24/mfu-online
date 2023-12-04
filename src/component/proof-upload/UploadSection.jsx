@@ -1,77 +1,85 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Form } from "react-bootstrap";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Alert from "react-bootstrap/Alert";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import { toast } from "react-toastify";
-import { useNavigate, useLocation } from "react-router-dom";
-import { BsCheckCircleFill } from "react-icons/bs";
-import "../Style.css";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from 'react';
+import { Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Alert from 'react-bootstrap/Alert';
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
+import { toast } from 'react-toastify';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { BsCheckCircleFill } from 'react-icons/bs';
+import '../Style.css';
+import axios from 'axios';
+import { createProofDataAsync, updateProofDataAsync } from './proofSlice';
 
 // component
-import GridCustom from "../../common/grid-custom/GridCustom";
-import Section from "../../common/section/Section";
-import InputText from "../../common/form-elements/InputText";
-import FooterSection from "../../common/footerSection/FooterSection";
-import { btnHandeler } from "../../common/helper/Helper";
-import useCommonReducer from "../../common/customComp/useCommonReducer";
-import { pageCount } from "../../reducer/Reducer/tab/tabSlice";
+import GridCustom from '../../common/grid-custom/GridCustom';
+import Section from '../../common/section/Section';
+import InputText from '../../common/form-elements/InputText';
+import FooterSection from '../../common/footerSection/FooterSection';
+import { btnHandeler } from '../../common/helper/Helper';
+import useCommonReducer from '../../common/customComp/useCommonReducer';
+import { pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import {
   createAccount,
   reset,
-} from "../../reducer/Reducer/account/accountSlice";
+} from '../../reducer/Reducer/account/accountSlice';
 
-function UploadSection({ bankName, recCanID }) {
+function UploadSection({ bankName, recCanID, proofUploadObj, key }) {
   const [btnFun, setBtnFun] = useState({});
   const [imagesList, setImagesList] = useState([]);
-  const [data, setData] = useState("");
+  const [data, setData] = useState('');
   const [bankProofSize, setBankProofSize] = useState(0);
   const [status, setStatus] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [isSizeGrater, setIsSizeGrater] = useState(false);
+  const [uploadImgs, setUploadImgs] = useState([]);
   const divId = useRef();
+
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
+
   const [reqData, setReqData] = useState({
-    actionType: "AD",
-    imageReferenceNo: "",
-    imageType: "",
+    actionType: 'AD',
+    imageReferenceNo: '',
+    imageType: '',
   });
 
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    stepsCount,
-    tabsCreater,
-    proofUploadObj,
-    combinedForm,
-    isSuccess,
-    isError,
-    message,
-    nomineeObj,
-    account,
-    bankAccountsObj,
-    dispatch,
-  } = useCommonReducer();
+  // const {
+  //   stepsCount,
+  //   tabsCreater,
+  //   proofUploadObj,
+  //   combinedForm,
+  //   isSuccess,
+  //   isError,
+  //   message,
+  //   nomineeObj,
+  //   account,
+  //   bankAccountsObj,
+  //   dispatch,
+  // } = useCommonReducer();
 
-  useEffect(() => {
-    if (proofUploadObj.length) {
-      setImagesList(proofUploadObj);
-    }
-  }, [proofUploadObj]);
+  // useEffect(() => {
+  //   if (proofUploadObj.length) {
+  //     setImagesList(proofUploadObj);
+  //   }
+  // }, [proofUploadObj]);
 
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
+  // useEffect(() => {
+  //   if (isError) {
+  //     toast.error(message);
+  //   }
 
-    if (isSuccess) {
-      toast.success("User Registered successfuly");
-      dispatch(reset());
-      dispatch(pageCount(0));
-    }
-  }, [isError, isSuccess, message]);
+  //   if (isSuccess) {
+  //     toast.success('User Registered successfuly');
+  //     dispatch(reset());
+  //     dispatch(pageCount(0));
+  //   }
+  // }, [isError, isSuccess, message]);
 
   const getImageHandeler = (e) => {
     e.preventDefault();
@@ -84,10 +92,10 @@ function UploadSection({ bankName, recCanID }) {
     setData(e.target.files[0]);
     setIsUploaded(false);
 
-    setImagesList([{ id, path, name, size, type, status: "pending..." }]);
+    setImagesList([{ id, path, name, size, type, status: 'pending...' }]);
 
     setReqData({ ...reqData, imageReferenceNo: name, imageType: type });
-    e.target.value = "";
+    e.target.value = '';
   };
 
   const removeImgHandeler = (id, size) => {
@@ -104,55 +112,76 @@ function UploadSection({ bankName, recCanID }) {
 
   const fileUploadHandeler = async (size) => {
     const formData = new FormData();
-    formData.append("file", data);
-    formData.append("actionType", "AD");
-    formData.append("imageType", "2#BP");
 
-    // console.log([...formData]);
+    formData.append('file', data);
+    formData.append('userId', userId);
+    formData.append('actionType', 'AD');
+    formData.append('imageType', '2#BP');
 
-    if (size < 500000) {
-      let response = await fetch(
-        `http://api.finnsysonline.com:81/mfu/v1/cans/11169GS001/proof`,
-        {
-          method: "post",
-          body: formData,
-        }
-      );
+    // const newObj = {};
 
-      if (response.ok) {
-        toast.success("file uploaded");
-        setBankProofSize(size);
-        setIsUploaded(true);
-      } else {
-        toast.error(response.message);
-      }
-      setIsSizeGrater(false);
+    // for (let k of formData) {
+    //   newObj[k[0]] = k[1];
+    // }
+
+    // setUploadImgs([...proofUploadObj, newObj]);
+
+
+
+
+
+    console.log([...formData]);
+    if (proofUploadObj?.userId) {
+      console.log('update');
+      dispatch(updateProofDataAsync(formData));
     } else {
-      setIsSizeGrater(true);
+      console.log('create');
+      dispatch(createProofDataAsync(formData));
     }
+
+    // if (size < 500000) {
+    //   let response = await fetch(
+    //     `http://api.finnsysonline.com:81/mfu/v1/cans/11169GS001/proof`,
+    //     {
+    //       method: 'post',
+    //       body: formData,
+    //     }
+    //   );
+
+    //   if (response.ok) {
+    //     toast.success('file uploaded');
+    //     setBankProofSize(size);
+    //     setIsUploaded(true);
+    //   } else {
+    //     toast.error(response.message);
+    //   }
+    //   setIsSizeGrater(false);
+    // } else {
+    //   setIsSizeGrater(true);
+    // }
   };
-  console.log(bankProofSize);
+  console.log(uploadImgs);
 
   return (
-    <section className="bg-light mb-4 pb-3 rounded-3">
-      <GridCustom style={{ position: "relative" }}>
+    <section className="bg-light mb-4 pb-3 rounded-3" key={key}>
+      <GridCustom style={{ position: 'relative' }}>
         <Row className="justify-content-md-end mb-4 ">
-          <Col xs={12} md={12} style={{ textAlign: "right" }}>
+          <Col xs={12} md={12} style={{ textAlign: 'right' }}>
             <input
               type="file"
               name="file"
               className="upload-image-btn"
               ref={divId}
               onChange={getImageHandeler}
-              style={{ position: "relative" }}
+              style={{ position: 'relative' }}
               accept="image/png, image/gif, image/jpeg, image/jpg"
             />
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                position: "relative",
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                position: 'relative',
               }}
             >
               <h6 className="pb-2 mb-0">
@@ -191,7 +220,7 @@ function UploadSection({ bankName, recCanID }) {
                         <img
                           src={image.path}
                           alt={image.name}
-                          style={{ width: "80px" }}
+                          style={{ width: '80px' }}
                         />
                       </div>
 
@@ -202,37 +231,39 @@ function UploadSection({ bankName, recCanID }) {
                         {isUploaded ? (
                           <span>
                             <BsCheckCircleFill
-                              style={{ color: "green", fontSize: "21px" }}
+                              style={{ color: 'green', fontSize: '21px' }}
                             />
                           </span>
                         ) : (
-                          "Pending"
+                          'Pending'
                         )}
                       </div>
 
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-around",
+                          display: 'flex',
+                          justifyContent: 'space-around',
                         }}
                       >
                         {!isUploaded ? (
                           <>
-                            <Button
-                              variant="success"
-                              size="sm"
-                              onClick={() =>
-                                fileUploadHandeler(image.size + bankProofSize)
-                              }
-                              disabled={
-                                image.size + bankProofSize > 500000
-                                  ? true
-                                  : false
-                              }
-                            >
-                              Upload
-                            </Button>
-
+                          
+                              <Button
+                                variant="success"
+                                type="submit"
+                                size="sm"
+                                onClick={() =>
+                                  fileUploadHandeler(image.size + bankProofSize)
+                                }
+                                disabled={
+                                  image.size + bankProofSize > 500000
+                                    ? true
+                                    : false
+                                }
+                              >
+                                Upload
+                              </Button>
+                          
                             <Button
                               variant="warning"
                               size="sm"
@@ -244,7 +275,7 @@ function UploadSection({ bankName, recCanID }) {
                             </Button>
                           </>
                         ) : (
-                          "Uploaded"
+                          'Uploaded'
                         )}
                       </div>
                     </div>
@@ -253,16 +284,16 @@ function UploadSection({ bankName, recCanID }) {
                 {image.size + bankProofSize > 500000 ? (
                   <small
                     style={{
-                      position: "absolute",
-                      right: "0",
-                      top: "0",
-                      color: "red",
+                      position: 'absolute',
+                      right: '0',
+                      top: '0',
+                      color: 'red',
                     }}
                   >
                     Total uploaded images size are more than 500 KB
                   </small>
                 ) : (
-                  ""
+                  ''
                 )}
               </React.Fragment>
             );

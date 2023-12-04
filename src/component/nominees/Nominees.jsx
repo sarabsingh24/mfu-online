@@ -181,13 +181,13 @@ export default function Nominees() {
         return total;
       }, 0);
 
+    console.log(newObj.slice(0, nomineeCountNum));
     if (checkPercentage === 100) {
       if (nomineeObj.userId) {
         dispatch(
           updateNomineeAsync({
             nomineeOption: data.nomineeOptedFlag,
-            noOfNominees: number,
-            nomineeDetail: [...newObj.slice(0, nomineeCountNum)],
+            nomineeDetail: newObj.slice(0, nomineeCountNum),
             userId: userId,
           })
         );
@@ -195,13 +195,13 @@ export default function Nominees() {
         dispatch(
           createNomineeAsync({
             nomineeOption: data.nomineeOptedFlag,
-            noOfNominees: number,
-            nomineeDetail: [...newObj.slice(0, nomineeCountNum)],
+            nomineeDetail: newObj.slice(0, nomineeCountNum),
             userId: userId,
           })
         );
       }
-       setpercentSts(false);
+      setpercentSts(false);
+      dispatch(pageCount(stepsCount + 1));
     } else {
       setpercentSts(true);
     }
@@ -227,7 +227,7 @@ export default function Nominees() {
     //   };
 
     // dispatch(nomineesForm(obj));
-    dispatch(pageCount(stepsCount + 1));
+
     // }
   };
 
@@ -250,7 +250,11 @@ export default function Nominees() {
   }, [nomineeObj]);
 
   useEffect(() => {
-    setValue('nomineeCount', nomineeObj.length || nomineeCountNum);
+    console.log(nomineeObj.nomineeDetail);
+    setValue(
+      'nomineeCount',
+      nomineeObj.nomineeDetail.length || nomineeCountNum
+    );
     setValue(
       'nomineeOptedFlag',
       nomineeObj?.nomineeOptedFlag === 'N' ? 'N' : 'Y'
@@ -260,6 +264,8 @@ export default function Nominees() {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+  console.log(nomineeCountNum);
 
   return (
     <React.Fragment>

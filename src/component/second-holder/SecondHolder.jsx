@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
-
 import { useSelector, useDispatch } from 'react-redux';
 //components
 import StakeHolder from '../../common/stake-holder/StakeHolder';

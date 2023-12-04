@@ -11,6 +11,7 @@ import { getPrimaryHolderAsync } from './component/primary-holder/primarySlice';
 import { getSecondHolderAsync } from './component/second-holder/SecondSlice';
 import { getThirdHolderAsync } from './component/third-holder/thirdSlice';
 import { getBankAccountAsync } from './component/bank-account/bankaccountSlice';
+import {getNomineeAsync} from './component/nominees/nomineeSlice'
 //
 import Tabs from './common/tabs/Tabs';
 import BankAccounts from './component/bank-account/BankAccounts';
@@ -36,6 +37,7 @@ function App() {
       dispatch(getSecondHolderAsync(userId));
       dispatch(getThirdHolderAsync(userId));
       dispatch(getBankAccountAsync(userId));
+       dispatch(getNomineeAsync(userId));
     }
   }, []);
 
@@ -72,7 +74,7 @@ function App() {
                 path="/nominees"
                 element={<Nominees methods={methods} />}
               />
-              {/* <Route path="/proof-upload" element={<ProofUpload />} /> */}
+              <Route path="/proof-upload" element={<ProofUpload methods={methods}/>} />
             </Routes>
           </Router>
         </FormProvider>
