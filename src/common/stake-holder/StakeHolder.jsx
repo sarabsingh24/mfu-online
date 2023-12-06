@@ -149,7 +149,6 @@ function StakeHolder({
   const panPekrnNo = watch(fieldName[2]);
 
   useEffect(() => {
-    console.log('sliceData', sliceData);
     if (userId) {
       if (sliceData?.fatcaDetail?.taxResidencyFlag === 'Y') {
         setNotIndian(false);
@@ -174,22 +173,23 @@ function StakeHolder({
   }, [userId]);
 
   useEffect(() => {
+   
+    setValue('name', form?.name)
     for (let k in form) {
       setValue(k, form[k]);
     }
   }, [form]);
 
+  
+
   return (
     <React.Fragment>
-      <FooterSection
-        backBtn={true}
-        nextBtn={false}
-        btnFun={btnFun}
-        cls="btn-left-align"
-      />
-      {blanket && (
-        <div onClick={closeBlanketHandeler} className="blanket-cover"></div>
-      )}
+      <div>
+        {blanket && (
+          <div onClick={closeBlanketHandeler} className="blanket-cover"></div>
+        )}
+      </div>
+
       <Section heading={`${holderType} Basic Details`}>
         <GridCustom>
           <Row>

@@ -5,6 +5,7 @@ import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
 
 //components
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
@@ -151,8 +152,8 @@ console.log('zero');
   console.log('Form', form);
   return (
     <React.Fragment>
-      
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
+        <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
           form={form}
           fieldName={fieldName}
@@ -171,10 +172,8 @@ console.log('zero');
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
         />
-        <button type="button" onClick={backBtnHandeler}>
-          Back
-        </button>
-        <button type="submit">Next</button>
+        <ButtonCustomNew backFun={backBtnHandeler} />
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

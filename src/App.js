@@ -12,6 +12,7 @@ import { getSecondHolderAsync } from './component/second-holder/SecondSlice';
 import { getThirdHolderAsync } from './component/third-holder/thirdSlice';
 import { getBankAccountAsync } from './component/bank-account/bankaccountSlice';
 import {getNomineeAsync} from './component/nominees/nomineeSlice'
+import { getGuardianHolderAsync } from './component/guardian-holder/gurdianSlice';
 //
 import Tabs from './common/tabs/Tabs';
 import BankAccounts from './component/bank-account/BankAccounts';
@@ -23,6 +24,7 @@ import ThirdHolder from './component/third-holder/ThirdHolder';
 import ProofUpload from './component/proof-upload/ProofUpload';
 import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
+
 
 function App() {
   const methods = useForm();
@@ -38,6 +40,7 @@ function App() {
       dispatch(getThirdHolderAsync(userId));
       dispatch(getBankAccountAsync(userId));
        dispatch(getNomineeAsync(userId));
+       dispatch(getGuardianHolderAsync(userId));
     }
   }, []);
 
@@ -65,7 +68,10 @@ function App() {
                 path="/third-holder"
                 element={<ThirdHolder methods={methods} />}
               />
-              <Route path="/guardian-holder" element={<GuardianHolder />} />
+              <Route
+                path="/guardian-holder"
+                element={<GuardianHolder methods={methods} />}
+              />
               <Route
                 path="/bank-accounts"
                 element={<BankAccounts methods={methods} />}
@@ -74,7 +80,10 @@ function App() {
                 path="/nominees"
                 element={<Nominees methods={methods} />}
               />
-              <Route path="/proof-upload" element={<ProofUpload methods={methods}/>} />
+              <Route
+                path="/proof-upload"
+                element={<ProofUpload methods={methods} />}
+              />
             </Routes>
           </Router>
         </FormProvider>

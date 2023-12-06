@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormContext } from 'react-hook-form';
 // component
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
 import Section from '../../common/section/Section';
@@ -265,16 +266,11 @@ export default function Nominees() {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  console.log(nomineeCountNum);
+  
 
   return (
     <React.Fragment>
-      <FooterSection
-        backBtn={true}
-        nextBtn={false}
-        btnFun={btnFun}
-        cls="btn-left-align"
-      />
+      <ButtonCustomNew backFun={backBtnHandeler} />
 
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Nominee details">
@@ -354,16 +350,8 @@ export default function Nominees() {
               />
             );
           })}
-        <button type="button" onClick={backBtnHandeler}>
-          Back
-        </button>
-        <button type="submit">Next</button>
-        {/* <FooterSection
-          backBtn={true}
-          nextBtn={true}
-          btnFun={btnFun}
-          cls="btn-right-align"
-        /> */}
+        <ButtonCustomNew backFun={backBtnHandeler} />
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

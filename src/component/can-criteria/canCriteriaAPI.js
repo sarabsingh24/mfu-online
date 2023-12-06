@@ -9,7 +9,7 @@ export const createCriteria = async (obj) => {
     },
   });
   const data = await response.data;
-  console.log('api', data);
+  
   return data;
 };
 
@@ -36,7 +36,7 @@ export const updateCriteria = async (obj) => {
     }
   );
   const data = await response.data;
-  console.log('api', data);
+ 
   return data;
 };
 

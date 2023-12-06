@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
@@ -7,10 +7,13 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { createCanCriteriaAsync, updateCriteriaFormAsync } from './canCriteriaSlice';
+import {
+  createCanCriteriaAsync,
+  updateCriteriaFormAsync,
+} from './canCriteriaSlice';
 
 //component
-import ButtonCustom from '../../common/button/ButtonCustom';
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
 import Section from '../../common/section/Section';
@@ -63,8 +66,6 @@ function CanCriteria() {
   const [investorList, setInvestorList] = useState([]);
   const [btnFun, setBtnFun] = useState({});
 
-
-
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   const { userId } = useSelector((state) => state.account);
@@ -87,8 +88,6 @@ function CanCriteria() {
     setForm({ ...form, [name]: val });
     // errors[name].message = '';
 
-    
-
     // if (!!errorsOLD[name]) {
     //   setErrors({ ...errorsOLD, [name]: null });
     // }
@@ -108,7 +107,7 @@ function CanCriteria() {
   };
 
   useEffect(() => {
-    if (Object.keys(canCriteriaObj).length > 0) {
+    if (canCriteriaObj?.userId) {
       setForm(canCriteriaObj);
     } else {
       setForm(defaultValue);
@@ -117,13 +116,8 @@ function CanCriteria() {
 
   useEffect(() => {
     tabShoHideHandeler(tabsCreater, ['NOMI']);
-    
   }, []);
 
-  
-
-
- 
   useEffect(() => {
     if (form?.holdingNature === 'SI') {
       setInvestorList(singleOptions);
@@ -135,7 +129,6 @@ function CanCriteria() {
         holderCount: 1,
       });
     } else if (form.holdingNature === 'JO') {
-      // console.log(form);
       setInvestorList(jointOptions);
       setTaxList(singleIndividualOptions);
       tabShoHideHandeler(tabsCreater, ['SEC', 'NOMI']);
@@ -189,7 +182,6 @@ function CanCriteria() {
 
   useEffect(() => {
     if (form.holderCount === '3') {
-      console.log(form.holderCount, form.investorCategory);
       if (form.holdingNature === 'SI' && form.investorCategory !== 'M') {
         setForm({
           ...form,
@@ -214,7 +206,6 @@ function CanCriteria() {
       }
     }
     if (form.holderCount === '2') {
-      console.log(form.holderCount, form.holdingNature, form.investorCategory);
       if (form.holdingNature === 'SI' && form.investorCategory !== 'M') {
         setForm({
           ...form,
@@ -239,7 +230,6 @@ function CanCriteria() {
       }
     }
     if (form.holderCount === '1') {
-      console.log(form.holderCount);
       if (form.holdingNature === 'JO' || form.investorCategory !== 'M') {
         tabShoHideHandeler(tabsCreater, ['SEC', 'NOMI']);
         setForm({
@@ -258,10 +248,7 @@ function CanCriteria() {
   }, [form?.holderCount]);
 
   const formSubmitHandeler = (data) => {
-    // e.preventDefault();
-    // console.log('canCriteria', data);
-    console.log(canCriteriaObj);
-    if (canCriteriaObj.hasOwnProperty('id')) {
+    if (canCriteriaObj?.userId) {
       const obj = {
         userId: canCriteriaObj.userId,
         holdingNature: data.holdingNature,
@@ -282,36 +269,10 @@ function CanCriteria() {
         })
       );
     }
+   
 
     dispatch(pageCount(stepsCount + 1));
-
-    // const formErrors = validateForm(form);
-    // if (Object.keys(formErrors).length > 0) {
-    //   setErrors(formErrors);
-    // } else {
-    //   tabsCreater.map((tab) => {
-    //     if (tab.short === 'PRIM' && !tab.show) {
-    //       dispatch(primeHolderForm({}));
-    //     } else if (tab.short === 'SEC' && !tab.show) {
-    //       dispatch(secondHolderForm({}));
-    //     } else if (tab.short === 'THIR' && !tab.show) {
-    //       dispatch(thirdHolderForm({}));
-    //     } else if (tab.short === 'GUAR' && !tab.show) {
-    //       dispatch(guardianHolderForm({}));
-    //     } else if (tab.short === 'NOMI' && !tab.show) {
-    //       dispatch(nomineesForm({}));
-    //     }
-    //     return tab;
-    //   });
-    //   dispatch(criteriaForm(form));
-    //   dispatch(pageCount(stepsCount + 1));
-    // }
   };
-
-  // useEffect(() => {
-  //   setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
-  // }, [dispatch, stepsCount]);
-
 
   return (
     <React.Fragment>
@@ -394,14 +355,7 @@ function CanCriteria() {
           </GridCustom>
         </Section>
 
-        <button type="submit">Next</button>
-
-        {/* <FooterSection
-          backBtn={false}
-          nextBtn={true}
-          btnFun={btnFun}
-          cls="btn-right-align"
-        /> */}
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

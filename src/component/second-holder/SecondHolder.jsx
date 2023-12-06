@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 //components
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
@@ -12,7 +13,7 @@ import {
   createSecondHolderAsync,
   updateSecondHolderAsync,
 } from './SecondSlice';
-import {secondaryFormFields} from './secondaryData'
+import { secondaryFormFields } from './secondaryData';
 
 const fieldName = Object.keys(secondaryFormFields);
 
@@ -22,10 +23,10 @@ function SecondHolder() {
   const [networthRadio, setNetworthRadio] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
 
- const { secondHolderObj } = useSelector((state) => state.second);
- const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
- const { userId } = useSelector((state) => state.account);
- const dispatch = useDispatch();
+  const { secondHolderObj } = useSelector((state) => state.second);
+  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const { userId } = useSelector((state) => state.account);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -43,37 +44,37 @@ function SecondHolder() {
   //   }
   // }, [secondHolderObj]);
 
-    useEffect(() => {
-      const newObj = {};
+  useEffect(() => {
+    const newObj = {};
 
-      if (secondHolderObj?.userId) {
-        for (let fstLevel in secondHolderObj) {
-          if (fstLevel === 'contactDetail') {
-            for (let secLev in secondHolderObj[fstLevel]) {
-              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
-            }
-          } else if (fstLevel === 'otherDetail') {
-            for (let secLev in secondHolderObj[fstLevel]) {
-              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
-            }
-          } else if (fstLevel === 'fatcaDetail') {
-            for (let secLev in secondHolderObj[fstLevel]) {
-              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
-            }
-          } else if (fstLevel === 'taxRecords') {
-            for (let secLev in secondHolderObj[fstLevel]) {
-              newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
-            }
-          } else {
-            newObj[`secondary-${fstLevel}`] = secondHolderObj[fstLevel];
+    if (secondHolderObj?.userId) {
+      for (let fstLevel in secondHolderObj) {
+        if (fstLevel === 'contactDetail') {
+          for (let secLev in secondHolderObj[fstLevel]) {
+            newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
           }
+        } else if (fstLevel === 'otherDetail') {
+          for (let secLev in secondHolderObj[fstLevel]) {
+            newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'fatcaDetail') {
+          for (let secLev in secondHolderObj[fstLevel]) {
+            newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+          }
+        } else if (fstLevel === 'taxRecords') {
+          for (let secLev in secondHolderObj[fstLevel]) {
+            newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
+          }
+        } else {
+          newObj[`secondary-${fstLevel}`] = secondHolderObj[fstLevel];
         }
-        // console.log(newObj);
-        setForm(newObj);
-      } else {
-        setForm(secondaryFormFields);
       }
-    }, [secondHolderObj]);
+      console.log(newObj);
+      setForm(newObj);
+    } else {
+      setForm(secondaryFormFields);
+    }
+  }, [secondHolderObj]);
 
   const formSubmitHandeler = (data) => {
     console.log('secondary', data);
@@ -87,10 +88,8 @@ function SecondHolder() {
         console.log(k, '====', data[k]);
       }
     }
-   
-    
+
     const submitObj = {
-      
       userId: userId,
       holderType: 'PR',
       panExemptFlag: 'Y',
@@ -150,11 +149,10 @@ function SecondHolder() {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  console.log(secondHolderObj);
-
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
+        <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
           form={form}
           fieldName={fieldName}
@@ -173,10 +171,9 @@ function SecondHolder() {
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
         />
-        <button type="button" onClick={backBtnHandeler}>
-          Back
-        </button>
-        <button type="submit">Next</button>
+
+        <ButtonCustomNew backFun={backBtnHandeler} />
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

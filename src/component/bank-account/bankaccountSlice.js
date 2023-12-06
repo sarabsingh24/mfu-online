@@ -14,7 +14,7 @@ const initialState = {
 export const createBankAccountAsync = createAsyncThunk(
   'bankAccount/create',
   async (obj, thunkAPI) => {
-    console.log('slice', obj);
+   
     try {
       return await bankAccountAPI.createBankAccount(obj);
     } catch (error) {
@@ -32,7 +32,7 @@ export const createBankAccountAsync = createAsyncThunk(
 export const getBankAccountAsync = createAsyncThunk(
   'bankAccount/get',
   async (userId, thunkAPI) => {
-    console.log('slice', userId);
+    
     try {
       return await bankAccountAPI.getBankAccount(userId);
     } catch (error) {
@@ -50,7 +50,7 @@ export const getBankAccountAsync = createAsyncThunk(
 export const updateBankAccountAsync = createAsyncThunk(
   'bankAccount/update',
   async (obj, thunkAPI) => {
-    console.log('slice', obj);
+   
     try {
       return await bankAccountAPI.updateBankAccount(obj);
     } catch (error) {
@@ -79,7 +79,7 @@ export const bankAccountSlice = createSlice({
       state.message = '';
     },
     accountsFun: (state, action) => {
-      console.log('slice', action.payload);
+     
       state.accountCountNum = action.payload;
     },
   },

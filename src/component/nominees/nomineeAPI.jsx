@@ -26,7 +26,7 @@ export const getNominee = async (userId) => {
 
 //update
 export const updateNominee = async (obj) => {
- console.log('api', obj);
+ 
   const response = await axios.put(
     `${BASE_URL}/nomineeObj/${obj.userId}`,
     obj,

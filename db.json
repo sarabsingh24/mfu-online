@@ -7,6 +7,14 @@
       "taxStatus": "NRI",
       "holderCount": "3",
       "id": 1
+    },
+    {
+      "userId": 2,
+      "holdingNature": "SI",
+      "investorCategory": "M",
+      "taxStatus": "NRM",
+      "holderCount": "2",
+      "id": 2
     }
   ],
   "primeHolderObj": [
@@ -22,9 +30,9 @@
       "name": "sarab preet singh33",
       "dateOfBirth": "2023-11-09",
       "contactDetail": {
-        "primaryEmail": "dd@jj.com",
+        "primaryEmail": "dd@g.com",
         "mobileIsdCode": "55",
-        "primaryMobileNo": "6666666666"
+        "primaryMobileNo": "7777777777"
       },
       "otherDetail": {
         "otherInfo": "string",
@@ -49,6 +57,46 @@
         ]
       },
       "id": 1
+    },
+    {
+      "userId": 2,
+      "holderType": "PR",
+      "panExemptFlag": "Y",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "8889",
+      "confirmpanPekrnNo": "8889",
+      "name": "amir",
+      "dateOfBirth": "2023-12-07",
+      "contactDetail": {
+        "primaryEmail": "ff@jk.com",
+        "mobileIsdCode": "67",
+        "primaryMobileNo": "9999999999"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "hj",
+        "occupation": "03",
+        "occupationOthers": "kl",
+        "kraAddressType": "3",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "hjk",
+        "taxReferenceNo": "raja",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "raja"
+          }
+        ]
+      },
+      "id": 2
     }
   ],
   "secondHolderObj": [
@@ -149,10 +197,6 @@
           "bankProof": "77"
         },
         {
-          "nomineeName": "sss",
-          "relation": "44",
-          "percentage": "70",
-          "dateOfBirth": "2023-12-27",
           "accountNo": "8888",
           "reAccountNo": "8888",
           "accountType": "CC",
@@ -164,6 +208,30 @@
       ],
       "userId": 1,
       "id": 1
+    },
+    {
+      "accountDetails": [
+        {
+          "accountNo": "890",
+          "reAccountNo": "890",
+          "accountType": "FCNR",
+          "bankId": "yes",
+          "micrCode": "567",
+          "ifscCode": "345",
+          "bankProof": "14"
+        },
+        {
+          "accountNo": "666",
+          "reAccountNo": "666",
+          "accountType": "CC",
+          "bankId": "nouty",
+          "micrCode": "rty",
+          "ifscCode": "rty",
+          "bankProof": "14"
+        }
+      ],
+      "userId": 2,
+      "id": 2
     }
   ],
   "nomineeObj": [
@@ -177,12 +245,12 @@
           "dateOfBirth": "2023-12-26"
         },
         {
-          "accountNo": "567",
-          "reAccountNo": "567",
-          "accountType": "CA",
-          "bankId": "hdfc",
-          "micrCode": "888",
-          "ifscCode": "sss",
+          "accountNo": "8888",
+          "reAccountNo": "8888",
+          "accountType": "CC",
+          "bankId": "axex",
+          "micrCode": "rty",
+          "ifscCode": "hjk",
           "bankProof": "14",
           "nomineeName": "sss",
           "relation": "44",

@@ -48,7 +48,7 @@ export const getNomineeAsync = createAsyncThunk(
 export const updateNomineeAsync = createAsyncThunk(
   'nominee/update',
   async (obj, thunkAPI) => {
-    console.log('slice', obj)
+  
     try {
       return await nomineeAPI.updateNominee(obj);
     } catch (error) {
@@ -101,7 +101,7 @@ export const nomineeSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getNomineeAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+       
         state.isLoading = false;
         state.nomineeObj = action.payload;
         state.nomineeCountNum = action.payload.nomineeDetail.length;

@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 
+
 //component
 import Section from '../../common/section/Section';
 import InputText from '../../common/form-elements/InputText';
@@ -36,13 +37,15 @@ function BankAccountSection({
   let accountCount = count === 0 ? 'Default' : count === 1 ? 'Second' : 'Third';
 
   useEffect(() => {
-    setValue(`${accountCount}-accountNo`, formObj?.accountNo);
-    setValue(`${accountCount}-reAccountNo`, formObj?.reAccountNo);
-    setValue(`${accountCount}-accountType`, formObj?.accountType);
-    setValue(`${accountCount}-bankId`, formObj?.bankId);
-    setValue(`${accountCount}-micrCode`, formObj?.micrCode);
-    setValue(`${accountCount}-ifscCode`, formObj?.ifscCode);
-    setValue(`${accountCount}-bankProof`, formObj?.bankProof);
+ 
+      setValue(`${accountCount}-accountNo`, formObj?.accountNo );
+      setValue(`${accountCount}-reAccountNo`, formObj?.reAccountNo);
+      setValue(`${accountCount}-accountType`, formObj?.accountType);
+      setValue(`${accountCount}-bankId`, formObj?.bankId);
+      setValue(`${accountCount}-micrCode`, formObj?.micrCode);
+      setValue(`${accountCount}-ifscCode`, formObj?.ifscCode);
+      setValue(`${accountCount}-bankProof`, formObj?.bankProof);
+    
   }, []);
 
   let labelName = `${accountCount}-accountNo`;

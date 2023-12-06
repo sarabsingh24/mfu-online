@@ -2,17 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import accountService from './accountService';
 
 const initialState = {
-  guardianHolderObj: {},
-  bankAccountsObj: [],
-  nomineeObj: {},
-  proofUploadObj: [],
   account: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
   canId: '',
-  userId:1
+  userId: 2,
 };
 
 export const createAccount = createAsyncThunk(
@@ -37,28 +33,11 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.guardianHolderObj = {};
-      state.bankAccountsObj = [];
-      state.nomineeObj = {};
-      state.proofUploadObj = [];
       state.account = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
-    },
-
-    guardianHolderForm: (state, action) => {
-      state.guardianHolderObj = action.payload;
-    },
-    bankAccountForm: (state, action) => {
-      state.bankAccountsObj = action.payload;
-    },
-    nomineesForm: (state, action) => {
-      state.nomineeObj = action.payload;
-    },
-    proofUploadForm: (state, action) => {
-      state.proofUploadObj = action.payload;
     },
   },
   extraReducers: (builder) => {

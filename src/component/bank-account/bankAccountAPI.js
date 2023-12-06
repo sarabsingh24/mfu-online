@@ -9,16 +9,16 @@ export const createBankAccount = async (obj) => {
     },
   });
   const data = await response.data;
-  console.log('api', data);
+
   return data;
 };
 
 
 // GET
 export const getBankAccount = async (userId) => {
-  const response = await axios.get(`${BASE_URL}/bankAccountsObj/?${userId}`);
-  const data = await response.data[0];
-  console.log('api', data);
+  const response = await axios.get(`${BASE_URL}/bankAccountsObj/${userId}`);
+  const data = await response.data;
+  
   if (data) {
     return data;
   }

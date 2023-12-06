@@ -8,7 +8,7 @@ import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
 
 //component
-
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import Section from '../../common/section/Section';
 import GridCustom from '../../common/grid-custom/GridCustom';
 import SelectOption from '../../common/form-elements/SelectOption';
@@ -27,15 +27,19 @@ import {
 import { accountsFun } from './bankaccountSlice';
 
 const bankRecord = {
-  sequenceNo: '1',
-  defaultAccountFlag: true,
-  accountNo: '',
-  accountType: '',
-  bankId: '',
-  micrCode: '',
-  ifscCode: '',
-  bankProof: '',
-  reAccountNo: '',
+  accountDetails: [
+    {
+      sequenceNo: '1',
+      defaultAccountFlag: true,
+      accountNo: '',
+      accountType: '',
+      bankId: '',
+      micrCode: '',
+      ifscCode: '',
+      bankProof: '',
+      reAccountNo: '',
+    },
+  ],
 };
 
 function BankAccounts() {
@@ -125,11 +129,11 @@ function BankAccounts() {
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  useEffect(() => {
-    if (Object.keys(bankAccountsObj).length) {
-      setForm(bankAccountsObj);
-    } 
-  }, [bankAccountsObj]);
+  // useEffect(() => {
+  //   if (Object.keys(bankAccountsObj).length) {
+  //     setForm(bankAccountsObj);
+  //   }
+  // }, [bankAccountsObj]);
 
   const formSubmitHandeler = (data) => {
     let newObj = [];
@@ -153,7 +157,7 @@ function BankAccounts() {
 
     setBankAccount(newObj);
 
-    if (bankAccountsObj?.userId) {
+    if (bankAccountsObj?.userId === userId) {
       dispatch(
         updateBankAccountAsync({
           accountDetails: [...newObj.slice(0, accountCountNum)],
@@ -172,32 +176,39 @@ function BankAccounts() {
     dispatch(pageCount(stepsCount + 1));
   };
 
+  useEffect(() => {
+    // const filter
+
+    setValue(
+      'accounts',
+      bankAccountsObj?.userId === userId
+        ? bankAccountsObj?.accountDetails?.length
+        : bankRecord?.accountDetails?.length
+    );
+  }, []);
+
+  useEffect(() => {
+    dispatch(accountsFun(bankAccountsObj?.accountDetails?.length));
+    if (bankAccountsObj?.userId !== userId) {
+      dispatch(accountsFun(1));
+    }
+  }, [bankAccountsObj?.accountDetails?.length]);
+
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  useEffect(()=>{
-    setValue(
-      'accounts',
-      bankAccountsObj.accountDetails.length 
-    );
-  },[])
+  console.log(
+    bankAccountsObj?.userId === userId
+      ? bankAccountsObj?.accountDetails
+      : accountCountNum
+  );
 
-  useEffect(() => {
-    dispatch(accountsFun(bankAccountsObj.accountDetails.length));
-  }, [bankAccountsObj.accountDetails.length]);
-
-
-
+  console.log(bankAccountsObj?.userId);
 
   return (
     <React.Fragment>
-      <FooterSection
-        backBtn={true}
-        nextBtn={false}
-        btnFun={btnFun}
-        cls="btn-left-align"
-      />
+      <ButtonCustomNew backFun={backBtnHandeler} />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Number of bank account">
           <GridCustom>
@@ -221,12 +232,15 @@ function BankAccounts() {
         </Section>
 
         {Array.from({
-          length:  accountCountNum,
+          length: accountCountNum,
         }).map((detail, index) => {
           return (
             <BankAccountSection
               key={index}
-              formObj={bankAccountsObj.accountDetails[index]}
+              formObj={
+                bankAccountsObj?.accountDetails[index] ||
+                bankRecord?.accountDetails[index]
+              }
               setForm={setForm}
               count={index}
               thisAccountHandeler={thisAccountHandeler}
@@ -239,25 +253,8 @@ function BankAccounts() {
           );
         })}
 
-        <button type="button" onClick={backBtnHandeler}>
-          Back
-        </button>
-        <button type="submit">Next</button>
-
-        <button
-          type="button"
-          onClick={() => {
-            reset();
-          }}
-        >
-          Reset
-        </button>
-        {/* <FooterSection
-          backBtn={true}
-          nextBtn={true}
-          btnFun={btnFun}
-          cls="btn-right-align"
-        />*/}
+        <ButtonCustomNew backFun={backBtnHandeler} />
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

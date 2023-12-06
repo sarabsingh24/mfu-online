@@ -13,7 +13,7 @@ const initialState = {
 export const createSecondHolderAsync = createAsyncThunk(
   'second/create',
   async (obj, thunkAPI) => {
-    console.log('slice', obj);
+   
     try {
       return await secondAPI.createSecondHolder(obj);
     } catch (error) {
@@ -32,7 +32,7 @@ export const createSecondHolderAsync = createAsyncThunk(
 export const getSecondHolderAsync = createAsyncThunk(
   'second/get',
   async (userId, thunkAPI) => {
-    console.log('slice', userId);
+ 
     try {
       return await secondAPI.getSecondHolder(userId);
     } catch (error) {
@@ -50,9 +50,26 @@ export const getSecondHolderAsync = createAsyncThunk(
 export const updateSecondHolderAsync = createAsyncThunk(
   'second/update',
   async (obj, thunkAPI) => {
-    console.log('slice', obj);
+   
     try {
       return await secondAPI.updateSecondHolder(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteSecondHolderAsync = createAsyncThunk(
+  'second/delete',
+  async (id, thunkAPI) => {
+    try {
+      return await secondAPI.deleteSecondHolder(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -121,6 +138,21 @@ export const secondSlice = createSlice({
         state.message = '';
       })
       .addCase(updateSecondHolderAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //DELETE secondary holder
+      .addCase(deleteSecondHolderAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteSecondHolderAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.secondHolderObj = {};
+        state.isError = false;
+        state.message = action.payload.message;
+      })
+      .addCase(deleteSecondHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

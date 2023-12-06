@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import thirdAPI from './thirdAPI';
+import guardianAPI from './guardianAPI';
 
 const initialState = {
-  thirdHolderObj: {},
+  guardianHolderObj: {},
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -10,12 +10,11 @@ const initialState = {
   canId: '',
 };
 
-export const createThirdHolderAsync = createAsyncThunk(
-  'third/create',
+export const createGuardianHolderAsync = createAsyncThunk(
+  'guardian/create',
   async (obj, thunkAPI) => {
-    
     try {
-      return await thirdAPI.createThirdHolder(obj);
+      return await guardianAPI.createGuardianHolder(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -28,11 +27,11 @@ export const createThirdHolderAsync = createAsyncThunk(
   }
 );
 
-export const getThirdHolderAsync = createAsyncThunk(
-  'third/get',
+export const getGuardianHolderAsync = createAsyncThunk(
+  'guardian/get',
   async (userId, thunkAPI) => {
     try {
-      return await thirdAPI.getThirdHolder(userId);
+      return await guardianAPI.getGuardianHolder(userId);
     } catch (error) {
       const message =
         (error.response &&
@@ -45,11 +44,11 @@ export const getThirdHolderAsync = createAsyncThunk(
   }
 );
 
-export const updateThirdHolderAsync = createAsyncThunk(
-  'third/update',
+export const updateGuardianHolderAsync = createAsyncThunk(
+  'guardian/update',
   async (obj, thunkAPI) => {
     try {
-      return await thirdAPI.updateThirdHolder(obj);
+      return await guardianAPI.updateGuardianHolder(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -62,11 +61,11 @@ export const updateThirdHolderAsync = createAsyncThunk(
   }
 );
 
-export const deleteThirdHolderAsync = createAsyncThunk(
-  'third/delete',
+export const deleteGuardianHolderAsync = createAsyncThunk(
+  'second/delete',
   async (id, thunkAPI) => {
     try {
-      return await thirdAPI.deleteThirdHolder(id);
+      return await guardianAPI.deleteGuardianHolder(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -79,12 +78,12 @@ export const deleteThirdHolderAsync = createAsyncThunk(
   }
 );
 
-export const thirdSlice = createSlice({
-  name: 'third',
+export const guardianSlice = createSlice({
+  name: 'guardian',
   initialState,
   reducers: {
     reset: (state) => {
-      state.thirdHolderObj = {};
+      state.guardianHolderObj = {};
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -93,65 +92,62 @@ export const thirdSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //POST can creteria form
-      .addCase(createThirdHolderAsync.pending, (state) => {
+      //create guardian form
+      .addCase(createGuardianHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createThirdHolderAsync.fulfilled, (state, action) => {
+      .addCase(createGuardianHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.thirdHolderObj = action.payload;
+        state.guardianHolderObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(createThirdHolderAsync.rejected, (state, action) => {
+      .addCase(createGuardianHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-
-      //GET can creteria form
-      .addCase(getThirdHolderAsync.pending, (state) => {
+      //get guardian form
+      .addCase(getGuardianHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getThirdHolderAsync.fulfilled, (state, action) => {
+      .addCase(getGuardianHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.thirdHolderObj = action.payload;
+        state.guardianHolderObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(getThirdHolderAsync.rejected, (state, action) => {
+      .addCase(getGuardianHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      //UPDATE can creteria form
-      .addCase(updateThirdHolderAsync.pending, (state) => {
+      //update guardian form
+      .addCase(updateGuardianHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateThirdHolderAsync.fulfilled, (state, action) => {
+      .addCase(updateGuardianHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.thirdHolderObj = action.payload;
+        state.guardianHolderObj = action.payload;
         state.isError = false;
         state.message = '';
       })
-      .addCase(updateThirdHolderAsync.rejected, (state, action) => {
+      .addCase(updateGuardianHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-      //DELETE can creteria form
-      .addCase(deleteThirdHolderAsync.pending, (state) => {
+      //DELETE guardian form
+      .addCase(deleteGuardianHolderAsync.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteThirdHolderAsync.fulfilled, (state, action) => {
-        console.log('third slice',action.payload)
+      .addCase(deleteGuardianHolderAsync.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.thirdHolderObj = {};
+        state.guardianHolderObj = action.payload;
         state.isError = false;
-        state.message = action.payload.message;
+        state.message = '';
       })
-      .addCase(deleteThirdHolderAsync.rejected, (state, action) => {
-        console.log('third slice', action.payload);
+      .addCase(deleteGuardianHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -159,7 +155,7 @@ export const thirdSlice = createSlice({
   },
 });
 
-const { actions, reducer } = thirdSlice;
+const { actions, reducer } = guardianSlice;
 
 export const { reset } = actions;
 export default reducer;

@@ -9,7 +9,7 @@ export const createThirdHolder = async (obj) => {
     },
   });
   const data = await response.data;
-  console.log('api', data);
+
   return data;
 };
 
@@ -19,27 +19,46 @@ export const getThirdHolder = async (userId) => {
     `${BASE_URL}/thirdHolderObj/?userId=${userId}`
   );
   const data = await response.data[0];
-  console.log('api', data);
+
   if (data) {
     return data;
   }
-    return {};
-  
+  return {};
 };
-
 
 // UPDATE
 export const updateThirdHolder = async (obj) => {
   const response = await axios.put(
-    `${BASE_URL}/thirdHolderObj/${obj.userId}`, obj, {
-      headers:{
-        'content-type':'application/json'
-      }
+    `${BASE_URL}/thirdHolderObj/${obj.userId}`,
+    obj,
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
     }
   );
   const data = await response.data[0];
-  console.log('api', data);
   return data;
 };
-const thirdAPI = { createThirdHolder, getThirdHolder, updateThirdHolder };
+
+
+// DELETE
+export const deleteThirdHolder = async (id) => {
+ const response = await axios.delete(
+    `${BASE_URL}/thirdHolderObj/${id}`
+  );
+  if(response.statusText === 'OK'){
+    console.log(response);
+    return { message: 'The item got successfully deleted', error: false };
+  }
+  
+};
+
+
+const thirdAPI = {
+  createThirdHolder,
+  getThirdHolder,
+  updateThirdHolder,
+  deleteThirdHolder,
+};
 export default thirdAPI;

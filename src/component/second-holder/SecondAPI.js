@@ -9,7 +9,7 @@ export const createSecondHolder = async (obj) => {
     },
   });
   const data = await response.data;
-  console.log('api', data);
+
   return data;
 };
 
@@ -19,12 +19,11 @@ export const getSecondHolder = async (userId) => {
     `${BASE_URL}/secondHolderObj/?userId=${userId}`
   );
   const data = await response.data[0];
-  console.log('api', data);
+
   if (data) {
     return data;
   }
-  return {}
-  
+  return {};
 };
 
 // GET
@@ -39,11 +38,24 @@ export const updateSecondHolder = async (obj) => {
     }
   );
   const data = await response.data[0];
-  console.log('api', data);
   return data;
 };
 
+// DELETE
+export const deleteSecondHolder = async (id) => {
+   const response = await axios.delete(
+    `${BASE_URL}/secondHolderObj/${id}`
+  );
+   if (response.statusText === 'OK') {
+     console.log(response);
+     return { message: 'The item got successfully deleted', error: false };
+   }
+};
 
-
-const secondAPI = { createSecondHolder, getSecondHolder, updateSecondHolder };
+const secondAPI = {
+  createSecondHolder,
+  getSecondHolder,
+  updateSecondHolder,
+  deleteSecondHolder,
+};
 export default secondAPI;

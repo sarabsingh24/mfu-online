@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
-
 import { useFormContext } from 'react-hook-form';
+
 //components
+import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
+import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
+import {deleteThirdHolderAsync} from '../third-holder/thirdSlice'
+import {deleteGuardianHolderAsync} from '../guardian-holder/gurdianSlice'
 
 import {
   createPrimaryHolderAsync,
@@ -26,6 +30,12 @@ function PrimaryHolder({ methods }) {
 
   const { primeHolderObj, isSuccess } = useSelector((state) => state.primary);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+
+  const { canCriteriaObj } = useSelector((state) => state.criteria);
+  const { secondHolderObj } = useSelector((state) => state.second);
+  const { thirdHolderObj } = useSelector((state) => state.third);
+  const { guardianHolderObj } = useSelector((state) => state.guardian);
+
   const { userId } = useSelector((state) => state.account);
   const dispatch = useDispatch();
   const {
@@ -63,16 +73,53 @@ function PrimaryHolder({ methods }) {
           newObj[`primary-${fstLevel}`] = primeHolderObj[fstLevel];
         }
       }
-      // console.log(newObj);
+      console.log(newObj);
       setForm(newObj);
     } else {
       setForm(primaryFormFields);
     }
   }, [primeHolderObj]);
 
+  useEffect(() => {
+    console.log('first')
+    if (
+      (canCriteriaObj?.holdingNature === 'SI' &&
+        canCriteriaObj?.investorCategory === 'S') ||
+      (canCriteriaObj?.holdingNature === 'SI' &&
+        canCriteriaObj?.investorCategory === 'I')
+    ) {
+      if (secondHolderObj?.id || thirdHolderObj?.id || guardianHolderObj.id) {
+        console.log('kill');
+        dispatch(deleteSecondHolderAsync(secondHolderObj.id));
+        dispatch(deleteThirdHolderAsync(thirdHolderObj.id));
+        dispatch(deleteGuardianHolderAsync(guardianHolderObj.id));
+      }
+
+      console.log('remove second, third, guardian');
+    } else if (
+      canCriteriaObj?.holdingNature === 'SI' &&
+      canCriteriaObj?.investorCategory === 'M'
+    ) {
+       console.log('sec');
+       console.log(secondHolderObj);
+      if (secondHolderObj?.id && thirdHolderObj?.id) {
+        console.log('kill', secondHolderObj?.id, thirdHolderObj.id);
+        dispatch(deleteSecondHolderAsync(secondHolderObj.id));
+        dispatch(deleteThirdHolderAsync(thirdHolderObj.id));
+      }
+      console.log('remove second, third, nominee');
+    } else if (canCriteriaObj?.holdingNature === 'JO') {
+      console.log('remove  third, guardian');
+    } else if (canCriteriaObj?.holdingNature === 'AS') {
+      console.log('remove  second, third, guardian');
+    }
+  }, []);
+
+  
+
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
-    console.log('priamry', data);
+
     const obj = {};
 
     for (let k in data) {
@@ -144,12 +191,14 @@ function PrimaryHolder({ methods }) {
   };
 
   const backBtnHandeler = () => {
+    console.log('kk');
     dispatch(pageCount(stepsCount - 1));
   };
 
   return (
     <React.Fragment>
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
+        <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
           form={form}
           fieldName={fieldName}
@@ -168,10 +217,9 @@ function PrimaryHolder({ methods }) {
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
         />
-        <button type="button" onClick={backBtnHandeler}>
-          Back
-        </button>
-        <button type="submit">Next</button>
+
+        <ButtonCustomNew backFun={backBtnHandeler} />
+        <ButtonCustomNew text="next" />
       </Form>
     </React.Fragment>
   );

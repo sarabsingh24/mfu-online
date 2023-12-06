@@ -13,7 +13,7 @@ const initialState = {
 export const createPrimaryHolderAsync = createAsyncThunk(
   'primary/create',
   async (obj, thunkAPI) => {
-    console.log('slice', obj);
+   
     try {
       return await primaryAPI.createPrimaryHolder(obj);
     } catch (error) {

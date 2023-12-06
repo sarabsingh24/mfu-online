@@ -9,7 +9,7 @@ export const createPrimaryHolder = async (obj) => {
     },
   });
   const data = await response.data;
-  console.log('api', data);
+ 
   return data;
 };
 
@@ -19,7 +19,7 @@ export const getPrimaryHolder = async (userId) => {
     `${BASE_URL}/primeHolderObj/?userId=${userId}`
   );
   const data = await response.data[0];
-  console.log('api', data);
+  
   if (data) {
     return data;
   }
