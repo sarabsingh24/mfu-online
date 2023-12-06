@@ -143,20 +143,19 @@ export const secondSlice = createSlice({
         state.message = action.payload;
       })
       //DELETE secondary holder
-      .addCase(deleteSecondHolderAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteSecondHolderAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.secondHolderObj = {};
-        state.isError = false;
-        state.message = action.payload.message;
-      })
-      .addCase(deleteSecondHolderAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      });
+      // .addCase(deleteSecondHolderAsync.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(deleteSecondHolderAsync.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isError = false;
+      //   state.message = action.payload;
+      // })
+      // .addCase(deleteSecondHolderAsync.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.isError = true;
+      //   state.message = action.payload;
+      // });
   },
 });
 

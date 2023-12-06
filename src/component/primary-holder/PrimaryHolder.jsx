@@ -7,8 +7,9 @@ import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
-import {deleteThirdHolderAsync} from '../third-holder/thirdSlice'
-import {deleteGuardianHolderAsync} from '../guardian-holder/gurdianSlice'
+import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
+import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
+import { deleteNomineeAsync } from '../nominees/nomineeSlice';
 
 import {
   createPrimaryHolderAsync,
@@ -35,6 +36,7 @@ function PrimaryHolder({ methods }) {
   const { secondHolderObj } = useSelector((state) => state.second);
   const { thirdHolderObj } = useSelector((state) => state.third);
   const { guardianHolderObj } = useSelector((state) => state.guardian);
+  const { nomineeObj } = useSelector((state) => state.nominee);
 
   const { userId } = useSelector((state) => state.account);
   const dispatch = useDispatch();
@@ -81,18 +83,22 @@ function PrimaryHolder({ methods }) {
   }, [primeHolderObj]);
 
   useEffect(() => {
-    console.log('first')
     if (
       (canCriteriaObj?.holdingNature === 'SI' &&
         canCriteriaObj?.investorCategory === 'S') ||
       (canCriteriaObj?.holdingNature === 'SI' &&
-        canCriteriaObj?.investorCategory === 'I')
+        canCriteriaObj?.investorCategory === 'I') ||
+      canCriteriaObj?.holdingNature === 'AS'
     ) {
-      if (secondHolderObj?.id || thirdHolderObj?.id || guardianHolderObj.id) {
-        console.log('kill');
-        dispatch(deleteSecondHolderAsync(secondHolderObj.id));
-        dispatch(deleteThirdHolderAsync(thirdHolderObj.id));
-        dispatch(deleteGuardianHolderAsync(guardianHolderObj.id));
+      if (secondHolderObj?.id) {
+        dispatch(deleteSecondHolderAsync(secondHolderObj?.id));
+      }
+      if (thirdHolderObj?.id) {
+        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
+      }
+
+      if (guardianHolderObj?.id) {
+        dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
       }
 
       console.log('remove second, third, guardian');
@@ -100,22 +106,32 @@ function PrimaryHolder({ methods }) {
       canCriteriaObj?.holdingNature === 'SI' &&
       canCriteriaObj?.investorCategory === 'M'
     ) {
-       console.log('sec');
-       console.log(secondHolderObj);
-      if (secondHolderObj?.id && thirdHolderObj?.id) {
-        console.log('kill', secondHolderObj?.id, thirdHolderObj.id);
-        dispatch(deleteSecondHolderAsync(secondHolderObj.id));
-        dispatch(deleteThirdHolderAsync(thirdHolderObj.id));
+      if (secondHolderObj?.id) {
+        console.log('in')
+        dispatch(deleteSecondHolderAsync(secondHolderObj?.id));
       }
+      if (thirdHolderObj?.id) {
+        console.log('in');
+        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
+      }
+
+       if (nomineeObj?.id) {
+         dispatch(deleteNomineeAsync(nomineeObj?.id));
+       }
+      
+
       console.log('remove second, third, nominee');
     } else if (canCriteriaObj?.holdingNature === 'JO') {
+      if (thirdHolderObj?.id) {
+        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
+      }
+
+      if (guardianHolderObj?.id) {
+        dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
+      }
       console.log('remove  third, guardian');
-    } else if (canCriteriaObj?.holdingNature === 'AS') {
-      console.log('remove  second, third, guardian');
     }
   }, []);
-
-  
 
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)

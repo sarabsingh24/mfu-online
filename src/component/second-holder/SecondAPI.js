@@ -43,13 +43,14 @@ export const updateSecondHolder = async (obj) => {
 
 // DELETE
 export const deleteSecondHolder = async (id) => {
-   const response = await axios.delete(
+    await axios.delete(
     `${BASE_URL}/secondHolderObj/${id}`
   );
-   if (response.statusText === 'OK') {
-     console.log(response);
-     return { message: 'The item got successfully deleted', error: false };
-   }
+
+  //  if (response.statusText === 'OK') {
+  //    console.log(response);
+  //    return { message: 'The item got successfully deleted', error: false };
+  //  }
 };
 
 const secondAPI = {

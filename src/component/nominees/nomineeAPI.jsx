@@ -40,5 +40,16 @@ export const updateNominee = async (obj) => {
   return data;
 };
 
-const nomineeAPI = { createNominee, getNominee, updateNominee };
+
+// DELETE
+
+export const deleteNominee = async (id) => {
+ await axios.delete(
+    `${BASE_URL}/nomineeObj/${id}`
+  );
+  // const data = await response.data;
+  // return data;
+};
+
+const nomineeAPI = { createNominee, getNominee, updateNominee, deleteNominee };
 export default nomineeAPI;

@@ -44,13 +44,13 @@ export const updateThirdHolder = async (obj) => {
 
 // DELETE
 export const deleteThirdHolder = async (id) => {
- const response = await axios.delete(
+  await axios.delete(
     `${BASE_URL}/thirdHolderObj/${id}`
   );
-  if(response.statusText === 'OK'){
-    console.log(response);
-    return { message: 'The item got successfully deleted', error: false };
-  }
+  // if(response.statusText === 'OK'){
+  //   console.log(response);
+  //   return { message: 'The item got successfully deleted', error: false };
+  // }
   
 };
 

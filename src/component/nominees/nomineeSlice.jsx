@@ -63,6 +63,23 @@ export const updateNomineeAsync = createAsyncThunk(
   }
 );
 
+export const deleteNomineeAsync = createAsyncThunk(
+  'nominee/delete',
+  async (id, thunkAPI) => {
+    try {
+      return await nomineeAPI.deleteNominee(id);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const nomineeSlice = createSlice({
   name: 'nominee',
   initialState,
@@ -104,7 +121,7 @@ export const nomineeSlice = createSlice({
        
         state.isLoading = false;
         state.nomineeObj = action.payload;
-        state.nomineeCountNum = action.payload.nomineeDetail.length;
+        state.nomineeCountNum = action.payload.nomineeDetail?.length;
         state.isError = false;
         state.message = '';
       })

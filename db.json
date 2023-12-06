@@ -234,34 +234,7 @@
       "id": 2
     }
   ],
-  "nomineeObj": [
-    {
-      "nomineeOption": "Y",
-      "nomineeDetail": [
-        {
-          "nomineeName": "kamal",
-          "relation": "preet",
-          "percentage": "30",
-          "dateOfBirth": "2023-12-26"
-        },
-        {
-          "accountNo": "8888",
-          "reAccountNo": "8888",
-          "accountType": "CC",
-          "bankId": "axex",
-          "micrCode": "rty",
-          "ifscCode": "hjk",
-          "bankProof": "14",
-          "nomineeName": "sss",
-          "relation": "44",
-          "percentage": "70",
-          "dateOfBirth": "2023-12-27"
-        }
-      ],
-      "userId": 1,
-      "id": 1
-    }
-  ],
+  "nomineeObj": [],
   "proofUploadObj": [
     {
       "id": 1

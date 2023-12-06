@@ -140,22 +140,22 @@ export const thirdSlice = createSlice({
         state.message = action.payload;
       })
       //DELETE can creteria form
-      .addCase(deleteThirdHolderAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteThirdHolderAsync.fulfilled, (state, action) => {
-        console.log('third slice',action.payload)
-        state.isLoading = false;
-        state.thirdHolderObj = {};
-        state.isError = false;
-        state.message = action.payload.message;
-      })
-      .addCase(deleteThirdHolderAsync.rejected, (state, action) => {
-        console.log('third slice', action.payload);
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      });
+      // .addCase(deleteThirdHolderAsync.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(deleteThirdHolderAsync.fulfilled, (state, action) => {
+      //   console.log('third slice',action.payload)
+      //   state.isLoading = false;
+        
+      //   state.isError = false;
+      //   state.message = action.payload;
+      // })
+      // .addCase(deleteThirdHolderAsync.rejected, (state, action) => {
+      //   console.log('third slice', action.payload);
+      //   state.isLoading = false;
+      //   state.isError = true;
+      //   state.message = action.payload;
+      // });
   },
 });
 

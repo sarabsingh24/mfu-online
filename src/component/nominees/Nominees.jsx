@@ -72,6 +72,8 @@ export default function Nominees() {
     formState: { errors },
   } = useFormContext();
 
+  
+
   const numberHandeler = (e) => {
     let val = e.target.value;
     console.log(val);
