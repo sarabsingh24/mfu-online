@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormContext } from 'react-hook-form';
 // component
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
@@ -23,6 +24,7 @@ import {
   createNomineeAsync,
   updateNomineeAsync,
 } from '../nominees/nomineeSlice';
+
 
 const nomineeOption = [
   { value: 'N', label: 'No - I/We declare to Opt out' },
@@ -272,8 +274,9 @@ export default function Nominees() {
 
   return (
     <React.Fragment>
+      <Tabs />
+      
       <ButtonCustomNew backFun={backBtnHandeler} />
-
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Nominee details">
           <GridCustom>

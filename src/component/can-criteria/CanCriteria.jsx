@@ -13,6 +13,7 @@ import {
 } from './canCriteriaSlice';
 
 //component
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
@@ -269,13 +270,13 @@ function CanCriteria() {
         })
       );
     }
-   
 
     dispatch(pageCount(stepsCount + 1));
   };
 
   return (
     <React.Fragment>
+      <Tabs />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Account Type">
           <GridCustom>

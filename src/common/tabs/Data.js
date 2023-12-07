@@ -1,6 +1,7 @@
 
 
 export const stepsList = [
+  
   {
     text: 'CAN Criteria',
     short: 'CRI',
@@ -49,4 +50,5 @@ export const stepsList = [
     active: false,
     show: true,
   },
+  
 ];

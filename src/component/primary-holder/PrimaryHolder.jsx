@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 
 //components
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
@@ -10,6 +11,7 @@ import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
 import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
 import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
 import { deleteNomineeAsync } from '../nominees/nomineeSlice';
+
 
 import {
   createPrimaryHolderAsync,
@@ -213,6 +215,8 @@ function PrimaryHolder({ methods }) {
 
   return (
     <React.Fragment>
+      <Tabs />
+    
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder

@@ -13,13 +13,14 @@ export const tabSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.tabsCreater = stepsList;
-      state.statestepsCount = 0;
+      state.stepsCount = 0;
       state.stateopenForm = "CRI";
     },
     tabUpdate: (state, action) => {
       state.tabsCreater = action.payload;
     },
     pageCount: (state, action) => {
+      console.log(action.payload);
       state.stepsCount = action.payload;
     },
     nextSection: (state, action) => {

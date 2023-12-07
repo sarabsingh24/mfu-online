@@ -8,6 +8,7 @@ import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
 
 //component
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import Section from '../../common/section/Section';
 import GridCustom from '../../common/grid-custom/GridCustom';
@@ -25,6 +26,7 @@ import {
 } from './bankaccountSlice';
 
 import { accountsFun } from './bankaccountSlice';
+
 
 const bankRecord = {
   accountDetails: [
@@ -209,6 +211,8 @@ function BankAccounts() {
 
   return (
     <React.Fragment>
+      <Tabs />
+     
       <ButtonCustomNew backFun={backBtnHandeler} />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Number of bank account">

@@ -20,6 +20,7 @@ import bankAccountReducer from '../component/bank-account/bankaccountSlice'
 import nomineeObj from '../component/nominees/nomineeSlice'
 import proofReducer from '../component/proof-upload/proofSlice'
 import guardianReducer from '../component/guardian-holder/gurdianSlice'
+import authReducer from '../component/auth/authSlice'
 
 const persistConfig = {
   key: 'root',
@@ -28,6 +29,7 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
+  user:authReducer,
   tab: tabReducer,
   account: accountReducer,
   criteria: criteriaReducer,
@@ -38,6 +40,7 @@ const reducer = combineReducers({
   guardian:guardianReducer,
   nominee: nomineeObj,
   proof: proofReducer,
+
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

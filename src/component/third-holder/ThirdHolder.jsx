@@ -5,6 +5,7 @@ import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
 
 //components
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
@@ -13,6 +14,7 @@ import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
 import { createThirdHolderAsync, updateThirdHolderAsync } from './thirdSlice';
 import { thirdFormFields } from './thirdData';
+
 
 const fieldName = Object.keys(thirdFormFields);
 
@@ -154,6 +156,8 @@ console.log('zero');
   console.log('Form', form);
   return (
     <React.Fragment>
+      <Tabs />
+   
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder

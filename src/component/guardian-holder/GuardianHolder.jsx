@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
 //components
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
@@ -16,6 +17,7 @@ import {
   updateGuardianHolderAsync,
 } from '../guardian-holder/gurdianSlice';
 import { gurdianFormFields } from './gurdianData';
+
 
 const fieldName = Object.keys(gurdianFormFields);
 
@@ -156,6 +158,8 @@ function GuardianHolder() {
 
   return (
     <React.Fragment>
+      <Tabs />
+    
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder

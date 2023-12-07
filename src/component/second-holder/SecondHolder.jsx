@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 //components
+import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
@@ -14,6 +15,7 @@ import {
   updateSecondHolderAsync,
 } from './SecondSlice';
 import { secondaryFormFields } from './secondaryData';
+
 
 const fieldName = Object.keys(secondaryFormFields);
 
@@ -152,6 +154,8 @@ function SecondHolder() {
 
   return (
     <React.Fragment>
+      <Tabs />
+    
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder

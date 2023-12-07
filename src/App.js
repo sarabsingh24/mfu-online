@@ -3,7 +3,14 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCriteriaFormAsync } from './component/can-criteria/canCriteriaSlice';
@@ -11,7 +18,7 @@ import { getPrimaryHolderAsync } from './component/primary-holder/primarySlice';
 import { getSecondHolderAsync } from './component/second-holder/SecondSlice';
 import { getThirdHolderAsync } from './component/third-holder/thirdSlice';
 import { getBankAccountAsync } from './component/bank-account/bankaccountSlice';
-import {getNomineeAsync} from './component/nominees/nomineeSlice'
+import { getNomineeAsync } from './component/nominees/nomineeSlice';
 import { getGuardianHolderAsync } from './component/guardian-holder/gurdianSlice';
 //
 import Tabs from './common/tabs/Tabs';
@@ -24,12 +31,17 @@ import ThirdHolder from './component/third-holder/ThirdHolder';
 import ProofUpload from './component/proof-upload/ProofUpload';
 import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
+import LoginScreen from './component/auth/LoginScreen';
+import Register from './component/auth/Register';
+import HeaderSection from './common/header/HeaderSection';
+import Protected from './component/auth/Protected';
+import { tabUpdate, pageCount } from './reducer/Reducer/tab/tabSlice';
 
 
 function App() {
   const methods = useForm();
   const { userId } = useSelector((state) => state.account);
-
+  const { IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,50 +51,89 @@ function App() {
       dispatch(getSecondHolderAsync(userId));
       dispatch(getThirdHolderAsync(userId));
       dispatch(getBankAccountAsync(userId));
-       dispatch(getNomineeAsync(userId));
-       dispatch(getGuardianHolderAsync(userId));
+      dispatch(getNomineeAsync(userId));
+      dispatch(getGuardianHolderAsync(userId));
     }
+
   }, []);
+
+  console.log(IslogedIn);
 
   return (
     <React.Fragment>
       <Container>
         <FormProvider {...methods}>
           <Router>
-            <Tabs />
-            <CheckNavigate />
+            {/* <HeaderSection /> */}
+
+            {userId && <CheckNavigate />}
+
             <Routes>
+              <Route path="/signin" element={<LoginScreen />} />
+              <Route path="/signup" element={<Register />} />
               <Route
                 path="/can-criteria"
-                element={<CanCriteria methods={methods} />}
+                element={
+                  <Protected>
+                    <CanCriteria methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/primary-holder"
-                element={<PrimaryHolder methods={methods} />}
+                element={
+                  <Protected>
+                    <PrimaryHolder methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/second-holder"
-                element={<SecondHolder methods={methods} />}
+                element={
+                  <Protected>
+                    <SecondHolder methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/third-holder"
-                element={<ThirdHolder methods={methods} />}
+                element={
+                  <Protected>
+                    <ThirdHolder methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/guardian-holder"
-                element={<GuardianHolder methods={methods} />}
+                element={
+                  <Protected>
+                    <GuardianHolder methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/bank-accounts"
-                element={<BankAccounts methods={methods} />}
+                element={
+                  <Protected>
+                    <BankAccounts methods={methods} />
+                  </Protected>
+                }
               />
               <Route
                 path="/nominees"
-                element={<Nominees methods={methods} />}
+                element={
+                  <Protected>
+                    <Nominees methods={methods} />{' '}
+                  </Protected>
+                }
               />
               <Route
                 path="/proof-upload"
-                element={<ProofUpload methods={methods} />}
+                element={
+                  <Protected>
+                    <ProofUpload methods={methods} />
+                  </Protected>
+                }
               />
             </Routes>
           </Router>
