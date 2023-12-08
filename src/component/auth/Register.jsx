@@ -5,6 +5,8 @@ import { Wrapper } from './auth-styles';
 import Card from 'react-bootstrap/Card';
 import InputTextHook from '../../common/form-elements/InputTextHook';
 import Button from 'react-bootstrap/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import {registerUserAsync} from '../auth/authSlice'
 
 const errorFontStyle = {
   color: 'red',
@@ -22,8 +24,11 @@ function Register() {
     formState: { errors },
   } = useForm();
 
+const password = watch('password');
+  const dispatch = useDispatch();
   const registerSubmit = (data) => {
     console.log(data)
+    dispatch(registerUserAsync(data));
   };
   return (
     <Wrapper>
@@ -57,7 +62,7 @@ function Register() {
             />
             <small style={errorFontStyle}>{errors?.email?.message}</small>
             <InputTextHook
-              type="text"
+              type="password"
               register={register}
               name="password"
               label="Password"
@@ -70,7 +75,7 @@ function Register() {
             />
             <small style={errorFontStyle}>{errors?.password?.message}</small>
             <InputTextHook
-              type="text"
+              type="password"
               register={register}
               name="conform-password"
               label="Conform Password"
@@ -78,13 +83,14 @@ function Register() {
               disabled={false}
               errorBorder={errors['conform-password']?.message}
               mandatory="*"
+              compair={password}
               // value={form?.name || ''}
               // changeFun={formHandeler}
             />
             <small style={errorFontStyle}>
               {errors['conform-password']?.message}
             </small>
-            <Button variant="primary" size="sm" type='submit'>
+            <Button variant="primary" size="sm" type="submit">
               Signin
             </Button>
           </form>

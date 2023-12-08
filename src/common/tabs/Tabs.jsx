@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { StepperContainer, StepperLine, Steps } from "./CommonTab-style";
-import Tab from "./Tab";
+import React, { useState, useEffect } from 'react';
+import { StepperContainer, StepperLine, Steps } from './CommonTab-style';
+import Tab from './Tab';
 import { useSelector, useDispatch } from 'react-redux';
 //component
-import { stepsList } from "./Data";
+import { stepsList } from './Data';
+import HeaderSection from '../../common/header/HeaderSection';
 
-
-import{tabUpdate} from '../../reducer/Reducer/tab/tabSlice'
+import { tabUpdate } from '../../reducer/Reducer/tab/tabSlice';
 // import useCommonReducer from "../customComp/useCommonReducer";
 
 function Tabs() {
@@ -15,12 +15,10 @@ function Tabs() {
   // const {  tabsCreater } = useCommonReducer();
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   const dispatch = useDispatch();
- 
 
   useEffect(() => {
-   
     let copyTab = tabsCreater.filter((tab) => tab.show === true);
-   
+
     let currentTab = copyTab.slice(0, stepsCount + 1);
 
     let getVal = currentTab.map((val) => val.short);
@@ -33,23 +31,24 @@ function Tabs() {
     });
 
     dispatch(tabUpdate(heilightedTab));
-  }, [ stepsCount]);
+  }, [stepsCount]);
 
   useEffect(() => {
     setTabs(tabsCreater);
   }, [tabsCreater]);
- 
-
 
   return (
-    <StepperContainer>
-      <StepperLine />
-      <Steps>
-        {tabs?.map((step, index) => {
-          return <Tab key={step.short} step={step} count={index} />;
-        })}
-      </Steps>
-    </StepperContainer>
+    <React.Fragment>
+      <HeaderSection />
+      <StepperContainer>
+        <StepperLine />
+        <Steps>
+          {tabs?.map((step, index) => {
+            return <Tab key={step.short} step={step} count={index} />;
+          })}
+        </Steps>
+      </StepperContainer>
+    </React.Fragment>
   );
 }
 

@@ -58,7 +58,8 @@ function StakeHolder({
   const [isOtherOccupation, setIsOtherOccupation] = useState(true);
   const [notIndian, setNotIndian] = useState(true);
   const { stepsCount } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [blanket, setBlanket] = useState(false);
@@ -149,7 +150,7 @@ function StakeHolder({
   const panPekrnNo = watch(fieldName[2]);
 
   useEffect(() => {
-    if (userId) {
+    if (user.id) {
       if (sliceData?.fatcaDetail?.taxResidencyFlag === 'Y') {
         setNotIndian(false);
       } else {
@@ -170,7 +171,7 @@ function StakeHolder({
         setValue(fieldName[13], '');
       }
     }
-  }, [userId]);
+  }, [user]);
 
   useEffect(() => {
    

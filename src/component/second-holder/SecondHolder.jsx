@@ -27,7 +27,8 @@ function SecondHolder() {
 
   const { secondHolderObj } = useSelector((state) => state.second);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -93,7 +94,7 @@ function SecondHolder() {
     }
 
     const submitObj = {
-      userId: userId,
+      userId: user.id,
       holderType: 'PR',
       panExemptFlag: 'Y',
       residencePhoneNo: '',
@@ -140,7 +141,7 @@ function SecondHolder() {
     if (secondHolderObj?.userId) {
       console.log('update');
 
-      dispatch(updateSecondHolderAsync({ ...submitObj, userId: userId }));
+      dispatch(updateSecondHolderAsync({ ...submitObj, userId: user.id }));
     } else {
       console.log('create');
       dispatch(createSecondHolderAsync({ ...submitObj }));

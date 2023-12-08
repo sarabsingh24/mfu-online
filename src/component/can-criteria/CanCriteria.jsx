@@ -69,7 +69,8 @@ function CanCriteria() {
 
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -262,7 +263,7 @@ function CanCriteria() {
     } else {
       dispatch(
         createCanCriteriaAsync({
-          userId: userId,
+          userId: user.id,
           holdingNature: data.holdingNature,
           investorCategory: data.investorCategory,
           taxStatus: data.taxStatus,

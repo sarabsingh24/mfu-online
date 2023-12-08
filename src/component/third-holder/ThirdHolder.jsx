@@ -27,7 +27,8 @@ function ThirdHolder() {
 
   const { thirdHolderObj, isSuccess } = useSelector((state) => state.third);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const {
     register,
@@ -92,7 +93,7 @@ console.log('zero');
     }
 
     const submitObj = {
-      userId: userId,
+      userId: user.id,
       holderType: 'PR',
       panExemptFlag: 'Y',
       residencePhoneNo: '',
@@ -139,7 +140,7 @@ console.log('zero');
     if (thirdHolderObj?.userId) {
       console.log('update');
 
-      dispatch(updateThirdHolderAsync({ ...submitObj, userId: userId }));
+      dispatch(updateThirdHolderAsync({ ...submitObj, userId: user.id }));
     } else {
       console.log('create');
       dispatch(createThirdHolderAsync({ ...submitObj }));

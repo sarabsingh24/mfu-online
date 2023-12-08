@@ -61,8 +61,9 @@ export default function Nominees() {
 
   const { nomineeObj, nomineeCountNum } = useSelector((state) => state.nominee);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
 
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -193,7 +194,7 @@ export default function Nominees() {
           updateNomineeAsync({
             nomineeOption: data.nomineeOptedFlag,
             nomineeDetail: newObj.slice(0, nomineeCountNum),
-            userId: userId,
+            userId: user.id,
           })
         );
       } else {
@@ -201,7 +202,7 @@ export default function Nominees() {
           createNomineeAsync({
             nomineeOption: data.nomineeOptedFlag,
             nomineeDetail: newObj.slice(0, nomineeCountNum),
-            userId: userId,
+            userId: user.id,
           })
         );
       }

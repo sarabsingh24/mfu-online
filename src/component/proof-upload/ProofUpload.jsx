@@ -41,7 +41,8 @@ const { bankAccountsObj } = useSelector((state) => state.bankAccount);
 const { nomineeObj } = useSelector((state) => state.nominee);
 const { proofUploadObj } = useSelector((state) => state.proof);
 const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-const { userId } = useSelector((state) => state.account);
+// const { userId } = useSelector((state) => state.account);
+
 const dispatch = useDispatch();
 
 

@@ -33,31 +33,35 @@ import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
 import LoginScreen from './component/auth/LoginScreen';
 import Register from './component/auth/Register';
-import HeaderSection from './common/header/HeaderSection';
+
 import Protected from './component/auth/Protected';
 import { tabUpdate, pageCount } from './reducer/Reducer/tab/tabSlice';
+import {getUserAsync} from './component/auth/authSlice'
 
 
 function App() {
   const methods = useForm();
-  const { userId } = useSelector((state) => state.account);
-  const { IslogedIn } = useSelector((state) => state.user);
+  // const { userId } = useSelector((state) => state.account);
+  const { user,IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userId) {
-      dispatch(getCriteriaFormAsync(userId));
-      dispatch(getPrimaryHolderAsync(userId));
-      dispatch(getSecondHolderAsync(userId));
-      dispatch(getThirdHolderAsync(userId));
-      dispatch(getBankAccountAsync(userId));
-      dispatch(getNomineeAsync(userId));
-      dispatch(getGuardianHolderAsync(userId));
+    if (user.id) {
+      dispatch(getCriteriaFormAsync(user.id));
+      dispatch(getPrimaryHolderAsync(user.id));
+      dispatch(getSecondHolderAsync(user.id));
+      dispatch(getThirdHolderAsync(user.id));
+      dispatch(getBankAccountAsync(user.id));
+      dispatch(getNomineeAsync(user.id));
+      dispatch(getGuardianHolderAsync(user.id));
     }
+  }, [user.id]);
 
-  }, []);
+  useEffect(()=>{
+dispatch(getUserAsync());
+  },[])
 
-  console.log(IslogedIn);
+  console.log(user.id);
 
   return (
     <React.Fragment>
@@ -66,7 +70,7 @@ function App() {
           <Router>
             {/* <HeaderSection /> */}
 
-            {userId && <CheckNavigate />}
+            {user.id && <CheckNavigate />}
 
             <Routes>
               <Route path="/signin" element={<LoginScreen />} />

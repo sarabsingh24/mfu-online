@@ -1,5 +1,21 @@
 {
-  "users": [],
+  "users": [
+    {
+      "name": "sarab",
+      "email": "sarab@gmail.com",
+      "password": "123",
+      "conform-password": "123",
+      "re-password": "",
+      "id": 1
+    },
+    {
+      "name": "preet",
+      "email": "preet@gmail.com",
+      "password": "123",
+      "conform-password": "123",
+      "id": 2
+    }
+  ],
   "canCriteriaObj": [
     {
       "userId": 1,

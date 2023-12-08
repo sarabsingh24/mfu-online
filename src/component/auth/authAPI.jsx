@@ -14,12 +14,14 @@ export const registerUser = async (obj) => {
 };
 
 // GET
-export const getUser = async (userId) => {
-  const response = await axios.get(`${BASE_URL}/users/${userId}`);
+export const getUser = async (obj) => {
+  const response = await axios.get(`${BASE_URL}/users`);
   const data = await response.data;
 
+const filterUser = data.find(user => user.email === obj.email)
+
   if (data) {
-    return data;
+    return filterUser;
   }
   return {};
 };

@@ -31,7 +31,7 @@ const persistConfig = {
 const reducer = combineReducers({
   user:authReducer,
   tab: tabReducer,
-  account: accountReducer,
+  // account: accountReducer,
   criteria: criteriaReducer,
   primary: primaryReducer,
   second: secondSlice,

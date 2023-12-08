@@ -29,9 +29,9 @@ export const registerUserAsync = createAsyncThunk(
 
 export const getUserAsync = createAsyncThunk(
   'user/get',
-  async (userId, thunkAPI) => {
+  async (obj, thunkAPI) => {
     try {
-      return await authAPI.getUser(userId);
+      return await authAPI.getUser(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -65,8 +65,8 @@ export const authSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    reset: (state) => {
-      state.bankAccountsObj = {};
+    logout: (state) => {
+      state.user = {};
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -81,7 +81,6 @@ export const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(registerUserAsync.fulfilled, (state, action) => {
-        console.log('aa', action.payload);
         state.isLoading = false;
         state.user = action.payload;
         state.isError = false;
@@ -130,5 +129,5 @@ export const authSlice = createSlice({
 
 const { actions, reducer } = authSlice;
 
-export const { reset } = actions;
+export const { logout } = actions;
 export default reducer;

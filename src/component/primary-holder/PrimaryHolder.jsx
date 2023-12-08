@@ -40,7 +40,8 @@ function PrimaryHolder({ methods }) {
   const { guardianHolderObj } = useSelector((state) => state.guardian);
   const { nomineeObj } = useSelector((state) => state.nominee);
 
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const {
     register,
@@ -150,7 +151,7 @@ function PrimaryHolder({ methods }) {
 
     const submitObj = {
       // ...primeHolderObj,
-      userId: userId,
+      userId: user.id,
       holderType: 'PR',
       panExemptFlag: 'Y',
       residencePhoneNo: '',
@@ -197,7 +198,7 @@ function PrimaryHolder({ methods }) {
     if (primeHolderObj?.userId) {
       console.log('update');
 
-      dispatch(updatePrimaryHolderAsync({ ...submitObj, userId: userId }));
+      dispatch(updatePrimaryHolderAsync({ ...submitObj, userId: user.id }));
     } else {
       console.log('create');
       dispatch(createPrimaryHolderAsync({ ...submitObj }));

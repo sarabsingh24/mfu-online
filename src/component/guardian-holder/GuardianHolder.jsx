@@ -30,7 +30,8 @@ function GuardianHolder() {
   const { guardianHolderObj } = useSelector((state) => state.guardian);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
 
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -95,7 +96,7 @@ function GuardianHolder() {
 
     const submitObj = {
       // ...guardianHolderObj,
-      userId: userId,
+      userId: user.id,
       holderType: 'PR',
       panExemptFlag: 'Y',
       residencePhoneNo: '',
@@ -141,7 +142,7 @@ function GuardianHolder() {
 
     if (guardianHolderObj?.userId) {
       console.log('update');
-      dispatch(updateGuardianHolderAsync({ ...submitObj, userId: userId }));
+      dispatch(updateGuardianHolderAsync({ ...submitObj, userId: user.id }));
     } else {
       console.log('create');
       dispatch(createGuardianHolderAsync({ ...submitObj }));

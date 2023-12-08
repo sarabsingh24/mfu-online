@@ -50,7 +50,8 @@ function BankAccounts() {
   const [btnFun, setBtnFun] = useState({});
   const [errorsOld, setErrors] = useState([]);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const [bankAccount, setBankAccount] = useState([]);
 
   const { accountCountNum, bankAccountsObj } = useSelector(
@@ -160,18 +161,18 @@ function BankAccounts() {
 
     setBankAccount(newObj);
 
-    if (bankAccountsObj?.userId === userId) {
+    if (bankAccountsObj?.userId === user.id) {
       dispatch(
         updateBankAccountAsync({
           accountDetails: [...newObj.slice(0, accountCountNum)],
-          userId: userId,
+          userId: user.id,
         })
       );
     } else {
       dispatch(
         createBankAccountAsync({
           accountDetails: [...newObj.slice(0, accountCountNum)],
-          userId: userId,
+          userId: user.id,
         })
       );
     }
@@ -184,7 +185,7 @@ function BankAccounts() {
 
     setValue(
       'accounts',
-      bankAccountsObj?.userId === userId
+      bankAccountsObj?.userId === user.id
         ? bankAccountsObj?.accountDetails?.length
         : bankRecord?.accountDetails?.length
     );
@@ -192,7 +193,7 @@ function BankAccounts() {
 
   useEffect(() => {
     dispatch(accountsFun(bankAccountsObj?.accountDetails?.length));
-    if (bankAccountsObj?.userId !== userId) {
+    if (bankAccountsObj?.userId !== user.id) {
       dispatch(accountsFun(1));
     }
   }, [bankAccountsObj?.accountDetails?.length]);
@@ -202,7 +203,7 @@ function BankAccounts() {
   };
 
   console.log(
-    bankAccountsObj?.userId === userId
+    bankAccountsObj?.userId === user.id
       ? bankAccountsObj?.accountDetails
       : accountCountNum
   );

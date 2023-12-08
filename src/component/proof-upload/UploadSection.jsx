@@ -38,7 +38,8 @@ function UploadSection({ bankName, recCanID, proofUploadObj, key }) {
   const [uploadImgs, setUploadImgs] = useState([]);
   const divId = useRef();
 
-  const { userId } = useSelector((state) => state.account);
+  // const { userId } = useSelector((state) => state.account);
+    const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [reqData, setReqData] = useState({
@@ -114,7 +115,7 @@ function UploadSection({ bankName, recCanID, proofUploadObj, key }) {
     const formData = new FormData();
 
     formData.append('file', data);
-    formData.append('userId', userId);
+    formData.append('userId', user.id);
     formData.append('actionType', 'AD');
     formData.append('imageType', '2#BP');
 

@@ -26,7 +26,7 @@ function CheckNavigate() {
   }, [displayedTab, stepsCount, tabsCreater]);
 
   useEffect(() => {
-    console.log(IslogedIn);
+    
     if (str === 'CRI' && IslogedIn) {
       navigate('/can-criteria');
     }
