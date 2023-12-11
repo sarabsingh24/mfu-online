@@ -33,6 +33,8 @@ import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
 import LoginScreen from './component/auth/LoginScreen';
 import Register from './component/auth/Register';
+import AdminDashboard from  './admin/admin-pages/AdminDashboard';
+import Test from './admin/admin-pages/Test'
 
 import Protected from './component/auth/Protected';
 import { tabUpdate, pageCount } from './reducer/Reducer/tab/tabSlice';
@@ -65,84 +67,101 @@ dispatch(getUserAsync());
 
   return (
     <React.Fragment>
-      <Container>
-        <FormProvider {...methods}>
-          <Router>
-            {/* <HeaderSection /> */}
+      {/* <Container> */}
+      <FormProvider {...methods}>
+        <Router>
+          {/* <HeaderSection /> */}
 
-            {user.id && <CheckNavigate />}
+          {user.id && <CheckNavigate />}
 
-            <Routes>
-              <Route path="/signin" element={<LoginScreen />} />
-              <Route path="/signup" element={<Register />} />
-              <Route
-                path="/can-criteria"
+          <Routes>
+            <Route path="/signin" element={<LoginScreen />} />
+            <Route path="/signup" element={<Register />} />
+            <Route
+              path="/can-criteria"
+              element={
+                <Protected>
+                  <CanCriteria methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/primary-holder"
+              element={
+                <Protected>
+                  <PrimaryHolder methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/second-holder"
+              element={
+                <Protected>
+                  <SecondHolder methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/third-holder"
+              element={
+                <Protected>
+                  <ThirdHolder methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/guardian-holder"
+              element={
+                <Protected>
+                  <GuardianHolder methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/bank-accounts"
+              element={
+                <Protected>
+                  <BankAccounts methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/nominees"
+              element={
+                <Protected>
+                  <Nominees methods={methods} />{' '}
+                </Protected>
+              }
+            />
+            <Route
+              path="/proof-upload"
+              element={
+                <Protected>
+                  <ProofUpload methods={methods} />
+                </Protected>
+              }
+            />
+            <Route
+              path="/admin/"
+              element={
+                <Protected>
+                  <AdminDashboard methods={methods} />
+                </Protected>
+              }
+            >
+              
+            </Route><Route
+                path="/admin/test"
                 element={
                   <Protected>
-                    <CanCriteria methods={methods} />
+                    <Test methods={methods} />
                   </Protected>
                 }
               />
-              <Route
-                path="/primary-holder"
-                element={
-                  <Protected>
-                    <PrimaryHolder methods={methods} />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/second-holder"
-                element={
-                  <Protected>
-                    <SecondHolder methods={methods} />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/third-holder"
-                element={
-                  <Protected>
-                    <ThirdHolder methods={methods} />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/guardian-holder"
-                element={
-                  <Protected>
-                    <GuardianHolder methods={methods} />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/bank-accounts"
-                element={
-                  <Protected>
-                    <BankAccounts methods={methods} />
-                  </Protected>
-                }
-              />
-              <Route
-                path="/nominees"
-                element={
-                  <Protected>
-                    <Nominees methods={methods} />{' '}
-                  </Protected>
-                }
-              />
-              <Route
-                path="/proof-upload"
-                element={
-                  <Protected>
-                    <ProofUpload methods={methods} />
-                  </Protected>
-                }
-              />
-            </Routes>
-          </Router>
-        </FormProvider>
-      </Container>
+          </Routes>
+        </Router>
+      </FormProvider>
+      {/* </Container> */}
       <ToastContainer />
     </React.Fragment>
   );

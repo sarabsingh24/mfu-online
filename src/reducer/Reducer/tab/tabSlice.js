@@ -8,13 +8,13 @@ const initialState = {
 };
 
 export const tabSlice = createSlice({
-  name: "tab",
+  name: 'tab',
   initialState,
   reducers: {
     reset: (state) => {
       state.tabsCreater = stepsList;
       state.stepsCount = 0;
-      state.stateopenForm = "CRI";
+      state.stateopenForm = 'CRI';
     },
     tabUpdate: (state, action) => {
       state.tabsCreater = action.payload;
@@ -26,14 +26,13 @@ export const tabSlice = createSlice({
     nextSection: (state, action) => {
       state.openForm = action.payload;
     },
+    switchPanel: (state, action) => {
+      state.openForm = action.payload;
+    },
   },
 });
 
 
-export const {
-  reset,
-  tabUpdate,
-  pageCount,
-  nextSection,
-} = tabSlice.actions;
+export const { reset, tabUpdate, pageCount, nextSection, switchPanel } =
+  tabSlice.actions;
 export default tabSlice.reducer;

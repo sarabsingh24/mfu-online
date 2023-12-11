@@ -11,6 +11,7 @@ import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
 import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
 import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
 import { deleteNomineeAsync } from '../nominees/nomineeSlice';
+import { Container } from 'react-bootstrap';
 
 
 import {
@@ -215,7 +216,7 @@ function PrimaryHolder({ methods }) {
   };
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
     
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
@@ -242,7 +243,7 @@ function PrimaryHolder({ methods }) {
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 

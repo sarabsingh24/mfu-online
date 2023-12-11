@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Alert from 'react-bootstrap/Alert';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormContext } from 'react-hook-form';
+import { Container } from 'react-bootstrap';
 // component
 import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
@@ -274,7 +275,7 @@ export default function Nominees() {
   
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
       
       <ButtonCustomNew backFun={backBtnHandeler} />
@@ -359,6 +360,6 @@ export default function Nominees() {
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }

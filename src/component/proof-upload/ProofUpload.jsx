@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useFormContext } from 'react-hook-form';
 import "../Style.css";
+import { Container } from 'react-bootstrap';
 
 import { BsCheckCircleFill } from "react-icons/bs";
 
@@ -154,97 +155,104 @@ console.log(data)
     };
 
   return (
-    <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
-      <FooterSection
-        backBtn={true}
-        nextBtn={false}
-        submitBtn={false}
-        btnFun={btnFun}
-        cls="btn-left-align"
-      />
-      <Section heading="Proof Upload">
-        <GridCustom>
-          <Row>
-            <Col xs={12}>
-              <Alert variant="danger">
-                Note: The allowed image file formats ( PNG, GIF, JPG | JPEG, ).
-                Total submitted document file size should not be more than 500
-                KB.
-              </Alert>
-            </Col>
-          </Row>
-          <Row className=" mb-4">
-            <Col xs={12} md={6}>
-              <h5 className={recCanID ? 'text-success' : 'text-secondary'}>
-                Step 1: Submit Can Criteria Form &nbsp;
-                {recCanID && <BsCheckCircleFill />}
-              </h5>
-
-              {!recCanID && (
-                <button type="submit" className="btn  btn-success me-2  btn-sm">
-                  Submit Can Criteria Form
-                </button>
-              )}
-            </Col>
-          </Row>
-          <Row className=" mb-4">
-            <Col xs={12}>
-              <h5 className="text-secondary" disabled>
-                Step 2: Proof Upload
-              </h5>
-
-              {bankAccountsObj?.accountDetails?.map((bank, index) => {
-                return (
-                  // <div>{name}</div>
-                  <UploadSection
-                    key={`${index}r`}
-                    bankName={bank.bankId}
-                    recCanID={recCanID}
-                    proofUploadObj={proofUploadObj}
-                  />
-                );
-              })}
-            </Col>
-          </Row>
-          {canNominee ? (
-            <Row className=" mb-4">
+    <Container>
+      <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
+        <FooterSection
+          backBtn={true}
+          nextBtn={false}
+          submitBtn={false}
+          btnFun={btnFun}
+          cls="btn-left-align"
+        />
+        <Section heading="Proof Upload">
+          <GridCustom>
+            <Row>
               <Col xs={12}>
-                <h5 className="text-secondary">step 3: Nominee Varification</h5>
-
-                {nomineeApi.length > 0 && recCanID !== ''
-                  ? nomineeApi.map((item, index) => {
-                      return (
-                        <a
-                          key={index}
-                          class="btn btn-outline-success btn-sm"
-                          role="button"
-                          href={item.nomineeVerificationLinks[index]}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          click to verify
-                        </a>
-                      );
-                    })
-                  : ''}
+                <Alert variant="danger">
+                  Note: The allowed image file formats ( PNG, GIF, JPG | JPEG,
+                  ). Total submitted document file size should not be more than
+                  500 KB.
+                </Alert>
               </Col>
             </Row>
-          ) : (
-            ''
-          )}
-        </GridCustom>
-      </Section>
-      <button type="button" onClick={backBtnHandeler}>
-        Back
-      </button>
-      {/* <FooterSection
+            <Row className=" mb-4">
+              <Col xs={12} md={6}>
+                <h5 className={recCanID ? 'text-success' : 'text-secondary'}>
+                  Step 1: Submit Can Criteria Form &nbsp;
+                  {recCanID && <BsCheckCircleFill />}
+                </h5>
+
+                {!recCanID && (
+                  <button
+                    type="submit"
+                    className="btn  btn-success me-2  btn-sm"
+                  >
+                    Submit Can Criteria Form
+                  </button>
+                )}
+              </Col>
+            </Row>
+            <Row className=" mb-4">
+              <Col xs={12}>
+                <h5 className="text-secondary" disabled>
+                  Step 2: Proof Upload
+                </h5>
+
+                {bankAccountsObj?.accountDetails?.map((bank, index) => {
+                  return (
+                    // <div>{name}</div>
+                    <UploadSection
+                      key={`${index}r`}
+                      bankName={bank.bankId}
+                      recCanID={recCanID}
+                      proofUploadObj={proofUploadObj}
+                    />
+                  );
+                })}
+              </Col>
+            </Row>
+            {canNominee ? (
+              <Row className=" mb-4">
+                <Col xs={12}>
+                  <h5 className="text-secondary">
+                    step 3: Nominee Varification
+                  </h5>
+
+                  {nomineeApi.length > 0 && recCanID !== ''
+                    ? nomineeApi.map((item, index) => {
+                        return (
+                          <a
+                            key={index}
+                            class="btn btn-outline-success btn-sm"
+                            role="button"
+                            href={item.nomineeVerificationLinks[index]}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            click to verify
+                          </a>
+                        );
+                      })
+                    : ''}
+                </Col>
+              </Row>
+            ) : (
+              ''
+            )}
+          </GridCustom>
+        </Section>
+        <button type="button" onClick={backBtnHandeler}>
+          Back
+        </button>
+        {/* <FooterSection
         backBtn={recCanID ? false : true}
         nextBtn={false}
         submitBtn={false}
         btnFun={btnFun}
         cls="btn-right-align"
       /> */}
-    </Form>
+      </Form>
+    </Container>
   );
 }
 

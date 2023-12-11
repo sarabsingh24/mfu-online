@@ -9,7 +9,9 @@ function CheckNavigate() {
 
   const navigate = useNavigate();
 
-  const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
+  const { stepsCount, tabsCreater, openForm } = useSelector(
+    (state) => state.tab
+  );
   const { IslogedIn } = useSelector((state) => state.user);
   const location = useLocation();
   useEffect(() => {
@@ -27,31 +29,37 @@ function CheckNavigate() {
 
   useEffect(() => {
     
-    if (str === 'CRI' && IslogedIn) {
+    if (str === 'CRI' || openForm === 'CRI') {
       navigate('/can-criteria');
     }
-    if (str === 'PRIM' && IslogedIn) {
+    if (str === 'PRIM' ) {
       navigate('primary-holder');
     }
-    if (str === 'SEC' && IslogedIn) {
+    if (str === 'SEC' ) {
       navigate('second-holder');
     }
-    if (str === 'THIR' && IslogedIn) {
+    if (str === 'THIR' ) {
       navigate('third-holder');
     }
-    if (str === 'GUAR' && IslogedIn) {
+    if (str === 'GUAR' ) {
       navigate('guardian-holder');
     }
-    if (str === 'BANK' && IslogedIn) {
+    if (str === 'BANK' ) {
       navigate('bank-accounts');
     }
-    if (str === 'NOMI' && IslogedIn) {
+    if (str === 'NOMI' ) {
       navigate('nominees');
     }
-    if (str === 'PROO' && IslogedIn) {
+    if (str === 'PROO' ) {
       navigate('proof-upload');
     }
-  }, [str, navigate, IslogedIn]);
+    if (openForm === 'admin') {
+      navigate('admin');
+    }
+     if (openForm === 'test') {
+       navigate('/admin/test');
+     }
+  }, [str, navigate]);
 
   return <>{!str && <div>Loading...</div>}</>;
 }

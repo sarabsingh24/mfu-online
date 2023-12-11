@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import { Container } from 'react-bootstrap';
 //components
 import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
@@ -154,7 +155,7 @@ function SecondHolder() {
   };
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
     
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
@@ -181,7 +182,7 @@ function SecondHolder() {
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 

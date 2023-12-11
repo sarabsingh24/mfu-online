@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
+import { Container } from 'react-bootstrap';
 
 //components
 import Tabs from '../../common/tabs/Tabs';
@@ -158,7 +159,7 @@ function GuardianHolder() {
    console.log(guardianHolderObj);
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
     
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
@@ -183,7 +184,7 @@ function GuardianHolder() {
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 

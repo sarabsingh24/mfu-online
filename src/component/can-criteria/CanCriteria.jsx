@@ -11,6 +11,7 @@ import {
   createCanCriteriaAsync,
   updateCriteriaFormAsync,
 } from './canCriteriaSlice';
+import { Container } from 'react-bootstrap';
 
 //component
 import Tabs from '../../common/tabs/Tabs';
@@ -276,7 +277,7 @@ function CanCriteria() {
   };
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Account Type">
@@ -359,7 +360,7 @@ function CanCriteria() {
 
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 

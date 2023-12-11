@@ -6,6 +6,7 @@ import '../Style.css';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
+import { Container } from 'react-bootstrap';
 
 //component
 import Tabs from '../../common/tabs/Tabs';
@@ -211,7 +212,7 @@ function BankAccounts() {
   console.log(bankAccountsObj?.userId);
 
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
      
       <ButtonCustomNew backFun={backBtnHandeler} />
@@ -262,7 +263,7 @@ function BankAccounts() {
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 

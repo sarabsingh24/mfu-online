@@ -90,9 +90,11 @@ const password = watch('password');
             <small style={errorFontStyle}>
               {errors['conform-password']?.message}
             </small>
-            <Button variant="primary" size="sm" type="submit">
-              Signin
-            </Button>
+            <div className="d-grid gap-2">
+              <Button variant="primary" size="sm" type="submit">
+                Register
+              </Button>
+            </div>
           </form>
           <small>
             Already a user? Signin <Link to="/signin">here</Link>.

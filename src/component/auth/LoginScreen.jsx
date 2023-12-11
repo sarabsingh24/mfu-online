@@ -88,7 +88,7 @@ function LoginScreen() {
                 mandatory=""
               />
               <small style={errorFontStyle}>{errors?.otp?.message}</small>
-              <div style={{ display: 'flex', justifyContent: 'spaceEvenly' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <Button
                   style={{ width: '6rem' }}
                   variant="primary"

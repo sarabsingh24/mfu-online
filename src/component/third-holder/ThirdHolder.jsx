@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
+import { Container } from 'react-bootstrap';
 
 //components
 import Tabs from '../../common/tabs/Tabs';
@@ -156,7 +157,7 @@ console.log('zero');
 
   console.log('Form', form);
   return (
-    <React.Fragment>
+    <Container>
       <Tabs />
    
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
@@ -182,7 +183,7 @@ console.log('zero');
         <ButtonCustomNew backFun={backBtnHandeler} />
         <ButtonCustomNew text="next" />
       </Form>
-    </React.Fragment>
+    </Container>
   );
 }
 
