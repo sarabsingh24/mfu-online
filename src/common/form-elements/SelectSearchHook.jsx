@@ -25,6 +25,7 @@ function SelectSearchHook({
   setValue,
   sts,
   depend,
+  selectFieldName,
 }) {
   const [isCountryList, setIsCountryList] = useState(false);
   const [countryList, setCountryList] = useState([]);
@@ -48,7 +49,7 @@ function SelectSearchHook({
   };
 
   const selectCountryHandeler = (inputFieldName, name) => {
-    // console.log(inputFieldName, name);
+    console.log(selectFieldName + '-' + inputFieldName, name);
     setValue(inputFieldName, name);
 
     if (
@@ -58,22 +59,30 @@ function SelectSearchHook({
     ) {
       setForm({
         ...form,
-        fatcaDetail: {
-          ...form.fatcaDetail,
-          [inputFieldName]: name,
-        },
+        [selectFieldName+'-'+inputFieldName]: name,
+        // fatcaDetail: {
+        //   ...form.fatcaDetail,
+        //   [inputFieldName]: name,
+        // },
       });
     } else {
       setForm({
         ...form,
-        fatcaDetail: {
-          ...form.fatcaDetail,
-          taxRecords: [
-            { ...form.fatcaDetail.taxRecords[0], [inputFieldName]: name },
-          ],
-        },
+        [selectFieldName + '-taxRecords']: 
+          
+            {...form[selectFieldName + '-taxRecords'],
+            [selectFieldName + '-' + inputFieldName]: name,}
+          
+        
+
+        // [{ ...form.taxRecords[0], [selectFieldName+'-'+inputFieldName]: name }],
+
+        // taxRecords: [
+        //   { ...form.taxRecords[0], [inputFieldName]: name },
+        // ],
       });
     }
+
 
     setCountryName(name);
     setIsCountryList(false);
@@ -99,13 +108,13 @@ function SelectSearchHook({
           name={name}
           label={label}
           placeholder={'countryName'}
-          value={sts ? 'India' : value || ''}
+          value={!sts ? 'India' : value || ''}
           clickFun={countryListHandeler}
           changeFun={changeFun}
           errorBorder={errorBorder}
           disabled={flag === 'N' ? true : false}
           reqText={reqText}
-          sts={sts ? true : false}
+          sts={!sts ? true : false}
           depend={name}
         />
         {/* <InputText

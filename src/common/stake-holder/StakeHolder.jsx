@@ -52,14 +52,21 @@ function StakeHolder({
   setGrossIncomeRadio,
   fieldName,
   sliceData,
+  IsPan,
+  setIsPan,
+  taxResidency,
+  changeTaxResidency,
 }) {
   const [btnFun, setBtnFun] = useState({});
   const [isOtherSourceOfWealth, setIsOtherSourceOfWealth] = useState(true);
   const [isOtherOccupation, setIsOtherOccupation] = useState(true);
   const [notIndian, setNotIndian] = useState(true);
+  const [IsTextCountry, setIsTextCountry] = useState(false);
+  const [test, setTest] = useState(false);
+
   const { stepsCount } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [blanket, setBlanket] = useState(false);
@@ -80,14 +87,18 @@ function StakeHolder({
     let name = e.target.name;
     let val = e.target.value;
 
+    //!form?.otherDetail?.sourceOfWealth
     // setForm({ ...form, [name]: val });
     // console.log('ssss', watch(fieldName[16]) === '', name, fieldName[16], val);
 
     if (name === fieldName[10]) {
       if (val !== '') {
         setIsOtherSourceOfWealth(false);
+        errors[fieldName[10]] = '';
+        // setForm({ ...form, otherDetail: { ...form.otherDetail, [name]: val } });
       } else {
         setIsOtherSourceOfWealth(true);
+
         setValue(fieldName[11], '');
       }
     }
@@ -95,22 +106,45 @@ function StakeHolder({
     if (name === fieldName[12]) {
       if (val !== '') {
         setIsOtherOccupation(false);
+        errors[fieldName[12]] = '';
       } else {
         setIsOtherOccupation(true);
         setValue(fieldName[13], '');
       }
     }
 
+    if (name === fieldName[14]) {
+      if (val !== '') {
+        setTest(true);
+        errors[fieldName[14]] = '';
+      } else {
+        setTest(false);
+      }
+    }
+
+    if (name === fieldName[15]) {
+      if (val !== '') {
+        setTest(true);
+        errors[fieldName[15]] = '';
+      } else {
+        setTest(false);
+      }
+    }
+
     if (name === fieldName[16]) {
       if (val === 'Y') {
         setNotIndian(false);
+        setIsTextCountry(true);
+        dispatch(changeTaxResidency('Y'));
       } else {
         setNotIndian(true);
+        setIsTextCountry(false);
+        dispatch(changeTaxResidency('N'));
       }
     }
 
     // console.log('kkkk');
-    //  console.log(getValues(fieldName[16]));
+    // console.log(getValues(fieldName[16]));
     // errors[name].message = '';
   };
 
@@ -150,34 +184,36 @@ function StakeHolder({
   const panPekrnNo = watch(fieldName[2]);
 
   useEffect(() => {
-    if (user.id) {
-      if (sliceData?.fatcaDetail?.taxResidencyFlag === 'Y') {
-        setNotIndian(false);
-      } else {
-        setNotIndian(true);
-      }
-
-      if (Object.keys(sliceData)?.length > 0) {
-        setIsOtherSourceOfWealth(false);
-      } else {
-        setIsOtherSourceOfWealth(true);
-        setValue(fieldName[11], '');
-      }
-
-      if (Object.keys(sliceData).length > 0) {
-        setIsOtherOccupation(false);
-      } else {
-        setIsOtherOccupation(true);
-        setValue(fieldName[13], '');
-      }
+    console.log(changeTaxResidency,'======');
+    if (sliceData?.taxResidencyFlag === 'Y') {
+      setNotIndian(false);
+    } else {
+      setNotIndian(true);
     }
-  }, [user]);
+
+    if (Object.keys(sliceData)?.length > 0) {
+      setIsOtherSourceOfWealth(false);
+    } else {
+      setIsOtherSourceOfWealth(true);
+      setValue(fieldName[11], '');
+    }
+
+    if (Object.keys(sliceData).length > 0) {
+      setIsOtherOccupation(false);
+    } else {
+      setIsOtherOccupation(true);
+      setValue(fieldName[13], '');
+    }
+  }, []);
 
   useEffect(() => {
-   
-    setValue('name', form?.name)
+    setValue('name', form?.name);
     for (let k in form) {
       setValue(k, form[k]);
+    }
+
+    if (sliceData.panPekrnNo) {
+      setValue('confirmpanPekrnNo', sliceData.panPekrnNo);
     }
   }, [form]);
 
@@ -229,12 +265,25 @@ function StakeHolder({
               </small>
             </Col>
             <Col xs={12} md={4}>
+              <Form.Check // prettier-ignore
+                type="switch"
+                id="custom-switch"
+                name="panExemptFlag"
+                label="Do you have PAN Number"
+                style={{ fontSize: '13px' }}
+                checked={IsPan}
+                value={IsPan}
+                onChange={() => {
+                  setIsPan(!IsPan);
+                }}
+              />
+
               <InputTextHook
                 type="password"
                 register={register}
                 // name="panPekrnNo"
                 name={fieldName[2]}
-                label="PAN / PEKRN"
+                label="PAN/PEKRN no."
                 placeholder="PAN/PEKRN no."
                 reqText="PAN/PEKRN required"
                 disabled={false}
@@ -250,20 +299,20 @@ function StakeHolder({
             <Col xs={12} md={{ span: 4, offset: 8 }}>
               <InputTextHook
                 register={register}
-                // name="confirmpanPekrnNo"
-                name={fieldName[3]}
+                name="confirmpanPekrnNo"
+                // name={fieldName[3]}
                 label="Re-Enter PAN / PEKRN"
                 placeholder="PAN/PEKRN no."
                 reqText="please re-enter PAN/PEKRN"
                 disabled={false}
-                errorBorder={errors[fieldName[3]]?.message}
+                errorBorder={errors.confirmpanPekrnNo?.message}
                 mandatory="*"
                 // value={form?.confirmpanPekrnNo.toUpperCase() || ''}
                 changeFun={formHandeler}
                 compair={panPekrnNo}
               />
               <small style={errorFontStyle}>
-                {errors[fieldName[3]]?.message}
+                {errors.confirmpanPekrnNo?.message}
               </small>
             </Col>
           </Row>
@@ -506,7 +555,7 @@ function StakeHolder({
                 disabled={false}
                 mandatory="*"
                 errorBorder={
-                  // !form?.otherDetail?.occupation &&
+                  !form?.otherDetail?.occupation &&
                   errors[fieldName[12]]?.message
                 }
                 listOptions={occupationOptions}
@@ -514,10 +563,8 @@ function StakeHolder({
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {
-                  // !form?.otherDetail?.occupation &&
-                  errors[fieldName[12]]?.message
-                }
+                {!form?.otherDetail?.occupation &&
+                  errors[fieldName[12]]?.message}
               </small>
             </Col>
             <Col xs={12} md={4}>
@@ -550,15 +597,13 @@ function StakeHolder({
                 reqText="please select Political Exposure"
                 disabled={false}
                 mandatory="*"
-                errorBorder={
-                  !form?.otherDetail?.pep && errors[fieldName[14]]?.message
-                }
+                errorBorder={errors[fieldName[14]]?.message}
                 listOptions={politicalExposureOptions}
                 // value={form?.otherDetail?.pep || ''}
-                // changeFun={formHandeler}
+                changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
-                {!form?.otherDetail?.pep && errors[fieldName[14]]?.message}
+                {errors[fieldName[14]]?.message}
               </small>
             </Col>
             <Col xs={12} md={4}>
@@ -601,7 +646,7 @@ function StakeHolder({
                 mandatory="*"
                 errorBorder={errors[fieldName[16]]?.message}
                 listOptions={taxResidencyOptions}
-                // value={form?.fatcaDetail?.taxResidencyFlag || ''}
+                value={taxResidency}
                 changeFun={formHandeler}
               />
               <small style={errorFontStyle}>
@@ -632,6 +677,7 @@ function StakeHolder({
                 register={register}
                 // name="birthCountry"
                 name={fieldName[18]}
+                selectFieldName={fieldName[18].split('-')[0]}
                 label="Country of Birth"
                 reqText="country of Birth required"
                 mandatory="*"
@@ -640,7 +686,7 @@ function StakeHolder({
                   errors[fieldName[18]]?.message
                 }
                 options={countryListOptions}
-                value={form?.fatcaDetail?.birthCountry || ''}
+                value={form?.[fieldName[18]] || ''}
                 setBlanket={setBlanket}
                 blanket={blanket}
                 flag={form?.fatcaDetail?.taxResidencyFlag}
@@ -648,7 +694,7 @@ function StakeHolder({
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={notIndian}
+                sts={taxResidency === 'Y'}
                 depend={fieldName[18]}
               />
               <small style={errorFontStyle}>
@@ -661,6 +707,7 @@ function StakeHolder({
                 register={register}
                 // name="citizenshipCountry"
                 name={fieldName[19]}
+                selectFieldName={fieldName[19].split('-')[0]}
                 label="Country of Citizenship"
                 reqText="country of citizenship required"
                 mandatory="*"
@@ -669,7 +716,7 @@ function StakeHolder({
                   errors[fieldName[19]]?.message
                 }
                 options={countryListOptions}
-                value={form?.fatcaDetail?.citizenshipCountry || ''}
+                value={form?.[fieldName[19]] || ''}
                 setBlanket={setBlanket}
                 blanket={blanket}
                 flag={form?.fatcaDetail?.taxResidencyFlag}
@@ -677,7 +724,7 @@ function StakeHolder({
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={notIndian}
+                sts={taxResidency === 'Y'}
                 depend={fieldName[19]}
               />
               <small style={errorFontStyle}>
@@ -690,6 +737,7 @@ function StakeHolder({
                 register={register}
                 // name="nationalityCountry"
                 name={fieldName[20]}
+                selectFieldName={fieldName[20].split('-')[0]}
                 label="Country of Nationality"
                 reqText="country of nationality required"
                 mandatory="*"
@@ -698,7 +746,7 @@ function StakeHolder({
                   errors[fieldName[20]]?.message
                 }
                 options={countryListOptions}
-                value={form?.fatcaDetail?.nationalityCountry || ''}
+                value={form?.[fieldName[20]] || ''}
                 setBlanket={setBlanket}
                 blanket={blanket}
                 flag={form?.fatcaDetail?.taxResidencyFlag}
@@ -706,7 +754,7 @@ function StakeHolder({
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={notIndian}
+                sts={taxResidency === 'Y'}
                 depend={fieldName[20]}
               />
               <small style={errorFontStyle}>
@@ -715,83 +763,98 @@ function StakeHolder({
               </small>
             </Col>
           </Row>
-          <Row>
-            <Col xs={12} md={3}>
-              <SelectSearchHook
-                register={register}
-                // name="taxCountry"
-                name={fieldName[21]}
-                label="Countries of Tax Residency"
-                reqText="Countries of Tax Residency required"
-                mandatory="*"
-                errorBorder={
-                  !form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
-                  errors[fieldName[21]]?.message
-                }
-                options={countryListOptions}
-                value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                // changeFun={formHandeler}
-                setValue={setValue}
-                sts={notIndian}
-                depend={fieldName[21]}
-              />
-              <small style={errorFontStyle}>
-                {!form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
-                  errors[fieldName[21]]?.message}
-              </small>
-            </Col>
-            <Col xs={12} md={3}>
-              <InputTextHook
-                register={register}
-                // name="taxReferenceNo"
-                name={fieldName[22]}
-                label="Tax Identification Numbers"
-                reqText="please enter Tax Identification Numbers"
-                disabled={false}
-                errorBorder={errors[fieldName[22]]?.message}
-                mandatory="*"
-                // value={form?.fatcaDetail?.taxRecords[0]?.taxReferenceNo || ''}
-                // changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[22]]?.message}
-              </small>
-            </Col>
-            <Col xs={12} md={3}>
-              <SelectSearchHook
-                register={register}
-                // name="identityType"
-                name={fieldName[23]}
-                label="Tax Identification Types"
-                reqText="Tax Identification Types required"
-                mandatory="*"
-                errorBorder={
-                  !form?.fatcaDetail?.taxRecords[0]?.identityType &&
-                  errors[fieldName[23]]?.message
-                }
-                options={countryListOptions}
-                value={form?.fatcaDetail?.taxRecords[0]?.identityType || ''}
-                setBlanket={setBlanket}
-                blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
-                form={form}
-                setForm={setForm}
-                // changeFun={formHandeler}
-                setValue={setValue}
-                sts={notIndian}
-                depend="identityType"
-              />
-              <small style={errorFontStyle}>
-                {!form?.fatcaDetail?.taxRecords[0]?.identityType &&
-                  errors[fieldName[23]]?.message}
-              </small>
-            </Col>
-          </Row>
+          {( taxResidency ==='Y') && (
+            <Row>
+              <Col xs={12} md={3}>
+                <SelectSearchHook
+                  register={register}
+                  // name="taxCountry"
+                  name={fieldName[21]}
+                  selectFieldName={fieldName[21].split('-')[0]}
+                  label="Countries of Tax Residency"
+                  reqText="Countries of Tax Residency required"
+                  mandatory="*"
+                  errorBorder={
+                    !form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                    errors[fieldName[21]]?.message
+                  }
+                  options={countryListOptions}
+                  // value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
+                  value={
+                    form?.[fieldName[21].split('-')[0] + '-taxRecords'][
+                      fieldName[21]
+                    ] || ''
+                  }
+                  setBlanket={setBlanket}
+                  blanket={blanket}
+                  flag={form?.fatcaDetail?.taxResidencyFlag}
+                  form={form}
+                  setForm={setForm}
+                  // changeFun={formHandeler}
+                  setValue={setValue}
+                  sts={taxResidency === 'Y'}
+                  depend={fieldName[21]}
+                />
+                <small style={errorFontStyle}>
+                  {!form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                    errors[fieldName[21]]?.message}
+                </small>
+              </Col>
+              <Col xs={12} md={3}>
+                <InputTextHook
+                  register={register}
+                  // name="taxReferenceNo"
+                  name={fieldName[22]}
+                  label="Tax Identification Numbers"
+                  reqText="please enter Tax Identification Numbers"
+                  disabled={false}
+                  errorBorder={errors[fieldName[22]]?.message}
+                  mandatory="*"
+                  sts={notIndian}
+                  depend={[1, 2, 3]}
+                  // value={form?.fatcaDetail?.taxRecords[0]?.taxReferenceNo || ''}
+                  // changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[22]]?.message}
+                </small>
+              </Col>
+              <Col xs={12} md={3}>
+                <SelectSearchHook
+                  register={register}
+                  // name="identityType"
+                  name={fieldName[23]}
+                  selectFieldName={fieldName[23].split('-')[0]}
+                  label="Tax Identification Types"
+                  reqText="Tax Identification Types required"
+                  mandatory="*"
+                  errorBorder={
+                    !form?.fatcaDetail?.taxRecords[0]?.identityType &&
+                    errors[fieldName[23]]?.message
+                  }
+                  options={countryListOptions}
+                  value={
+                    form?.[fieldName[23].split('-')[0] + '-taxRecords'][
+                      fieldName[23]
+                    ] || ''
+                  }
+                  setBlanket={setBlanket}
+                  blanket={blanket}
+                  flag={form?.fatcaDetail?.taxResidencyFlag}
+                  form={form}
+                  setForm={setForm}
+                  // changeFun={formHandeler}
+                  setValue={setValue}
+                  sts={taxResidency === 'Y'}
+                  depend="identityType"
+                />
+                <small style={errorFontStyle}>
+                  {!form?.fatcaDetail?.taxRecords[0]?.identityType &&
+                    errors[fieldName[23]]?.message}
+                </small>
+              </Col>
+            </Row>
+          )}
         </GridCustom>
       </Section>
       <br></br>

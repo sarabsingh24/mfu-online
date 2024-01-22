@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import bankAccountAPI from './bankAccountAPI';
 
 const initialState = {
-  bankAccountsObj: {},
+  bankAccountsObj: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -72,15 +72,19 @@ export const bankAccountSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.bankAccountsObj = {};
+      state.bankAccountsObj = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
       state.message = '';
     },
     accountsFun: (state, action) => {
-     
       state.accountCountNum = action.payload;
+    },
+    createBankAccountOBJ :(state, action)=>{
+      console.log(action.payload)
+      state.bankAccountsObj = action.payload;
+
     },
   },
   extraReducers: (builder) => {
@@ -136,5 +140,5 @@ export const bankAccountSlice = createSlice({
 
 const { actions, reducer } = bankAccountSlice;
 
-export const { reset, accountsFun } = actions;
+export const { reset, accountsFun, createBankAccountOBJ } = actions;
 export default reducer;

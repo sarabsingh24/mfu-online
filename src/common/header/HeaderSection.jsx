@@ -22,21 +22,11 @@ function HeaderSection() {
     dispatch(logout());
   };
 
-  const adminHandeler = () => {
-    dispatch(switchPanel('admin'));
-    navigate('/admin');
-  };
+ 
 
   return (
     <div style={styles}>
-      <Button
-        variant="outline-primary"
-        size="sm"
-        className="m-2"
-        onClick={adminHandeler}
-      >
-        Admin Panel
-      </Button>
+     
       <Button
         variant="outline-primary"
         size="sm"

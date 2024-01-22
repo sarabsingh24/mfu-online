@@ -26,10 +26,10 @@ export default function AddNominee({
   register,
   setValue,
 }) {
-  let order = count === 0 ? 'First' : count === 1 ? 'Second' : 'Third';
+  let order = count === 0 ? '1st' : count === 1 ? '2nd' : '3rd';
 
   useEffect(() => {
-    setValue(`${order}-nomineeName`, formObj?.nomineeName);
+    setValue(`${order}-nomineeName`, formObj?.nomineeName );
     setValue(`${order}-relation`, formObj?.relation);
     setValue(`${order}-percentage`, formObj?.percentage);
     setValue(`${order}-dateOfBirth`, formObj?.dateOfBirth);

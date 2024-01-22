@@ -44,6 +44,7 @@ import {
   singleSoleProprietorOptions,
   holderOptions,
 } from './canCriteriaData';
+import { createCanCriteria } from './canCriteriaSlice';
 
 const defaultValue = {
   holdingNature: '',
@@ -63,15 +64,21 @@ const errorFontStyle = {
 function CanCriteria() {
   const [form, setForm] = useState({});
   const [errorsOLD, setErrors] = useState({});
-
+const [IsPan, setIsPan] = useState(false);
   const [taxList, setTaxList] = useState([]);
   const [investorList, setInvestorList] = useState([]);
   const [btnFun, setBtnFun] = useState({});
+  const [selectHolderCount, setSelectHolderCount] = useState([
+    {
+      value: '0',
+      label: '0',
+    },
+  ]);
 
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -110,7 +117,7 @@ function CanCriteria() {
   };
 
   useEffect(() => {
-    if (canCriteriaObj?.userId) {
+    if (Object.keys(canCriteriaObj).length > 0) {
       setForm(canCriteriaObj);
     } else {
       setForm(defaultValue);
@@ -131,6 +138,12 @@ function CanCriteria() {
         investorCategory: form.investorCategory || '',
         holderCount: 1,
       });
+      setSelectHolderCount([
+        {
+          value: '1',
+          label: '1',
+        },
+      ]);
     } else if (form.holdingNature === 'JO') {
       setInvestorList(jointOptions);
       setTaxList(singleIndividualOptions);
@@ -146,6 +159,16 @@ function CanCriteria() {
             ? 2
             : form.holderCount,
       });
+      setSelectHolderCount([
+        {
+          value: '2',
+          label: '2',
+        },
+        {
+          value: '3',
+          label: '3',
+        },
+      ]);
     } else if (form.holdingNature === 'AS') {
       setForm({ ...form, holdingNature: 'AS', investorCategory: 'I' });
       setInvestorList(jointOptions);
@@ -251,27 +274,16 @@ function CanCriteria() {
   }, [form?.holderCount]);
 
   const formSubmitHandeler = (data) => {
-    if (canCriteriaObj?.userId) {
-      const obj = {
-        userId: canCriteriaObj.userId,
+    console.log(data)
+    dispatch(
+      createCanCriteria({
+        requestEvent: 'CR',
         holdingNature: data.holdingNature,
         investorCategory: data.investorCategory,
         taxStatus: data.taxStatus,
         holderCount: data.holderCount,
-      };
-
-      dispatch(updateCriteriaFormAsync(obj));
-    } else {
-      dispatch(
-        createCanCriteriaAsync({
-          userId: user.id,
-          holdingNature: data.holdingNature,
-          investorCategory: data.investorCategory,
-          taxStatus: data.taxStatus,
-          holderCount: data.holderCount,
-        })
-      );
-    }
+      })
+    );
 
     dispatch(pageCount(stepsCount + 1));
   };
@@ -349,7 +361,7 @@ function CanCriteria() {
                   disabled={false}
                   mandatory="*"
                   errorBorder={errors?.holderCount?.message}
-                  listOptions={holderOptions}
+                  listOptions={selectHolderCount}
                   value={form?.holderCount || 1}
                   changeFun={formHandeler}
                 />
@@ -357,8 +369,9 @@ function CanCriteria() {
             </Row>
           </GridCustom>
         </Section>
-
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

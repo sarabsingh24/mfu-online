@@ -11,12 +11,8 @@ import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import {
-  createSecondHolderAsync,
-  updateSecondHolderAsync,
-} from './SecondSlice';
+import { createSecondHolderOBJ } from './SecondSlice';
 import { secondaryFormFields } from './secondaryData';
-
 
 const fieldName = Object.keys(secondaryFormFields);
 
@@ -25,11 +21,12 @@ function SecondHolder() {
   const [errorsOld, setErrors] = useState({});
   const [networthRadio, setNetworthRadio] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
+  const [IsPan, setIsPan] = useState(false);
 
   const { secondHolderObj } = useSelector((state) => state.second);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -47,12 +44,19 @@ function SecondHolder() {
   //     setForm(secondHolderObj);
   //   }
   // }, [secondHolderObj]);
-  
 
   useEffect(() => {
     const newObj = {};
+    
 
-    if (secondHolderObj?.userId) {
+    if (Object.keys(secondHolderObj).length > 0) {
+      setIsPan(
+        secondHolderObj.panExemptFlag !== ''
+          ? secondHolderObj.panExemptFlag !== 'N'
+            ? true
+            : false
+          : true
+      );
       for (let fstLevel in secondHolderObj) {
         if (fstLevel === 'contactDetail') {
           for (let secLev in secondHolderObj[fstLevel]) {
@@ -82,27 +86,29 @@ function SecondHolder() {
   }, [secondHolderObj]);
 
   const formSubmitHandeler = (data) => {
-    console.log('secondary', data);
+    // console.log('secondary', data);
 
     const obj = {};
 
     for (let k in data) {
-      if (k.includes('secondary')) {
+      if (k.includes('secondary-')) {
         let lab = k.split('-')[1];
         obj[lab] = data[k];
-        console.log(k, '====', data[k]);
+        // console.log(k, '====', data[k]);
       }
     }
 
+    let panValue = IsPan === true ? 'Y' : 'N';
+
     const submitObj = {
-      userId: user.id,
+      // userId: user.id,
       holderType: 'PR',
-      panExemptFlag: 'Y',
       residencePhoneNo: '',
-      relationship: '01',
-      relationshipProof: '01',
+      // relationship: '01',
+      // relationshipProof: '01',
+      panExemptFlag: panValue,
       panPekrnNo: obj.panPekrnNo,
-      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      // confirmpanPekrnNo: obj.confirmpanPekrnNo,
       name: obj.name,
       dateOfBirth: obj.dateOfBirth,
       contactDetail: {
@@ -139,14 +145,7 @@ function SecondHolder() {
       },
     };
 
-    if (secondHolderObj?.userId) {
-      console.log('update');
-
-      dispatch(updateSecondHolderAsync({ ...submitObj, userId: user.id }));
-    } else {
-      console.log('create');
-      dispatch(createSecondHolderAsync({ ...submitObj }));
-    }
+    dispatch(createSecondHolderOBJ({ ...submitObj }));
     dispatch(pageCount(stepsCount + 1));
   };
 
@@ -157,7 +156,7 @@ function SecondHolder() {
   return (
     <Container>
       <Tabs />
-    
+
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
@@ -177,10 +176,13 @@ function SecondHolder() {
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
+          IsPan={IsPan}
+          setIsPan={setIsPan}
         />
-
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

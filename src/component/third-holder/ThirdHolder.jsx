@@ -16,7 +16,6 @@ import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
 import { createThirdHolderAsync, updateThirdHolderAsync } from './thirdSlice';
 import { thirdFormFields } from './thirdData';
 
-
 const fieldName = Object.keys(thirdFormFields);
 
 function ThirdHolder() {
@@ -25,11 +24,12 @@ function ThirdHolder() {
 
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
+  const [IsPan, setIsPan] = useState(false);
 
   const { thirdHolderObj, isSuccess } = useSelector((state) => state.third);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const {
     register,
@@ -42,13 +42,17 @@ function ThirdHolder() {
 
   // useFormPersist('form-name-third', { watch, setValue });
 
-  
-
   useEffect(() => {
     const newObj = {};
-console.log('zero');
-    if (thirdHolderObj?.userId) {
-      console.log('one')
+    console.log('zero');
+    if (Object.keys(thirdHolderObj).length > 0) {
+      setIsPan(
+        thirdHolderObj.panExemptFlag !== ''
+          ? thirdHolderObj.panExemptFlag !== 'N'
+            ? true
+            : false
+          : true
+      );
       for (let fstLevel in thirdHolderObj) {
         console.log('two');
         if (fstLevel === 'contactDetail') {
@@ -79,29 +83,28 @@ console.log('zero');
     }
   }, [thirdHolderObj]);
 
- 
-
   const formSubmitHandeler = (data) => {
-    
     const obj = {};
 
     for (let k in data) {
-      if (k.includes('third')) {
+      if (k.includes('third-')) {
         let lab = k.split('-')[1];
         obj[lab] = data[k];
-        console.log(k, '====', data[k]);
       }
     }
 
+    let panValue = IsPan === true ? 'Y' : 'N';
+
     const submitObj = {
-      userId: user.id,
+      // userId: user.id,
       holderType: 'PR',
-      panExemptFlag: 'Y',
+
       residencePhoneNo: '',
-      relationship: '01',
-      relationshipProof: '01',
+      // relationship: '01',
+      // relationshipProof: '01',
+      panExemptFlag: panValue,
       panPekrnNo: obj.panPekrnNo,
-      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      // confirmpanPekrnNo: obj.confirmpanPekrnNo,
       name: obj.name,
       dateOfBirth: obj.dateOfBirth,
       contactDetail: {
@@ -154,12 +157,11 @@ console.log('zero');
     dispatch(pageCount(stepsCount - 1));
   };
 
-
   console.log('Form', form);
   return (
     <Container>
       <Tabs />
-   
+
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
@@ -179,9 +181,13 @@ console.log('zero');
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
+          IsPan={IsPan}
+          setIsPan={setIsPan}
         />
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

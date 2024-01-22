@@ -91,8 +91,12 @@ export const nomineeSlice = createSlice({
       state.isLoading = false;
       state.message = '';
     },
-    nomineeCountAction:(state,action) =>{
-        state.nomineeCountNum= action.payload
+    nomineeCountAction: (state, action) => {
+      state.nomineeCountNum = action.payload;
+    },
+    createNomineeOBJ: (state, action)=>{
+      console.log(action.payload);
+      state.nomineeObj=action.payload
     }
   },
   extraReducers: (builder) => {
@@ -118,7 +122,6 @@ export const nomineeSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getNomineeAsync.fulfilled, (state, action) => {
-       
         state.isLoading = false;
         state.nomineeObj = action.payload;
         state.nomineeCountNum = action.payload.nomineeDetail?.length;
@@ -150,5 +153,5 @@ export const nomineeSlice = createSlice({
 
 const { actions, reducer } = nomineeSlice;
 
-export const { reset, nomineeCountAction } = actions;
+export const { reset, nomineeCountAction, createNomineeOBJ } = actions;
 export default reducer;

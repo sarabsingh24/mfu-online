@@ -21,16 +21,11 @@ import FooterSection from '../../common/footerSection/FooterSection';
 import { btnHandeler } from '../../common/helper/Helper';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import { validateForm } from './BankAccountValidation';
-import {
-  createBankAccountAsync,
-  updateBankAccountAsync,
-} from './bankaccountSlice';
+import { createBankAccountOBJ } from './bankaccountSlice';
 
 import { accountsFun } from './bankaccountSlice';
 
-
-const bankRecord = {
-  accountDetails: [
+const bankRecord= [
     {
       sequenceNo: '1',
       defaultAccountFlag: true,
@@ -42,8 +37,8 @@ const bankRecord = {
       bankProof: '',
       reAccountNo: '',
     },
-  ],
-};
+  ]
+
 
 function BankAccounts() {
   const [form, setForm] = useState([]);
@@ -52,7 +47,7 @@ function BankAccounts() {
   const [errorsOld, setErrors] = useState([]);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const [bankAccount, setBankAccount] = useState([]);
 
   const { accountCountNum, bankAccountsObj } = useSelector(
@@ -71,11 +66,11 @@ function BankAccounts() {
     formState: { errors },
   } = useFormContext();
   // useFormPersist('form-name-bankAccount', { watch, setValue });
-  
 
   const numberHandeler = (e) => {
     let val = e.target.value;
 
+    console.log(val)
     setNumber(val);
     dispatch(accountsFun(val));
   };
@@ -141,80 +136,73 @@ function BankAccounts() {
   // }, [bankAccountsObj]);
 
   const formSubmitHandeler = (data) => {
+
+    console.log("data bank acount", data)
     let newObj = [];
 
     for (let k in data) {
       if (k.includes('Default')) {
         let lab = k.split('-')[1];
-        newObj[0] = { ...newObj[0], [lab]: data[k] };
+        newObj[0] = {
+          ...newObj[0],
+          sequenceNo: 1,
+          defaultAccountFlag: 'Y',
+          [lab]: data[k],
+        };
       }
 
       if (k.includes('Second')) {
         let lab = k.split('-')[1];
-        newObj[1] = { ...newObj[1], [lab]: data[k] };
+        newObj[1] = {
+          ...newObj[1],
+          sequenceNo: 2,
+          defaultAccountFlag: 'N',
+          [lab]: data[k],
+        };
       }
       if (k.includes('Third')) {
         let lab = k.split('-')[1];
-        newObj[2] = { ...newObj[2], [lab]: data[k] };
+        newObj[2] = {
+          ...newObj[2],
+          sequenceNo: 3,
+          defaultAccountFlag: 'N',
+          [lab]: data[k],
+        };
       }
     }
-    console.log(newObj);
+    console.log('bank account',newObj);
 
     setBankAccount(newObj);
 
-    if (bankAccountsObj?.userId === user.id) {
-      dispatch(
-        updateBankAccountAsync({
-          accountDetails: [...newObj.slice(0, accountCountNum)],
-          userId: user.id,
-        })
-      );
-    } else {
-      dispatch(
-        createBankAccountAsync({
-          accountDetails: [...newObj.slice(0, accountCountNum)],
-          userId: user.id,
-        })
-      );
-    }
+    dispatch(createBankAccountOBJ(newObj.slice(0, number)));
 
     dispatch(pageCount(stepsCount + 1));
   };
 
   useEffect(() => {
-    // const filter
-
-    setValue(
-      'accounts',
-      bankAccountsObj?.userId === user.id
-        ? bankAccountsObj?.accountDetails?.length
-        : bankRecord?.accountDetails?.length
-    );
+ 
+    setValue('accounts', bankAccountsObj?.length || bankRecord?.length);
   }, []);
 
   useEffect(() => {
-    dispatch(accountsFun(bankAccountsObj?.accountDetails?.length));
-    if (bankAccountsObj?.userId !== user.id) {
+    dispatch(accountsFun(bankAccountsObj?.length));
+    if (bankAccountsObj.length > 0) {
       dispatch(accountsFun(1));
     }
-  }, [bankAccountsObj?.accountDetails?.length]);
+
+    setNumber(bankAccountsObj?.length);
+  }, [bankAccountsObj?.length]);
 
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  console.log(
-    bankAccountsObj?.userId === user.id
-      ? bankAccountsObj?.accountDetails
-      : accountCountNum
-  );
-
-  console.log(bankAccountsObj?.userId);
+  console.log(bankAccountsObj);
 
   return (
     <Container>
       <Tabs />
-     
+
       <ButtonCustomNew backFun={backBtnHandeler} />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Number of bank account">
@@ -239,15 +227,12 @@ function BankAccounts() {
         </Section>
 
         {Array.from({
-          length: accountCountNum,
+          length: number,
         }).map((detail, index) => {
           return (
             <BankAccountSection
               key={index}
-              formObj={
-                bankAccountsObj?.accountDetails[index] ||
-                bankRecord?.accountDetails[index]
-              }
+              formObj={bankAccountsObj[index] || bankRecord[index]}
               setForm={setForm}
               count={index}
               thisAccountHandeler={thisAccountHandeler}
@@ -259,9 +244,10 @@ function BankAccounts() {
             />
           );
         })}
-
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

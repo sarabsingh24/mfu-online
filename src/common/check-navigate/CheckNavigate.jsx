@@ -53,12 +53,7 @@ function CheckNavigate() {
     if (str === 'PROO' ) {
       navigate('proof-upload');
     }
-    if (openForm === 'admin') {
-      navigate('admin');
-    }
-     if (openForm === 'test') {
-       navigate('/admin/test');
-     }
+   
   }, [str, navigate]);
 
   return <>{!str && <div>Loading...</div>}</>;

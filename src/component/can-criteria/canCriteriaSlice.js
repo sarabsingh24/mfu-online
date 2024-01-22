@@ -80,6 +80,17 @@ export const canCriteriaSlice = createSlice({
       state.isLoading = false;
       state.message = '';
     },
+    createCanCriteria: (state,action) => {
+      
+      state.canCriteriaObj = {
+        requestEvent: action.payload.requestEvent,
+        holdingNature: action.payload.holdingNature,
+        investorCategory: action.payload.investorCategory,
+        taxStatus: action.payload.taxStatus,
+        holderCount: action.payload.holderCount,
+      };
+      
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -101,8 +112,6 @@ export const canCriteriaSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getCriteriaFormAsync.fulfilled, (state, action) => {
-       
-
         state.isLoading = false;
         state.canCriteriaObj = action.payload;
       })
@@ -129,5 +138,5 @@ export const canCriteriaSlice = createSlice({
 
 const {actions,reducer} =canCriteriaSlice
 
-export const { reset } = actions;
+export const { reset, createCanCriteria } = actions;
 export default reducer;

@@ -38,3 +38,17 @@ align-items: center;
   line-height: 48px;
 }
 
+
+
+.button-container{
+  display: flex;
+   justify-content: flex-end
+}
+
+
+@media (max-width: 768px) {
+  .button-container {
+      
+      justify-content: space-between
+    }
+}

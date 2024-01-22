@@ -24,8 +24,8 @@ import {
   nomineeCountAction,
   createNomineeAsync,
   updateNomineeAsync,
+  createNomineeOBJ,
 } from '../nominees/nomineeSlice';
-
 
 const nomineeOption = [
   { value: 'N', label: 'No - I/We declare to Opt out' },
@@ -64,7 +64,7 @@ export default function Nominees() {
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
 
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -75,8 +75,6 @@ export default function Nominees() {
     getValues,
     formState: { errors },
   } = useFormContext();
-
-  
 
   const numberHandeler = (e) => {
     let val = e.target.value;
@@ -91,18 +89,19 @@ export default function Nominees() {
       setValue('nomineeOptedFlag', 'Y');
       setForm([nomineeCompObj]);
       dispatch(nomineeCountAction(1));
+      // setNumber(1);
       setIsNominee(true);
     } else {
       setValue('nomineeOptedFlag', 'N');
       setIsNominee(false);
-      dispatch(
-        updateNomineeAsync({
-          ...nomineeObj,
-          nomineeOption: 'N',
-          nomineeDetail: [],
-        })
-      );
-      dispatch(nomineesForm([]));
+      // dispatch(
+      //   updateNomineeAsync({
+      //     ...nomineeObj,
+      //     nomineeOption: 'N',
+      //     nomineeDetail: [],
+      //   })
+      // )
+      // dispatch(nomineesForm([]));
       setForm([]);
       // setNumber(0);
     }
@@ -163,21 +162,23 @@ export default function Nominees() {
   // }, [number]);
 
   const formSubmitHandeler = (data) => {
+ console.log('data nominee ', data);
+
     let newObj = [];
 
     for (let k in data) {
-      if (k.includes('First')) {
+      if (k.includes('1st')) {
         let lab = k.split('-')[1];
-        newObj[0] = { ...newObj[0], [lab]: data[k] };
+        newObj[0] = { ...newObj[0], sequenceNo: 1, [lab]: data[k] };
       }
 
-      if (k.includes('Second')) {
+      if (k.includes('2nd')) {
         let lab = k.split('-')[1];
-        newObj[1] = { ...newObj[1], [lab]: data[k] };
+        newObj[1] = { ...newObj[1], sequenceNo: 2, [lab]: data[k] };
       }
-      if (k.includes('Third')) {
+      if (k.includes('3rd')) {
         let lab = k.split('-')[1];
-        newObj[2] = { ...newObj[2], [lab]: data[k] };
+        newObj[2] = { ...newObj[2], sequenceNo: 3, [lab]: data[k] };
       }
     }
 
@@ -188,29 +189,29 @@ export default function Nominees() {
         return total;
       }, 0);
 
-    console.log(newObj.slice(0, nomineeCountNum));
-    if (checkPercentage === 100) {
-      if (nomineeObj.userId) {
+    console.log('nominee',newObj);
+    if (isNominee) {
+      if (checkPercentage === 100) {
         dispatch(
-          updateNomineeAsync({
-            nomineeOption: data.nomineeOptedFlag,
+          createNomineeOBJ({
+            nomineeOptedFlag: data.nomineeOptedFlag,
             nomineeDetail: newObj.slice(0, nomineeCountNum),
-            userId: user.id,
           })
         );
+        setpercentSts(false);
+        dispatch(pageCount(stepsCount + 1));
       } else {
-        dispatch(
-          createNomineeAsync({
-            nomineeOption: data.nomineeOptedFlag,
-            nomineeDetail: newObj.slice(0, nomineeCountNum),
-            userId: user.id,
-          })
-        );
+        setpercentSts(true);
       }
+    } else {
+      dispatch(
+        createNomineeOBJ({
+          nomineeOptedFlag: 'N',
+          nomineeDetail: [],
+        })
+      );
       setpercentSts(false);
       dispatch(pageCount(stepsCount + 1));
-    } else {
-      setpercentSts(true);
     }
 
     // const formErrors = validateForm(form, nomineeSelected);
@@ -243,41 +244,34 @@ export default function Nominees() {
   }, [dispatch, stepsCount]);
 
   useEffect(() => {
-    if (nomineeObj.userId) {
-      setValue('nomineeOptedFlag', nomineeObj.nomineeOptedFlag);
-      // setNomineeSelected(nomineeObj.nomineeOptedFlag === 'N' ? 'N' : 'Y');
-      setIsNominee(nomineeObj.nomineeOptedFlag === 'N' ? false : true);
-      setForm(nomineeObj.nomineeRecords);
-    } else {
-      setValue('nomineeOptedFlag', 'N');
-      setNumber('0');
-      setIsNominee(false);
-      setForm([]);
-    }
-  }, [nomineeObj]);
+    setValue('nomineeOptedFlag', nomineeObj.nomineeOptedFlag);
+    // setNomineeSelected(nomineeObj.nomineeOptedFlag === 'N' ? 'N' : 'Y');
+    setIsNominee(nomineeObj.nomineeOptedFlag === 'N' ? false : true);
+    setForm(nomineeObj.nomineeRecords);
 
-  useEffect(() => {
     console.log(nomineeObj.nomineeDetail);
+    console.log(nomineeObj?.nomineeOptedFlag);
+
     setValue(
       'nomineeCount',
-      nomineeObj.nomineeDetail.length || nomineeCountNum
+      nomineeObj?.nomineeDetail?.length || nomineeCountNum
     );
     setValue(
       'nomineeOptedFlag',
       nomineeObj?.nomineeOptedFlag === 'N' ? 'N' : 'Y'
     );
-  }, [nomineeObj]);
+  }, []);
 
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  
+  console.log(nomineeObj?.nomineeDetail?.length);
 
   return (
     <Container>
       <Tabs />
-      
+
       <ButtonCustomNew backFun={backBtnHandeler} />
       <Form onSubmit={handleSubmit(formSubmitHandeler)}>
         <Section heading="Nominee details">
@@ -347,7 +341,11 @@ export default function Nominees() {
               <AddNominee
                 key={`${index}v`}
                 register={register}
-                formObj={nomineeObj?.nomineeDetail[index]}
+                formObj={
+                  Object.keys(nomineeObj).length > 0
+                    ? nomineeObj?.nomineeDetail[index]
+                    : nomineeCompObj
+                }
                 setForm={setForm}
                 count={index}
                 // thisAccountHandeler={thisAccountHandeler}
@@ -357,8 +355,10 @@ export default function Nominees() {
               />
             );
           })}
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="Submit" />
+        </div>
       </Form>
     </Container>
   );

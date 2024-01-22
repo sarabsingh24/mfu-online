@@ -4,7 +4,6 @@ import Tab from './Tab';
 import { useSelector, useDispatch } from 'react-redux';
 //component
 import { stepsList } from './Data';
-import HeaderSection from '../../common/header/HeaderSection';
 
 import { tabUpdate } from '../../reducer/Reducer/tab/tabSlice';
 // import useCommonReducer from "../customComp/useCommonReducer";
@@ -39,7 +38,6 @@ function Tabs() {
 
   return (
     <React.Fragment>
-      <HeaderSection />
       <StepperContainer>
         <StepperLine />
         <Steps>

@@ -33,6 +33,13 @@
       "taxStatus": "NRM",
       "holderCount": "2",
       "id": 2
+    },
+    {
+      "holdingNature": "SI",
+      "investorCategory": "I",
+      "taxStatus": "NRI",
+      "holderCount": "1",
+      "id": 3
     }
   ],
   "primeHolderObj": [
@@ -115,6 +122,457 @@
         ]
       },
       "id": 2
+    },
+    {
+      "holderType": "PR",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1234",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-11",
+      "contactDetail": {
+        "primaryEmail": "ff@gg.com",
+        "mobileIsdCode": "34",
+        "primaryMobileNo": "3456789054"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "02",
+        "sourceOfWealthOthers": "dd",
+        "occupation": "02",
+        "occupationOthers": "dd",
+        "kraAddressType": "1",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "dd",
+        "taxReferenceNo": "234",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "234"
+          }
+        ]
+      },
+      "id": 3
+    },
+    {
+      "holderType": "PR",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "123",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-12",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "34",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "gg",
+        "occupation": "02",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "gg",
+        "taxReferenceNo": "jj",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "jj"
+          }
+        ]
+      },
+      "id": 4
+    },
+    {
+      "holderType": "PR",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1234",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-12",
+      "contactDetail": {
+        "primaryEmail": "fgf@gg.com",
+        "mobileIsdCode": "23",
+        "primaryMobileNo": "6666666666"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "dd",
+        "occupation": "02",
+        "occupationOthers": "jj",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "ds",
+        "taxReferenceNo": "yy",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "yy"
+          }
+        ]
+      },
+      "id": 5
+    },
+    {
+      "holderType": "PR",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "2345",
+      "name": "sara",
+      "dateOfBirth": "2024-01-05",
+      "contactDetail": {
+        "primaryEmail": "dfd@hh.com",
+        "mobileIsdCode": "34",
+        "primaryMobileNo": "8888888888"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "gg",
+        "occupation": "02",
+        "occupationOthers": "jj",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "hj",
+        "taxReferenceNo": "kl",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "kl"
+          }
+        ]
+      },
+      "id": 6
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": "3456",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "3456",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-04",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "89",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "ff",
+        "occupation": "02",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "gg",
+        "taxReferenceNo": "kk",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "kk"
+          }
+        ]
+      },
+      "id": 7
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": "456",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "456",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-11",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "67",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "04",
+        "sourceOfWealthOthers": "hh",
+        "occupation": "03",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "ff",
+        "taxReferenceNo": "kk",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "kk"
+          }
+        ]
+      },
+      "id": 8
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": "4567",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "4567",
+      "name": "sss",
+      "dateOfBirth": "2024-01-11",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "44",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "04",
+        "sourceOfWealthOthers": "ff",
+        "occupation": "03",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "ff",
+        "taxReferenceNo": "jj",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "jj"
+          }
+        ]
+      },
+      "id": 9
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": "345",
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "345",
+      "name": "dd",
+      "dateOfBirth": "2024-01-11",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "44",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "hh",
+        "occupation": "02",
+        "occupationOthers": "ll",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "j",
+        "taxReferenceNo": "k",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "k"
+          }
+        ]
+      },
+      "id": 10
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": false,
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1234",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-04",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "34",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "ff",
+        "occupation": "02",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "uu",
+        "taxReferenceNo": "ff",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "ff"
+          }
+        ]
+      },
+      "id": 11
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": true,
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1234",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-04",
+      "contactDetail": {
+        "primaryEmail": "",
+        "mobileIsdCode": "34",
+        "primaryMobileNo": ""
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "ff",
+        "occupation": "02",
+        "occupationOthers": "kk",
+        "kraAddressType": "2",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "uu",
+        "taxReferenceNo": "ff",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "ff"
+          }
+        ]
+      },
+      "id": 12
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": true,
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1234",
+      "name": "sarab",
+      "dateOfBirth": "2024-01-12",
+      "contactDetail": {
+        "primaryEmail": "2323232323",
+        "mobileIsdCode": "1234",
+        "primaryMobileNo": "34"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "ff@g.com",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealthOthers": "03",
+        "occupation": "dd",
+        "occupationOthers": "02",
+        "kraAddressType": "PEP",
+        "pep": "jj"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "1",
+        "birthCity": "N",
+        "birthCountry": "dd",
+        "taxRecords": [
+          {
+            "identityType": "kk"
+          }
+        ]
+      },
+      "id": 13
+    },
+    {
+      "holderType": "PR",
+      "panExemptFlag": true,
+      "residencePhoneNo": "",
+      "relationship": "01",
+      "relationshipProof": "01",
+      "panPekrnNo": "1",
+      "name": "s",
+      "dateOfBirth": "2024-01-11",
+      "contactDetail": {
+        "primaryEmail": "dd@gg.com",
+        "mobileIsdCode": "55",
+        "primaryMobileNo": "5555555555"
+      },
+      "otherDetail": {
+        "otherInfo": "string",
+        "grossIncome": "",
+        "netWorth": "",
+        "netWorthDate": "",
+        "sourceOfWealth": "03",
+        "sourceOfWealthOthers": "dd",
+        "occupation": "02",
+        "occupationOthers": "kk",
+        "kraAddressType": "1",
+        "pep": "PEP"
+      },
+      "fatcaDetail": {
+        "taxResidencyFlag": "N",
+        "birthCity": "fg",
+        "taxReferenceNo": "hj",
+        "taxRecords": [
+          {
+            "taxReferenceNo": "hj"
+          }
+        ]
+      },
+      "id": 14
     }
   ],
   "secondHolderObj": [
@@ -159,48 +617,7 @@
       "id": 1
     }
   ],
-  "thirdHolderObj": [
-    {
-      "userId": 1,
-      "holderType": "PR",
-      "panExemptFlag": "Y",
-      "residencePhoneNo": "",
-      "relationship": "01",
-      "relationshipProof": "01",
-      "panPekrnNo": "678",
-      "confirmpanPekrnNo": "678",
-      "name": "kamal preet",
-      "dateOfBirth": "2023-11-15",
-      "contactDetail": {
-        "primaryEmail": "gg@hh.com",
-        "mobileIsdCode": "99",
-        "primaryMobileNo": "3333333333"
-      },
-      "otherDetail": {
-        "otherInfo": "string",
-        "grossIncome": "",
-        "netWorth": "",
-        "netWorthDate": "",
-        "sourceOfWealth": "02",
-        "sourceOfWealthOthers": "bn",
-        "occupation": "02",
-        "occupationOthers": "dn",
-        "kraAddressType": "PEP",
-        "pep": "2"
-      },
-      "fatcaDetail": {
-        "taxResidencyFlag": "N",
-        "birthCity": "bh",
-        "taxReferenceNo": "gh",
-        "taxRecords": [
-          {
-            "taxReferenceNo": "gh"
-          }
-        ]
-      },
-      "id": 1
-    }
-  ],
+  "thirdHolderObj": [],
   "guardianHolderObj": [],
   "bankAccountsObj": [
     {
@@ -252,7 +669,46 @@
       "id": 2
     }
   ],
-  "nomineeObj": [],
+  "nomineeObj": [
+    {
+      "nomineeOption": "Y",
+      "nomineeDetail": [
+        {
+          "nomineeName": "sarab",
+          "relation": "husband",
+          "percentage": "100",
+          "dateOfBirth": "2024-01-30"
+        }
+      ],
+      "userId": 1,
+      "id": 1
+    },
+    {
+      "nomineeOption": "Y",
+      "nomineeDetail": [
+        {
+          "nomineeName": "kk",
+          "relation": "husband",
+          "percentage": "40",
+          "dateOfBirth": "2024-01-30"
+        },
+        {
+          "accountNo": "678",
+          "reAccountNo": "678",
+          "accountType": "FCNR",
+          "bankId": "hdfc",
+          "micrCode": "jkl",
+          "ifscCode": "rty",
+          "bankProof": "14",
+          "nomineeName": "jk",
+          "relation": "son",
+          "percentage": "60",
+          "dateOfBirth": "2024-01-29"
+        }
+      ],
+      "id": 2
+    }
+  ],
   "proofUploadObj": [
     {
       "id": 1

@@ -1,5 +1,6 @@
-import React from 'react'
-import { BtnStyle, BtnTextStyle } from './ButtonCustom-style';
+import React from 'react';
+import Button from 'react-bootstrap/Button';
+import { BtnStyle, BtnTextStyle, BtnSubmitStyle } from './ButtonCustom-style';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import { MdArrowForwardIos } from 'react-icons/md';
 
@@ -10,8 +11,12 @@ function ButtonCustomNew({ text, backFun }) {
         <BtnStyle type="submit">
           <MdArrowForwardIos />
         </BtnStyle>
+      ) : text === 'Submit' ? (
+        <Button variant="success" type="submit">
+          Submit
+        </Button>
       ) : (
-        <BtnStyle type='button' onClick={backFun}>
+        <BtnStyle type="button" onClick={backFun}>
           <MdArrowBackIosNew />
         </BtnStyle>
       )}
@@ -19,9 +24,7 @@ function ButtonCustomNew({ text, backFun }) {
   );
 }
 
-export default ButtonCustomNew
-
-
+export default ButtonCustomNew;
 
 //  {
 //    text === 'save' ? (

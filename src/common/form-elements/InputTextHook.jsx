@@ -21,11 +21,6 @@ function InputTextHook({
   depend,
   sts,
 }) {
-
-  
-
- 
- 
   return (
     <Form.Group className="mb-1">
       <Form.Label>
@@ -52,7 +47,6 @@ function InputTextHook({
       ) : depend?.length ? (
         <Form.Control
           type={type}
-          
           className={` ${
             errorBorder ? 'border border-1 border-danger rounded-1' : null
           }`}

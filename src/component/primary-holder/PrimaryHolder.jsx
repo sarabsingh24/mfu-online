@@ -13,14 +13,15 @@ import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
 import { deleteNomineeAsync } from '../nominees/nomineeSlice';
 import { Container } from 'react-bootstrap';
 
-
 import {
   createPrimaryHolderAsync,
   updatePrimaryHolderAsync,
+  changeTaxResidency,
 } from './primarySlice';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { primaryFormFields } from './primaryData';
+import { createPrimaryHolderOBJ } from './primarySlice';
 
 const fieldName = Object.keys(primaryFormFields);
 
@@ -31,8 +32,11 @@ function PrimaryHolder({ methods }) {
 
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
+  const [IsPan, setIsPan] = useState(false);
 
-  const { primeHolderObj, isSuccess } = useSelector((state) => state.primary);
+  const { primeHolderObj, isSuccess, taxResidency } = useSelector(
+    (state) => state.primary
+  );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
 
   const { canCriteriaObj } = useSelector((state) => state.criteria);
@@ -57,7 +61,14 @@ function PrimaryHolder({ methods }) {
   useEffect(() => {
     const newObj = {};
 
-    if (primeHolderObj?.userId) {
+    if (Object.keys(primeHolderObj).length > 0) {
+      setIsPan(
+        primeHolderObj.panExemptFlag !== ''
+          ? primeHolderObj.panExemptFlag !== 'N'
+            ? true
+            : false
+          : true
+      );
       for (let fstLevel in primeHolderObj) {
         if (fstLevel === 'contactDetail') {
           for (let secLev in primeHolderObj[fstLevel]) {
@@ -111,7 +122,7 @@ function PrimaryHolder({ methods }) {
       canCriteriaObj?.investorCategory === 'M'
     ) {
       if (secondHolderObj?.id) {
-        console.log('in')
+        console.log('in');
         dispatch(deleteSecondHolderAsync(secondHolderObj?.id));
       }
       if (thirdHolderObj?.id) {
@@ -119,10 +130,9 @@ function PrimaryHolder({ methods }) {
         dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
       }
 
-       if (nomineeObj?.id) {
-         dispatch(deleteNomineeAsync(nomineeObj?.id));
-       }
-      
+      if (nomineeObj?.id) {
+        dispatch(deleteNomineeAsync(nomineeObj?.id));
+      }
 
       console.log('remove second, third, nominee');
     } else if (canCriteriaObj?.holdingNature === 'JO') {
@@ -137,35 +147,52 @@ function PrimaryHolder({ methods }) {
     }
   }, []);
 
+  useEffect(() => {
+    console.log('ghgg', primeHolderObj.fatcaDetail.taxResidencyFlag);
+
+    if (
+      primeHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
+      primeHolderObj.fatcaDetail.taxResidencyFlag === ''
+    ) {
+       dispatch(changeTaxResidency('N'));
+    
+    } else {
+       dispatch(changeTaxResidency('Y'));
+    }
+  }, []);
+
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
 
     const obj = {};
 
     for (let k in data) {
-      if (k.includes('primary')) {
+      if (k.includes('primary-')) {
         let lab = k.split('-')[1];
+        console.log(obj[lab], '=======', data[k]);
         obj[lab] = data[k];
-        console.log(k, '====', data[k]);
       }
     }
+    let panValue = IsPan === true ? 'Y' : 'N';
 
     const submitObj = {
       // ...primeHolderObj,
-      userId: user.id,
+      // userId: user.id,
       holderType: 'PR',
-      panExemptFlag: 'Y',
       residencePhoneNo: '',
       relationship: '01',
       relationshipProof: '01',
+      panExemptFlag: panValue,
       panPekrnNo: obj.panPekrnNo,
-      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      // confirmpanPekrnNo: obj.confirmpanPekrnNo,
       name: obj.name,
       dateOfBirth: obj.dateOfBirth,
       contactDetail: {
         primaryEmail: obj.primaryEmail,
         mobileIsdCode: obj.mobileIsdCode,
+        primaryMobileBelongsTo: '',
         primaryMobileNo: obj.primaryMobileNo,
+        primaryEmailBelongsTo: '',
       },
       otherDetail: {
         otherInfo: 'string',
@@ -186,24 +213,15 @@ function PrimaryHolder({ methods }) {
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
         taxReferenceNo: obj.taxReferenceNo,
-        taxRecords: [
-          {
-            taxCountry: obj.taxCountry,
-            taxReferenceNo: obj.taxReferenceNo,
-            identityType: obj.identityType,
-          },
-        ],
+        taxRecords: {
+          taxCountry: obj.taxCountry,
+          taxReferenceNo: obj.taxReferenceNo,
+          identityType: obj.identityType,
+        },
       },
     };
 
-    if (primeHolderObj?.userId) {
-      console.log('update');
-
-      dispatch(updatePrimaryHolderAsync({ ...submitObj, userId: user.id }));
-    } else {
-      console.log('create');
-      dispatch(createPrimaryHolderAsync({ ...submitObj }));
-    }
+    dispatch(createPrimaryHolderOBJ({ ...submitObj }));
 
     dispatch(pageCount(stepsCount + 1));
 
@@ -211,14 +229,13 @@ function PrimaryHolder({ methods }) {
   };
 
   const backBtnHandeler = () => {
-    console.log('kk');
     dispatch(pageCount(stepsCount - 1));
   };
 
   return (
     <Container>
       <Tabs />
-    
+
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
@@ -238,10 +255,15 @@ function PrimaryHolder({ methods }) {
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
+          IsPan={IsPan}
+          setIsPan={setIsPan}
+          taxResidency={taxResidency}
+          changeTaxResidency={changeTaxResidency}
         />
-
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

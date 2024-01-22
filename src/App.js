@@ -33,37 +33,32 @@ import SecondHolder from './component/second-holder/SecondHolder';
 import CheckNavigate from './common/check-navigate/CheckNavigate';
 import LoginScreen from './component/auth/LoginScreen';
 import Register from './component/auth/Register';
-import AdminDashboard from  './admin/admin-pages/AdminDashboard';
-import Test from './admin/admin-pages/Test'
 
 import Protected from './component/auth/Protected';
 import { tabUpdate, pageCount } from './reducer/Reducer/tab/tabSlice';
-import {getUserAsync} from './component/auth/authSlice'
-
+import { getUserAsync } from './component/auth/authSlice';
 
 function App() {
   const methods = useForm();
   // const { userId } = useSelector((state) => state.account);
-  const { user,IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+   
+  //     dispatch(getCriteriaFormAsync(user.id));
+  //     dispatch(getPrimaryHolderAsync(user.id));
+  //     dispatch(getSecondHolderAsync(user.id));
+  //     dispatch(getThirdHolderAsync(user.id));
+  //     dispatch(getBankAccountAsync(user.id));
+  //     dispatch(getNomineeAsync(user.id));
+  //     dispatch(getGuardianHolderAsync(user.id));
+    
+  // }, []);
+
   useEffect(() => {
-    if (user.id) {
-      dispatch(getCriteriaFormAsync(user.id));
-      dispatch(getPrimaryHolderAsync(user.id));
-      dispatch(getSecondHolderAsync(user.id));
-      dispatch(getThirdHolderAsync(user.id));
-      dispatch(getBankAccountAsync(user.id));
-      dispatch(getNomineeAsync(user.id));
-      dispatch(getGuardianHolderAsync(user.id));
-    }
-  }, [user.id]);
-
-  useEffect(()=>{
-dispatch(getUserAsync());
-  },[])
-
-  console.log(user.id);
+    dispatch(getUserAsync());
+  }, []);
 
   return (
     <React.Fragment>
@@ -72,92 +67,40 @@ dispatch(getUserAsync());
         <Router>
           {/* <HeaderSection /> */}
 
-          {user.id && <CheckNavigate />}
+          <CheckNavigate />
 
           <Routes>
-            <Route path="/signin" element={<LoginScreen />} />
-            <Route path="/signup" element={<Register />} />
+            {/* <Route path="/signin" element={<LoginScreen />} />
+            <Route path="/signup" element={<Register />} /> */}
             <Route
               path="/can-criteria"
-              element={
-                <Protected>
-                  <CanCriteria methods={methods} />
-                </Protected>
-              }
+              element={<CanCriteria methods={methods} />}
             />
             <Route
               path="/primary-holder"
-              element={
-                <Protected>
-                  <PrimaryHolder methods={methods} />
-                </Protected>
-              }
+              element={<PrimaryHolder methods={methods} />}
             />
             <Route
               path="/second-holder"
-              element={
-                <Protected>
-                  <SecondHolder methods={methods} />
-                </Protected>
-              }
+              element={<SecondHolder methods={methods} />}
             />
             <Route
               path="/third-holder"
-              element={
-                <Protected>
-                  <ThirdHolder methods={methods} />
-                </Protected>
-              }
+              element={<ThirdHolder methods={methods} />}
             />
             <Route
               path="/guardian-holder"
-              element={
-                <Protected>
-                  <GuardianHolder methods={methods} />
-                </Protected>
-              }
+              element={<GuardianHolder methods={methods} />}
             />
             <Route
               path="/bank-accounts"
-              element={
-                <Protected>
-                  <BankAccounts methods={methods} />
-                </Protected>
-              }
+              element={<BankAccounts methods={methods} />}
             />
-            <Route
-              path="/nominees"
-              element={
-                <Protected>
-                  <Nominees methods={methods} />{' '}
-                </Protected>
-              }
-            />
+            <Route path="/nominees" element={<Nominees methods={methods} />} />
             <Route
               path="/proof-upload"
-              element={
-                <Protected>
-                  <ProofUpload methods={methods} />
-                </Protected>
-              }
+              element={<ProofUpload methods={methods} />}
             />
-            <Route
-              path="/admin/"
-              element={
-                <Protected>
-                  <AdminDashboard methods={methods} />
-                </Protected>
-              }
-            >
-              
-            </Route><Route
-                path="/admin/test"
-                element={
-                  <Protected>
-                    <Test methods={methods} />
-                  </Protected>
-                }
-              />
           </Routes>
         </Router>
       </FormProvider>

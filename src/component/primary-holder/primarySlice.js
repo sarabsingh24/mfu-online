@@ -8,12 +8,12 @@ const initialState = {
   isLoading: false,
   message: '',
   canId: '',
+  taxResidency:'N'
 };
 
 export const createPrimaryHolderAsync = createAsyncThunk(
   'primary/create',
   async (obj, thunkAPI) => {
-   
     try {
       return await primaryAPI.createPrimaryHolder(obj);
     } catch (error) {
@@ -31,7 +31,6 @@ export const createPrimaryHolderAsync = createAsyncThunk(
 export const getPrimaryHolderAsync = createAsyncThunk(
   'primary/get',
   async (userId, thunkAPI) => {
-    
     try {
       return await primaryAPI.getPrimaryHolder(userId);
     } catch (error) {
@@ -45,7 +44,6 @@ export const getPrimaryHolderAsync = createAsyncThunk(
     }
   }
 );
-
 
 export const updatePrimaryHolderAsync = createAsyncThunk(
   'primary/update',
@@ -75,6 +73,58 @@ export const primarySlice = createSlice({
       state.isLoading = false;
       state.message = '';
     },
+    changeTaxResidency: (state, action) => {
+      state.taxResidency = action.payload
+    },
+    createPrimaryHolderOBJ: (state, action) => {
+      state.primeHolderObj = {
+        holderType: 'PR',
+        residencePhoneNo: '',
+        relationship: '01',
+        relationshipProof: '01',
+        panExemptFlag: action.payload.panExemptFlag,
+        panPekrnNo: action.payload.panPekrnNo,
+        name: action.payload.name,
+        dateOfBirth: action.payload.dateOfBirth,
+        contactDetail: {
+          primaryEmail: action.payload.contactDetail.primaryEmail,
+          mobileIsdCode: action.payload.contactDetail.mobileIsdCode,
+          primaryMobileNo: action.payload.contactDetail.primaryMobileNo,
+        },
+        otherDetail: {
+          otherInfo: 'string',
+          grossIncome: action.payload.otherDetail.grossIncome
+            ? action.payload.otherDetail.grossIncome
+            : '',
+          netWorth: action.payload.otherDetail.netWorth
+            ? action.payload.otherDetail.netWorth
+            : '',
+          netWorthDate: action.payload.otherDetail.netWorthDate
+            ? action.payload.otherDetail.netWorthDate
+            : '',
+          sourceOfWealth: action.payload.otherDetail.sourceOfWealth,
+          sourceOfWealthOthers: action.payload.otherDetail.sourceOfWealthOthers,
+          occupation: action.payload.otherDetail.occupation,
+          occupationOthers: action.payload.otherDetail.occupationOthers,
+          kraAddressType: action.payload.otherDetail.kraAddressType,
+          pep: action.payload.otherDetail.pep,
+        },
+        fatcaDetail: {
+          taxResidencyFlag: action.payload.fatcaDetail.taxResidencyFlag,
+          birthCity: action.payload.fatcaDetail.birthCity,
+          birthCountry: action.payload.fatcaDetail.birthCountry,
+          citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
+          nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
+          taxReferenceNo: action.payload.fatcaDetail.taxReferenceNo,
+          taxRecords: {
+            taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
+            taxReferenceNo:
+              action.payload.fatcaDetail.taxRecords.taxReferenceNo,
+            identityType: action.payload.fatcaDetail.taxRecords.identityType,
+          },
+        },
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -86,7 +136,7 @@ export const primarySlice = createSlice({
         state.isLoading = false;
         state.primeHolderObj = action.payload;
         state.isError = false;
-         state.message = ''; 
+        state.message = '';
       })
       .addCase(createPrimaryHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
@@ -101,7 +151,7 @@ export const primarySlice = createSlice({
         state.isLoading = false;
         state.primeHolderObj = action.payload;
         state.isError = false;
-         state.message = ''; 
+        state.message = '';
       })
       .addCase(getPrimaryHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
@@ -116,7 +166,7 @@ export const primarySlice = createSlice({
         state.isLoading = false;
         state.primeHolderObj = action.payload;
         state.isError = false;
-        state.message=''; 
+        state.message = '';
       })
       .addCase(updatePrimaryHolderAsync.rejected, (state, action) => {
         state.isLoading = false;
@@ -128,5 +178,5 @@ export const primarySlice = createSlice({
 
 const { actions, reducer } = primarySlice;
 
-export const { reset } = actions;
+export const { reset, createPrimaryHolderOBJ, changeTaxResidency } = actions;
 export default reducer;
