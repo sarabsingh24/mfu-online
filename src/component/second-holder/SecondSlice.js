@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   message: '',
   canId: '',
+  taxResidency: 'N',
 };
 
 export const createSecondHolderAsync = createAsyncThunk(
@@ -94,6 +95,9 @@ export const secondSlice = createSlice({
       state.isLoading = false;
       state.message = '';
     },
+    changeTaxResidency: (state, action) => {
+      state.taxResidency = action.payload;
+    },
     createSecondHolderOBJ: (state, action) => {
       state.secondHolderObj = {
         holderType: 'PR',
@@ -133,16 +137,12 @@ export const secondSlice = createSlice({
           birthCountry: action.payload.fatcaDetail.birthCountry,
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
-          taxReferenceNo: action.payload.fatcaDetail.taxReferenceNo,
-          taxRecords: [
-            {
-              taxCountry: action.payload.fatcaDetail.taxRecords[0].taxCountry,
-              taxReferenceNo:
-                action.payload.fatcaDetail.taxRecords[0].taxReferenceNo,
-              identityType:
-                action.payload.fatcaDetail.taxRecords[0].identityType,
-            },
-          ],
+          taxRecords: {
+            taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
+            taxReferenceNo:
+              action.payload.fatcaDetail.taxRecords.taxReferenceNo,
+            identityType: action.payload.fatcaDetail.taxRecords.identityType,
+          },
         },
       };
     },
@@ -213,5 +213,5 @@ export const secondSlice = createSlice({
 
 const { actions, reducer } = secondSlice;
 
-export const { reset, createSecondHolderOBJ } = actions;
+export const { reset, createSecondHolderOBJ, changeTaxResidency } = actions;
 export default reducer;

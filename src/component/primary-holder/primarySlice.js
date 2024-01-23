@@ -115,7 +115,6 @@ export const primarySlice = createSlice({
           birthCountry: action.payload.fatcaDetail.birthCountry,
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
-          taxReferenceNo: action.payload.fatcaDetail.taxReferenceNo,
           taxRecords: {
             taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
             taxReferenceNo:

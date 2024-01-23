@@ -68,12 +68,11 @@ function SelectSearchHook({
     } else {
       setForm({
         ...form,
-        [selectFieldName + '-taxRecords']: 
-          
-            {...form[selectFieldName + '-taxRecords'],
-            [selectFieldName + '-' + inputFieldName]: name,}
-          
+        [selectFieldName + '-' + inputFieldName]: name,
         
+        // [selectFieldName + '-taxRecords']:
+        //     {...form[selectFieldName + '-taxRecords'],
+        //     [selectFieldName + '-' + inputFieldName]: name,}
 
         // [{ ...form.taxRecords[0], [selectFieldName+'-'+inputFieldName]: name }],
 

@@ -11,7 +11,7 @@ import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import { createSecondHolderOBJ } from './SecondSlice';
+import { createSecondHolderOBJ, changeTaxResidency } from './SecondSlice';
 import { secondaryFormFields } from './secondaryData';
 
 const fieldName = Object.keys(secondaryFormFields);
@@ -23,7 +23,9 @@ function SecondHolder() {
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
 
-  const { secondHolderObj } = useSelector((state) => state.second);
+  const { secondHolderObj, taxResidency } = useSelector(
+    (state) => state.second
+  );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
   const { user, IslogedIn } = useSelector((state) => state.user);
@@ -47,7 +49,6 @@ function SecondHolder() {
 
   useEffect(() => {
     const newObj = {};
-    
 
     if (Object.keys(secondHolderObj).length > 0) {
       setIsPan(
@@ -68,10 +69,12 @@ function SecondHolder() {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in secondHolderObj[fstLevel]) {
-            newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
-          }
-        } else if (fstLevel === 'taxRecords') {
-          for (let secLev in secondHolderObj[fstLevel]) {
+            if (secLev === 'taxRecords') {
+              for (let thirdLev in secondHolderObj[fstLevel].taxRecords) {
+                newObj[`secondary-${thirdLev}`] =
+                  secondHolderObj[fstLevel][secLev][thirdLev];
+              }
+            }
             newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
           }
         } else {
@@ -84,6 +87,17 @@ function SecondHolder() {
       setForm(secondaryFormFields);
     }
   }, [secondHolderObj]);
+
+  useEffect(() => {
+    if (
+      secondHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
+      secondHolderObj.fatcaDetail.taxResidencyFlag === ''
+    ) {
+      dispatch(changeTaxResidency('N'));
+    } else {
+      dispatch(changeTaxResidency('Y'));
+    }
+  }, []);
 
   const formSubmitHandeler = (data) => {
     // console.log('secondary', data);
@@ -99,6 +113,8 @@ function SecondHolder() {
     }
 
     let panValue = IsPan === true ? 'Y' : 'N';
+
+    delete obj.taxRecords;
 
     const submitObj = {
       // userId: user.id,
@@ -131,17 +147,17 @@ function SecondHolder() {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.birthCountry,
-        citizenshipCountry: obj.citizenshipCountry,
-        nationalityCountry: obj.nationalityCountry,
-        taxReferenceNo: obj.taxReferenceNo,
-        taxRecords: [
-          {
-            taxCountry: obj.taxCountry,
-            taxReferenceNo: obj.taxReferenceNo,
-            identityType: obj.identityType,
-          },
-        ],
+        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
+        citizenshipCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
+        nationalityCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
+        taxRecords: {
+          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+          taxReferenceNo:
+            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
+        },
       },
     };
 
@@ -178,6 +194,8 @@ function SecondHolder() {
           setGrossIncomeRadio={setGrossIncomeRadio}
           IsPan={IsPan}
           setIsPan={setIsPan}
+          taxResidency={taxResidency}
+          changeTaxResidency={changeTaxResidency}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

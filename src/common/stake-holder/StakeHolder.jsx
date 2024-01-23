@@ -184,7 +184,6 @@ function StakeHolder({
   const panPekrnNo = watch(fieldName[2]);
 
   useEffect(() => {
-    console.log(changeTaxResidency,'======');
     if (sliceData?.taxResidencyFlag === 'Y') {
       setNotIndian(false);
     } else {
@@ -210,6 +209,7 @@ function StakeHolder({
     setValue('name', form?.name);
     for (let k in form) {
       setValue(k, form[k]);
+     
     }
 
     if (sliceData.panPekrnNo) {
@@ -217,7 +217,8 @@ function StakeHolder({
     }
   }, [form]);
 
-  
+ 
+ console.log(form)
 
   return (
     <React.Fragment>
@@ -763,7 +764,7 @@ function StakeHolder({
               </small>
             </Col>
           </Row>
-          {( taxResidency ==='Y') && (
+          {taxResidency === 'Y' && (
             <Row>
               <Col xs={12} md={3}>
                 <SelectSearchHook
@@ -775,15 +776,13 @@ function StakeHolder({
                   reqText="Countries of Tax Residency required"
                   mandatory="*"
                   errorBorder={
-                    !form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                    !form?.fatcaDetail?.taxRecords?.taxCountry &&
                     errors[fieldName[21]]?.message
                   }
                   options={countryListOptions}
                   // value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
                   value={
-                    form?.[fieldName[21].split('-')[0] + '-taxRecords'][
-                      fieldName[21]
-                    ] || ''
+                    form?.[fieldName[21].split('-')[0] + '-taxCountry'] || ''
                   }
                   setBlanket={setBlanket}
                   blanket={blanket}
@@ -796,7 +795,7 @@ function StakeHolder({
                   depend={fieldName[21]}
                 />
                 <small style={errorFontStyle}>
-                  {!form?.fatcaDetail?.taxRecords[0]?.taxCountry &&
+                  {!form?.fatcaDetail?.taxRecords?.taxCountry &&
                     errors[fieldName[21]]?.message}
                 </small>
               </Col>
@@ -810,7 +809,7 @@ function StakeHolder({
                   disabled={false}
                   errorBorder={errors[fieldName[22]]?.message}
                   mandatory="*"
-                  sts={notIndian}
+                  sts={taxResidency === 'N'}
                   depend={[1, 2, 3]}
                   // value={form?.fatcaDetail?.taxRecords[0]?.taxReferenceNo || ''}
                   // changeFun={formHandeler}
@@ -834,9 +833,7 @@ function StakeHolder({
                   }
                   options={countryListOptions}
                   value={
-                    form?.[fieldName[23].split('-')[0] + '-taxRecords'][
-                      fieldName[23]
-                    ] || ''
+                    form?.[fieldName[21].split('-')[0] + '-identityType'] || ''
                   }
                   setBlanket={setBlanket}
                   blanket={blanket}

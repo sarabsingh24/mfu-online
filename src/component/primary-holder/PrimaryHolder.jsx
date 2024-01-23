@@ -69,6 +69,7 @@ function PrimaryHolder({ methods }) {
             : false
           : true
       );
+
       for (let fstLevel in primeHolderObj) {
         if (fstLevel === 'contactDetail') {
           for (let secLev in primeHolderObj[fstLevel]) {
@@ -80,17 +81,20 @@ function PrimaryHolder({ methods }) {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in primeHolderObj[fstLevel]) {
-            newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
-          }
-        } else if (fstLevel === 'taxRecords') {
-          for (let secLev in primeHolderObj[fstLevel]) {
+            if (secLev === 'taxRecords') {
+              for (let thirdLev in primeHolderObj[fstLevel].taxRecords) {
+                newObj[`primary-${thirdLev}`] =
+                  primeHolderObj[fstLevel][secLev][thirdLev];
+              }
+            }
+
             newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
           }
         } else {
           newObj[`primary-${fstLevel}`] = primeHolderObj[fstLevel];
         }
       }
-      console.log(newObj);
+
       setForm(newObj);
     } else {
       setForm(primaryFormFields);
@@ -143,21 +147,17 @@ function PrimaryHolder({ methods }) {
       if (guardianHolderObj?.id) {
         dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
       }
-      console.log('remove  third, guardian');
     }
   }, []);
 
   useEffect(() => {
-    console.log('ghgg', primeHolderObj.fatcaDetail.taxResidencyFlag);
-
     if (
       primeHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
       primeHolderObj.fatcaDetail.taxResidencyFlag === ''
     ) {
-       dispatch(changeTaxResidency('N'));
-    
+      dispatch(changeTaxResidency('N'));
     } else {
-       dispatch(changeTaxResidency('Y'));
+      dispatch(changeTaxResidency('Y'));
     }
   }, []);
 
@@ -169,11 +169,12 @@ function PrimaryHolder({ methods }) {
     for (let k in data) {
       if (k.includes('primary-')) {
         let lab = k.split('-')[1];
-        console.log(obj[lab], '=======', data[k]);
         obj[lab] = data[k];
       }
     }
     let panValue = IsPan === true ? 'Y' : 'N';
+
+    delete obj.taxRecords;
 
     const submitObj = {
       // ...primeHolderObj,
@@ -209,14 +210,16 @@ function PrimaryHolder({ methods }) {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.birthCountry,
-        citizenshipCountry: obj.citizenshipCountry,
-        nationalityCountry: obj.nationalityCountry,
-        taxReferenceNo: obj.taxReferenceNo,
+        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
+        citizenshipCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
+        nationalityCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
         taxRecords: {
-          taxCountry: obj.taxCountry,
-          taxReferenceNo: obj.taxReferenceNo,
-          identityType: obj.identityType,
+          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+          taxReferenceNo:
+            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
         },
       },
     };
@@ -231,6 +234,8 @@ function PrimaryHolder({ methods }) {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+  console.log(form);
 
   return (
     <Container>

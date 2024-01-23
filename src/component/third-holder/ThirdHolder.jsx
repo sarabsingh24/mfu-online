@@ -13,7 +13,7 @@ import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import { createThirdHolderAsync, updateThirdHolderAsync } from './thirdSlice';
+import { createThirdHolderOBJ, changeTaxResidency } from './thirdSlice';
 import { thirdFormFields } from './thirdData';
 
 const fieldName = Object.keys(thirdFormFields);
@@ -26,7 +26,9 @@ function ThirdHolder() {
   const [networthRadio, setNetworthRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
 
-  const { thirdHolderObj, isSuccess } = useSelector((state) => state.third);
+  const { thirdHolderObj, isSuccess, taxResidency } = useSelector(
+    (state) => state.third
+  );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
   const { user, IslogedIn } = useSelector((state) => state.user);
@@ -83,6 +85,17 @@ function ThirdHolder() {
     }
   }, [thirdHolderObj]);
 
+   useEffect(() => {
+     if (
+       thirdHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
+       thirdHolderObj.fatcaDetail.taxResidencyFlag === ''
+     ) {
+       dispatch(changeTaxResidency('N'));
+     } else {
+       dispatch(changeTaxResidency('Y'));
+     }
+   }, []);
+
   const formSubmitHandeler = (data) => {
     const obj = {};
 
@@ -127,29 +140,21 @@ function ThirdHolder() {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.birthCountry,
-        citizenshipCountry: obj.citizenshipCountry,
-        nationalityCountry: obj.nationalityCountry,
-        taxReferenceNo: obj.taxReferenceNo,
-        taxRecords: [
-          {
-            taxCountry: obj.taxCountry,
-            taxReferenceNo: obj.taxReferenceNo,
-            identityType: obj.identityType,
-          },
-        ],
+        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
+        citizenshipCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
+        nationalityCountry:
+          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
+        taxRecords: {
+          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+          taxReferenceNo:
+            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
+        },
       },
     };
 
-    if (thirdHolderObj?.userId) {
-      console.log('update');
-
-      dispatch(updateThirdHolderAsync({ ...submitObj, userId: user.id }));
-    } else {
-      console.log('create');
-      dispatch(createThirdHolderAsync({ ...submitObj }));
-    }
-
+    dispatch(createThirdHolderOBJ({ ...submitObj }));
     dispatch(pageCount(stepsCount + 1));
   };
 
@@ -183,6 +188,8 @@ function ThirdHolder() {
           setGrossIncomeRadio={setGrossIncomeRadio}
           IsPan={IsPan}
           setIsPan={setIsPan}
+          taxResidency={taxResidency}
+          changeTaxResidency={changeTaxResidency}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />
