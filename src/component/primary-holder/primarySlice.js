@@ -176,6 +176,5 @@ export const primarySlice = createSlice({
 });
 
 const { actions, reducer } = primarySlice;
-
 export const { reset, createPrimaryHolderOBJ, changeTaxResidency } = actions;
 export default reducer;

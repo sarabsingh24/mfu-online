@@ -217,7 +217,7 @@ function StakeHolder({
     }
   }, []);
 
-console.log(form)
+console.log(form['primary-taxRecords']);
 
   return (
     <React.Fragment>

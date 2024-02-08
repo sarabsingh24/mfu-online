@@ -339,7 +339,7 @@ function CanCriteria() {
     dispatch(pageCount(stepsCount + 1));
   };
 
-  console.log(errors);
+  
 
   return (
     <Container>

@@ -266,7 +266,7 @@ export default function Nominees() {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  console.log(nomineeObj?.nomineeDetail?.length);
+ 
 
   return (
     <Container>
