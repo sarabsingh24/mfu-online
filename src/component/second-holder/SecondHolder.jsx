@@ -22,7 +22,8 @@ function SecondHolder() {
   const [networthRadio, setNetworthRadio] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
-
+  
+const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { secondHolderObj, taxResidency } = useSelector(
     (state) => state.second
   );
@@ -90,8 +91,9 @@ function SecondHolder() {
 
   useEffect(() => {
     if (
-      secondHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
-      secondHolderObj.fatcaDetail.taxResidencyFlag === ''
+      secondHolderObj?.fatcaDetail?.taxResidencyFlag === 'N' ||
+      secondHolderObj?.fatcaDetail?.taxResidencyFlag === '' ||
+      Object.keys(secondHolderObj).length === 0
     ) {
       dispatch(changeTaxResidency('N'));
     } else {
@@ -147,11 +149,9 @@ function SecondHolder() {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
-        citizenshipCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
-        nationalityCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
         taxRecords: {
           taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
           taxReferenceNo:
@@ -196,6 +196,7 @@ function SecondHolder() {
           setIsPan={setIsPan}
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
+          investorCategory={canCriteriaObj?.investorCategory}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

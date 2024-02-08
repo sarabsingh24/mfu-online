@@ -45,7 +45,7 @@ function App() {
   const dispatch = useDispatch();
 
   // useEffect(() => {
-   
+
   //     dispatch(getCriteriaFormAsync(user.id));
   //     dispatch(getPrimaryHolderAsync(user.id));
   //     dispatch(getSecondHolderAsync(user.id));
@@ -53,12 +53,12 @@ function App() {
   //     dispatch(getBankAccountAsync(user.id));
   //     dispatch(getNomineeAsync(user.id));
   //     dispatch(getGuardianHolderAsync(user.id));
-    
+
   // }, []);
 
-  useEffect(() => {
-    dispatch(getUserAsync());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getUserAsync());
+  // }, []);
 
   return (
     <React.Fragment>

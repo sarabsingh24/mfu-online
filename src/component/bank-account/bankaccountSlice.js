@@ -3,6 +3,7 @@ import bankAccountAPI from './bankAccountAPI';
 
 const initialState = {
   bankAccountsObj: [],
+  bankProofList:[],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -10,6 +11,26 @@ const initialState = {
   canId: '',
   accountCountNum: 1,
 };
+
+
+
+export const getBankProofAsync = createAsyncThunk(
+  'bankAccount/getproof',
+  async (obj, thunkAPI) => {
+    try {
+      return await bankAccountAPI.getBankProof(obj);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 
 export const createBankAccountAsync = createAsyncThunk(
   'bankAccount/create',
@@ -131,6 +152,21 @@ export const bankAccountSlice = createSlice({
         state.message = '';
       })
       .addCase(updateBankAccountAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      //get bank proof
+      .addCase(getBankProofAsync.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getBankProofAsync.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.bankProofList = action.payload;
+        state.isError = false;
+        state.message = '';
+      })
+      .addCase(getBankProofAsync.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

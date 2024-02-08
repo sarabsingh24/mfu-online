@@ -29,6 +29,7 @@ function ThirdHolder() {
   const { thirdHolderObj, isSuccess, taxResidency } = useSelector(
     (state) => state.third
   );
+  const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
   const { user, IslogedIn } = useSelector((state) => state.user);
@@ -87,8 +88,9 @@ function ThirdHolder() {
 
    useEffect(() => {
      if (
-       thirdHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
-       thirdHolderObj.fatcaDetail.taxResidencyFlag === ''
+       thirdHolderObj?.fatcaDetail?.taxResidencyFlag === 'N' ||
+       thirdHolderObj?.fatcaDetail?.taxResidencyFlag === '' ||
+       Object.keys(thirdHolderObj).length === 0
      ) {
        dispatch(changeTaxResidency('N'));
      } else {
@@ -140,11 +142,9 @@ function ThirdHolder() {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
-        citizenshipCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
-        nationalityCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
         taxRecords: {
           taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
           taxReferenceNo:
@@ -190,6 +190,7 @@ function ThirdHolder() {
           setIsPan={setIsPan}
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
+          investorCategory={canCriteriaObj?.investorCategory}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

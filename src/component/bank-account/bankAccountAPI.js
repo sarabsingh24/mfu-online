@@ -1,6 +1,28 @@
 import axios from 'axios';
 const BASE_URL = 'http://localhost:8084';
 
+
+
+// bank proof
+export const getBankProof = async (userId) => {
+  const response = await axios.get(
+    'https://jsonplaceholder.typicode.com/users'
+  );
+  const data = await response.data;
+  let newData = [{ value: '', label: 'Select Bank Name' }];
+
+  for (let k of data){
+    newData.push({ label: k.name, value: k.name });
+  }
+  
+
+  if (data) {
+    return newData;
+  }
+  return [];
+};
+
+
 // create
 export const createBankAccount = async (obj) => {
   const response = await axios.post(`${BASE_URL}/bankAccountsObj`, obj, {
@@ -9,7 +31,6 @@ export const createBankAccount = async (obj) => {
     },
   });
   const data = await response.data;
-
   return data;
 };
 
@@ -42,5 +63,10 @@ export const updateBankAccount = async (obj) => {
   return data;
 };
 
-const bankAccountAPI = { createBankAccount,getBankAccount, updateBankAccount };
+const bankAccountAPI = {
+  createBankAccount,
+  getBankAccount,
+  updateBankAccount,
+  getBankProof,
+};
 export default bankAccountAPI;

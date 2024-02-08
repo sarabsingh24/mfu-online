@@ -22,7 +22,7 @@ function CheckNavigate() {
   }, [tabsCreater]);
 
   useEffect(() => {
-    console.log(location.pathname);
+   
     let displaySection = displayedTab[stepsCount];
     setStr(displaySection);
   }, [displayedTab, stepsCount, tabsCreater]);

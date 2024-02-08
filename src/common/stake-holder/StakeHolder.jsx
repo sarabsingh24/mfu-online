@@ -56,6 +56,7 @@ function StakeHolder({
   setIsPan,
   taxResidency,
   changeTaxResidency,
+  investorCategory,
 }) {
   const [btnFun, setBtnFun] = useState({});
   const [isOtherSourceOfWealth, setIsOtherSourceOfWealth] = useState(true);
@@ -209,16 +210,14 @@ function StakeHolder({
     setValue('name', form?.name);
     for (let k in form) {
       setValue(k, form[k]);
-     
     }
 
     if (sliceData.panPekrnNo) {
       setValue('confirmpanPekrnNo', sliceData.panPekrnNo);
     }
-  }, [form]);
+  }, []);
 
- 
- console.log(form)
+console.log(form)
 
   return (
     <React.Fragment>
@@ -266,30 +265,35 @@ function StakeHolder({
               </small>
             </Col>
             <Col xs={12} md={4}>
-              <Form.Check // prettier-ignore
-                type="switch"
-                id="custom-switch"
-                name="panExemptFlag"
-                label="Do you have PAN Number"
-                style={{ fontSize: '13px' }}
-                checked={IsPan}
-                value={IsPan}
-                onChange={() => {
-                  setIsPan(!IsPan);
-                }}
-              />
+              {investorCategory !== 'M' && (
+                <Form.Check // prettier-ignore
+                  type="switch"
+                  id="custom-switch"
+                  name="panExemptFlag"
+                  label="Do you have PAN?"
+                  style={{ fontSize: '13px' }}
+                  checked={IsPan}
+                  value={IsPan}
+                  onChange={() => {
+                    setIsPan(!IsPan);
+                  }}
+                />
+              )}
 
               <InputTextHook
                 type="password"
                 register={register}
                 // name="panPekrnNo"
                 name={fieldName[2]}
-                label="PAN/PEKRN no."
+                // label="PAN/PEKRN no."
+                label={!IsPan ? 'PAN no.' : 'PEKRN no.'}
                 placeholder="PAN/PEKRN no."
-                reqText="PAN/PEKRN required"
+                reqText={!IsPan ? 'PAN no. required' : 'PEKRN no. required'}
                 disabled={false}
                 errorBorder={errors[fieldName[2]]?.message}
                 mandatory="*"
+                depend={'dummytext'}
+                sts={investorCategory === 'M'}
                 // value={form?.panPekrnNo.toUpperCase() || ''}
                 // changeFun={formHandeler}
               />
@@ -302,15 +306,21 @@ function StakeHolder({
                 register={register}
                 name="confirmpanPekrnNo"
                 // name={fieldName[3]}
-                label="Re-Enter PAN / PEKRN"
+                label={!IsPan ? 'Re-Enter PAN no.' : 'Re-Enter PEKRN no.'}
                 placeholder="PAN/PEKRN no."
-                reqText="please re-enter PAN/PEKRN"
+                reqText={
+                  !IsPan
+                    ? 'please Re-Enter PAN no.'
+                    : 'please Re-Enter PEKRN no.'
+                }
                 disabled={false}
                 errorBorder={errors.confirmpanPekrnNo?.message}
                 mandatory="*"
                 // value={form?.confirmpanPekrnNo.toUpperCase() || ''}
                 changeFun={formHandeler}
                 compair={panPekrnNo}
+                depend={'dummytext'}
+                sts={investorCategory === 'M'}
               />
               <small style={errorFontStyle}>
                 {errors.confirmpanPekrnNo?.message}
@@ -391,247 +401,253 @@ function StakeHolder({
         </GridCustom>
       </Section>
       {/* ===========================Primary Holder Additional KYC Details=========================== */}
-      <Section heading={`${holderType} Additional KYC Details`}>
-        <GridCustom>
-          <Row className="justify-content-md-center">
-            <Col xs={12} md={2} className="m-4">
-              <Form.Check
-                type="radio"
-                label="Gross Annual Income"
-                name="income"
-                data-name="GAI"
-                onChange={incomeStatus}
-                mandatory="*"
-                checked={
-                  (form?.otherDetail?.grossIncome || grossIncomeRadio) &&
-                  'checked'
-                }
-              />
-            </Col>
-            <Col xs={12} md={2} className="m-4">
-              <Form.Check
-                type="radio"
-                label="Networth"
-                name="income"
-                data-name="NW"
-                onChange={incomeStatus}
-                mandatory="*"
-                checked={
-                  (form?.otherDetail?.netWorth || networthRadio) && 'checked'
-                }
-              />
-            </Col>
-          </Row>
-          <Row
-            style={{
-              display:
-                form?.otherDetail?.grossIncome || grossIncomeRadio
-                  ? 'flex'
-                  : 'none',
-            }}
-          >
-            <Col xs={12} md={4}>
-              <SelectOptionHook
-                register={register}
-                // name="grossIncome"
-                name={fieldName[7]}
-                label="Gross Annual Income "
-                reqText="please select Gross Annual Income"
-                disabled={false}
-                sts={!grossIncomeRadio}
-                mandatory="*"
-                errorBorder={
-                  !form?.otherDetail?.grossIncome &&
-                  errors[fieldName[7]]?.message
-                }
-                listOptions={grossAnnualIncomeOptions}
-                value={form?.otherDetail?.grossIncome || ''}
-                changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {!form?.otherDetail?.grossIncome &&
-                  errors[fieldName[7]]?.message}
-              </small>
-            </Col>
-          </Row>
-          <Row
-            style={{
-              display:
-                form?.otherDetail?.netWorth || networthRadio ? 'flex' : 'none',
-            }}
-          >
-            <Col xs={12} md={4}>
-              <InputTextHook
-                register={register}
-                // name="netWorth"
-                name={fieldName[8]}
-                label="Networth (in Rs.)"
-                reqText="please enter Networth (in Rs.)"
-                disabled={false}
-                sts={!networthRadio}
-                depend="netWorth"
-                errorBorder={errors[fieldName[8]]?.message}
-                mandatory="*"
-                // value={form?.otherDetail?.netWorth || ''}
-                // changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[8]]?.message}
-              </small>
-            </Col>
-            <Col xs={12} md={4}>
-              <InputTextHook
-                type="date"
-                register={register}
-                // name="netWorthDate"
-                name={fieldName[9]}
-                label="As on date"
-                reqText="pleas select date"
-                disabled={false}
-                sts={!networthRadio}
-                depend="netWorthDate"
-                errorBorder={errors[fieldName[9]]?.message}
-                mandatory="*"
-                // value={form?.otherDetail?.netWorthDate || ''}
-                // changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[9]]?.message}
-              </small>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} md={4}>
-              <SelectOptionHook
-                register={register}
-                // name="sourceOfWealth"
-                name={fieldName[10]}
-                label="Source of Wealth"
-                reqText="please select source of wealth"
-                disabled={false}
-                mandatory="*"
-                errorBorder={
-                  // !form?.otherDetail?.sourceOfWealth &&
-                  errors[fieldName[10]]?.message
-                }
-                listOptions={sourceOfWealthOptions}
-                // value={form?.otherDetail?.sourceOfWealth || ''}
-                changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {
-                  // !form?.otherDetail?.sourceOfWealth &&
-                  errors[fieldName[10]]?.message
-                }
-              </small>
-            </Col>
-            <Col xs={12} md={4}>
-              <InputTextHook
-                register={register}
-                // name="sourceOfWealthOthers"
-                name={fieldName[11]}
-                label="Other"
-                reqText="please enter other source of welth"
-                disabled={false}
-                depend={fieldName[11]}
-                sts={isOtherSourceOfWealth}
-                errorBorder={errors[fieldName[11]]?.message}
-                mandatory="*"
-                // value={form?.otherDetail?.sourceOfWealthOthers || ''}
-                // changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[11]]?.message}
-              </small>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} md={4}>
-              <SelectOptionHook
-                register={register}
-                // name="occupation"
-                name={fieldName[12]}
-                label="Occupation"
-                reqText="please select occupation"
-                disabled={false}
-                mandatory="*"
-                errorBorder={
-                  !form?.otherDetail?.occupation &&
-                  errors[fieldName[12]]?.message
-                }
-                listOptions={occupationOptions}
-                // value={form?.otherDetail?.occupation || ''}
-                changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {!form?.otherDetail?.occupation &&
-                  errors[fieldName[12]]?.message}
-              </small>
-            </Col>
-            <Col xs={12} md={4}>
-              <InputTextHook
-                register={register}
-                // name="occupationOthers"
-                name={fieldName[13]}
-                label="Other"
-                reqText="please enter other ocupation"
-                disabled={false}
-                sts={isOtherOccupation}
-                depend={fieldName[12]}
-                errorBorder={errors[fieldName[13]]?.message}
-                mandatory="*"
-                // value={form?.otherDetail?.occupationOthers || ''}
-                // changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[13]]?.message}
-              </small>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} md={4}>
-              <SelectOptionHook
-                register={register}
-                // name="pep"
-                name={fieldName[14]}
-                label="Political Exposure"
-                reqText="please select Political Exposure"
-                disabled={false}
-                mandatory="*"
-                errorBorder={errors[fieldName[14]]?.message}
-                listOptions={politicalExposureOptions}
-                // value={form?.otherDetail?.pep || ''}
-                changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {errors[fieldName[14]]?.message}
-              </small>
-            </Col>
-            <Col xs={12} md={4}>
-              <SelectOptionHook
-                register={register}
-                // name="kraAddressType"
-                name={fieldName[15]}
-                label="KRA Address Type"
-                reqText="please select KRA Address Type"
-                disabled={false}
-                mandatory="*"
-                errorBorder={
-                  !form?.otherDetail?.kraAddressType &&
-                  errors[fieldName[15]]?.message
-                }
-                listOptions={addressTypeOptions}
-                // value={form?.otherDetail?.kraAddressType || ''}
-                changeFun={formHandeler}
-              />
-              <small style={errorFontStyle}>
-                {!form?.otherDetail?.kraAddressType &&
-                  errors[fieldName[15]]?.message}
-              </small>
-            </Col>
-          </Row>
-        </GridCustom>
-      </Section>
+
+      {investorCategory !== 'M' && (
+        <Section heading={`${holderType} Additional KYC Details`}>
+          <GridCustom>
+            <Row className="justify-content-md-center">
+              <Col xs={12} md={2} className="m-4">
+                <Form.Check
+                  type="radio"
+                  label="Gross Annual Income"
+                  name="income"
+                  data-name="GAI"
+                  onChange={incomeStatus}
+                  mandatory="*"
+                  checked={
+                    (form?.otherDetail?.grossIncome || grossIncomeRadio) &&
+                    'checked'
+                  }
+                />
+              </Col>
+              <Col xs={12} md={2} className="m-4">
+                <Form.Check
+                  type="radio"
+                  label="Networth"
+                  name="income"
+                  data-name="NW"
+                  onChange={incomeStatus}
+                  mandatory="*"
+                  checked={
+                    (form?.otherDetail?.netWorth || networthRadio) && 'checked'
+                  }
+                />
+              </Col>
+            </Row>
+            <Row
+              style={{
+                display:
+                  form?.otherDetail?.grossIncome || grossIncomeRadio
+                    ? 'flex'
+                    : 'none',
+              }}
+            >
+              <Col xs={12} md={4}>
+                <SelectOptionHook
+                  register={register}
+                  // name="grossIncome"
+                  name={fieldName[7]}
+                  label="Gross Annual Income "
+                  reqText="please select Gross Annual Income"
+                  disabled={false}
+                  sts={!grossIncomeRadio}
+                  mandatory="*"
+                  errorBorder={
+                    !form?.otherDetail?.grossIncome &&
+                    errors[fieldName[7]]?.message
+                  }
+                  listOptions={grossAnnualIncomeOptions}
+                  value={form?.otherDetail?.grossIncome || ''}
+                  changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {!form?.otherDetail?.grossIncome &&
+                    errors[fieldName[7]]?.message}
+                </small>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                display:
+                  form?.otherDetail?.netWorth || networthRadio
+                    ? 'flex'
+                    : 'none',
+              }}
+            >
+              <Col xs={12} md={4}>
+                <InputTextHook
+                  register={register}
+                  // name="netWorth"
+                  name={fieldName[8]}
+                  label="Networth (in Rs.)"
+                  reqText="please enter Networth (in Rs.)"
+                  disabled={false}
+                  sts={!networthRadio}
+                  depend="netWorth"
+                  errorBorder={errors[fieldName[8]]?.message}
+                  mandatory="*"
+                  // value={form?.otherDetail?.netWorth || ''}
+                  // changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[8]]?.message}
+                </small>
+              </Col>
+              <Col xs={12} md={4}>
+                <InputTextHook
+                  type="date"
+                  register={register}
+                  // name="netWorthDate"
+                  name={fieldName[9]}
+                  label="As on date"
+                  reqText="pleas select date"
+                  disabled={false}
+                  sts={!networthRadio}
+                  depend="netWorthDate"
+                  errorBorder={errors[fieldName[9]]?.message}
+                  mandatory="*"
+                  // value={form?.otherDetail?.netWorthDate || ''}
+                  // changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[9]]?.message}
+                </small>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={4}>
+                <SelectOptionHook
+                  register={register}
+                  // name="sourceOfWealth"
+                  name={fieldName[10]}
+                  label="Source of Wealth"
+                  reqText="please select source of wealth"
+                  disabled={false}
+                  mandatory="*"
+                  errorBorder={
+                    // !form?.otherDetail?.sourceOfWealth &&
+                    errors[fieldName[10]]?.message
+                  }
+                  listOptions={sourceOfWealthOptions}
+                  // value={form?.otherDetail?.sourceOfWealth || ''}
+                  changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {
+                    // !form?.otherDetail?.sourceOfWealth &&
+                    errors[fieldName[10]]?.message
+                  }
+                </small>
+              </Col>
+              <Col xs={12} md={4}>
+                <InputTextHook
+                  register={register}
+                  // name="sourceOfWealthOthers"
+                  name={fieldName[11]}
+                  label="Other"
+                  reqText="please enter other source of welth"
+                  disabled={false}
+                  depend={fieldName[11]}
+                  sts={isOtherSourceOfWealth}
+                  errorBorder={errors[fieldName[11]]?.message}
+                  mandatory="*"
+                  // value={form?.otherDetail?.sourceOfWealthOthers || ''}
+                  // changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[11]]?.message}
+                </small>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={4}>
+                <SelectOptionHook
+                  register={register}
+                  // name="occupation"
+                  name={fieldName[12]}
+                  label="Occupation"
+                  reqText="please select occupation"
+                  disabled={false}
+                  mandatory="*"
+                  errorBorder={
+                    !form?.otherDetail?.occupation &&
+                    errors[fieldName[12]]?.message
+                  }
+                  listOptions={occupationOptions}
+                  // value={form?.otherDetail?.occupation || ''}
+                  changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {!form?.otherDetail?.occupation &&
+                    errors[fieldName[12]]?.message}
+                </small>
+              </Col>
+              <Col xs={12} md={4}>
+                <InputTextHook
+                  register={register}
+                  // name="occupationOthers"
+                  name={fieldName[13]}
+                  label="Other"
+                  reqText="please enter other ocupation"
+                  disabled={false}
+                  sts={isOtherOccupation}
+                  depend={fieldName[12]}
+                  errorBorder={errors[fieldName[13]]?.message}
+                  mandatory="*"
+                  // value={form?.otherDetail?.occupationOthers || ''}
+                  // changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[13]]?.message}
+                </small>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} md={4}>
+                <SelectOptionHook
+                  register={register}
+                  // name="pep"
+                  name={fieldName[14]}
+                  label="Political Exposure"
+                  reqText="please select Political Exposure"
+                  disabled={false}
+                  mandatory="*"
+                  errorBorder={errors[fieldName[14]]?.message}
+                  listOptions={politicalExposureOptions}
+                  // value={form?.otherDetail?.pep || ''}
+                  changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {errors[fieldName[14]]?.message}
+                </small>
+              </Col>
+              <Col xs={12} md={4}>
+                <SelectOptionHook
+                  register={register}
+                  // name="kraAddressType"
+                  name={fieldName[15]}
+                  label="KRA Address Type"
+                  reqText="please select KRA Address Type"
+                  disabled={false}
+                  mandatory="*"
+                  errorBorder={
+                    !form?.otherDetail?.kraAddressType &&
+                    errors[fieldName[15]]?.message
+                  }
+                  listOptions={addressTypeOptions}
+                  // value={form?.otherDetail?.kraAddressType || ''}
+                  changeFun={formHandeler}
+                />
+                <small style={errorFontStyle}>
+                  {!form?.otherDetail?.kraAddressType &&
+                    errors[fieldName[15]]?.message}
+                </small>
+              </Col>
+            </Row>
+          </GridCustom>
+        </Section>
+      )}
+
       {/* ===========================Primary Holder FATCA Details=========================== */}
       <Section heading={`${holderType} FATCA Details`}>
         <GridCustom>
@@ -690,13 +706,13 @@ function StakeHolder({
                 value={form?.[fieldName[18]] || ''}
                 setBlanket={setBlanket}
                 blanket={blanket}
-                flag={form?.fatcaDetail?.taxResidencyFlag}
+                // flag={form?.fatcaDetail?.taxResidencyFlag}
                 form={form}
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={taxResidency === 'Y'}
-                depend={fieldName[18]}
+                sts={true}
+                // depend={fieldName[18]}
               />
               <small style={errorFontStyle}>
                 {!form?.fatcaDetail?.birthCountry &&
@@ -725,7 +741,7 @@ function StakeHolder({
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={taxResidency === 'Y'}
+                sts={true}
                 depend={fieldName[19]}
               />
               <small style={errorFontStyle}>
@@ -755,7 +771,7 @@ function StakeHolder({
                 setForm={setForm}
                 // changeFun={formHandeler}
                 setValue={setValue}
-                sts={taxResidency === 'Y'}
+                sts={true}
                 depend={fieldName[20]}
               />
               <small style={errorFontStyle}>

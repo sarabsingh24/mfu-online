@@ -18,7 +18,7 @@ export const bankProofOptions = [
   { value: "14", label: "Latest Bank Passbook" },
   { value: "15", label: "Latest Bank Account Statement" },
   { value: "77", label: "Cheque Copy" },
-  { value: "78", label: "Bank Letter" },
+  // { value: "78", label: "Bank Letter" },
 ];
 
 export const accountCount = [

@@ -16,23 +16,27 @@ import { guardianHolderForm } from '../../reducer/Reducer/account/accountSlice';
 import {
   createGuardianHolderAsync,
   updateGuardianHolderAsync,
-} from '../guardian-holder/gurdianSlice';
+  createGuardianHolderOBJ,
+  changeTaxResidency,
+} from './gurdianSlice';
 import { gurdianFormFields } from './gurdianData';
-
 
 const fieldName = Object.keys(gurdianFormFields);
 
 function GuardianHolder() {
   const [form, setForm] = useState(commonFormField);
-  const [errorsOLD, setErrors] = useState({});
+  const [errorsOld, setErrors] = useState({});
   const [networthRadio, setNetworthRadio] = useState(false);
+  const [IsPan, setIsPan] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
-
-  const { guardianHolderObj } = useSelector((state) => state.guardian);
+  const { canCriteriaObj } = useSelector((state) => state.criteria);
+  const { guardianHolderObj, taxResidency } = useSelector(
+    (state) => state.guardian
+  );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
 
   // const { userId } = useSelector((state) => state.account);
-    const { user, IslogedIn } = useSelector((state) => state.user);
+  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -44,12 +48,17 @@ function GuardianHolder() {
     formState: { errors },
   } = useFormContext();
 
-  
-
   useEffect(() => {
     const newObj = {};
 
-    if (guardianHolderObj?.userId) {
+    if (Object.keys(guardianHolderObj).length > 0) {
+      setIsPan(
+        guardianHolderObj.panExemptFlag !== ''
+          ? guardianHolderObj.panExemptFlag !== 'N'
+            ? true
+            : false
+          : true
+      );
       for (let fstLevel in guardianHolderObj) {
         if (fstLevel === 'contactDetail') {
           for (let secLev in guardianHolderObj[fstLevel]) {
@@ -61,10 +70,13 @@ function GuardianHolder() {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in guardianHolderObj[fstLevel]) {
-            newObj[`gurdian-${secLev}`] = guardianHolderObj[fstLevel][secLev];
-          }
-        } else if (fstLevel === 'taxRecords') {
-          for (let secLev in guardianHolderObj[fstLevel]) {
+            if (secLev === 'taxRecords') {
+              for (let thirdLev in guardianHolderObj[fstLevel].taxRecords) {
+                newObj[`gurdian-$${thirdLev}`] =
+                  guardianHolderObj[fstLevel][secLev][thirdLev];
+              }
+              
+            }
             newObj[`gurdian-${secLev}`] = guardianHolderObj[fstLevel][secLev];
           }
         } else {
@@ -78,13 +90,20 @@ function GuardianHolder() {
     }
   }, [guardianHolderObj]);
 
-  // useEffect(() => {
-  //   if (Object.keys(guardianHolderObj).length) {
-  //     setForm(guardianHolderObj);
-  //   }
-  // }, [guardianHolderObj]);
+  useEffect(() => {
+    if (
+      guardianHolderObj?.fatcaDetail?.taxResidencyFlag === 'N' ||
+      guardianHolderObj?.fatcaDetail?.taxResidencyFlag === '' ||
+      Object.keys(guardianHolderObj).length === 0
+    ) {
+      dispatch(changeTaxResidency('N'));
+    } else {
+      dispatch(changeTaxResidency('Y'));
+    }
+  }, []);
 
   const formSubmitHandeler = (data) => {
+     console.log(data);
     const obj = {};
 
     for (let k in data) {
@@ -94,23 +113,28 @@ function GuardianHolder() {
         console.log(k, '====', data[k]);
       }
     }
+    let panValue = IsPan === true ? 'Y' : 'N';
+
+    delete obj.taxRecords;
 
     const submitObj = {
       // ...guardianHolderObj,
-      userId: user.id,
+      // userId: user.id,
       holderType: 'PR',
-      panExemptFlag: 'Y',
       residencePhoneNo: '',
       relationship: '01',
       relationshipProof: '01',
+      panExemptFlag: panValue,
       panPekrnNo: obj.panPekrnNo,
-      confirmpanPekrnNo: obj.confirmpanPekrnNo,
+      // confirmpanPekrnNo: obj.confirmpanPekrnNo,
       name: obj.name,
       dateOfBirth: obj.dateOfBirth,
       contactDetail: {
         primaryEmail: obj.primaryEmail,
         mobileIsdCode: obj.mobileIsdCode,
+        primaryMobileBelongsTo: '',
         primaryMobileNo: obj.primaryMobileNo,
+        primaryEmailBelongsTo: '',
       },
       otherDetail: {
         otherInfo: 'string',
@@ -130,38 +154,31 @@ function GuardianHolder() {
         birthCountry: obj.birthCountry,
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
-        taxReferenceNo: obj.taxReferenceNo,
-        taxRecords: [
-          {
-            taxCountry: obj.taxCountry,
-            taxReferenceNo: obj.taxReferenceNo,
-            identityType: obj.identityType,
-          },
-        ],
+        taxRecords: {
+          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+          taxReferenceNo:
+            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
+        },
       },
     };
 
-    if (guardianHolderObj?.userId) {
-      console.log('update');
-      dispatch(updateGuardianHolderAsync({ ...submitObj, userId: user.id }));
-    } else {
-      console.log('create');
-      dispatch(createGuardianHolderAsync({ ...submitObj }));
-    }
+   
+      dispatch(createGuardianHolderOBJ({ ...submitObj }));
+    
     dispatch(pageCount(stepsCount + 1));
   };
 
-   const backBtnHandeler = () => {
-     console.log('kk');
-     dispatch(pageCount(stepsCount - 1));
-   };
+  const backBtnHandeler = () => {
+    dispatch(pageCount(stepsCount - 1));
+  };
 
-   console.log(guardianHolderObj);
+
 
   return (
     <Container>
       <Tabs />
-    
+
       <Form onSubmit={handleSubmit(formSubmitHandeler)} autoComplete="off">
         <ButtonCustomNew backFun={backBtnHandeler} />
         <StakeHolder
@@ -170,6 +187,7 @@ function GuardianHolder() {
           sliceData={guardianHolderObj}
           setForm={setForm}
           holderType={'Guardian'}
+          errorsOld={errorsOld}
           register={register}
           errors={errors}
           watch={watch}
@@ -180,9 +198,16 @@ function GuardianHolder() {
           setNetworthRadio={setNetworthRadio}
           grossIncomeRadio={grossIncomeRadio}
           setGrossIncomeRadio={setGrossIncomeRadio}
+          IsPan={IsPan}
+          setIsPan={setIsPan}
+          taxResidency={taxResidency}
+          changeTaxResidency={changeTaxResidency}
+          investorCategory={canCriteriaObj?.investorCategory}
         />
-        <ButtonCustomNew backFun={backBtnHandeler} />
-        <ButtonCustomNew text="next" />
+        <div className="button-container">
+          <ButtonCustomNew backFun={backBtnHandeler} />
+          <ButtonCustomNew text="next" />
+        </div>
       </Form>
     </Container>
   );

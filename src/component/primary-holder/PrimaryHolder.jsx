@@ -16,12 +16,13 @@ import { Container } from 'react-bootstrap';
 import {
   createPrimaryHolderAsync,
   updatePrimaryHolderAsync,
+  createPrimaryHolderOBJ,
   changeTaxResidency,
 } from './primarySlice';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { primaryFormFields } from './primaryData';
-import { createPrimaryHolderOBJ } from './primarySlice';
+// import { createPrimaryHolderOBJ } from './primarySlice';
 
 const fieldName = Object.keys(primaryFormFields);
 
@@ -45,7 +46,6 @@ function PrimaryHolder({ methods }) {
   const { guardianHolderObj } = useSelector((state) => state.guardian);
   const { nomineeObj } = useSelector((state) => state.nominee);
 
-  // const { userId } = useSelector((state) => state.account);
   const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const {
@@ -101,6 +101,7 @@ function PrimaryHolder({ methods }) {
     }
   }, [primeHolderObj]);
 
+  // remove secondary third and guardian
   useEffect(() => {
     if (
       (canCriteriaObj?.holdingNature === 'SI' &&
@@ -138,7 +139,7 @@ function PrimaryHolder({ methods }) {
         dispatch(deleteNomineeAsync(nomineeObj?.id));
       }
 
-      console.log('remove second, third, nominee');
+      ///console.log('remove second, third, nominee');
     } else if (canCriteriaObj?.holdingNature === 'JO') {
       if (thirdHolderObj?.id) {
         dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
@@ -152,16 +153,19 @@ function PrimaryHolder({ methods }) {
 
   useEffect(() => {
     if (
-      primeHolderObj.fatcaDetail.taxResidencyFlag === 'N' ||
-      primeHolderObj.fatcaDetail.taxResidencyFlag === ''
+      primeHolderObj?.fatcaDetail?.taxResidencyFlag === 'N' ||
+      primeHolderObj?.fatcaDetail?.taxResidencyFlag === '' ||
+      Object.keys(primeHolderObj).length === 0
     ) {
       dispatch(changeTaxResidency('N'));
     } else {
       dispatch(changeTaxResidency('Y'));
     }
-  }, []);
+  }, [primeHolderObj.fatcaDetail?.taxResidencyFlag]);
 
   const formSubmitHandeler = (data) => {
+
+   
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
 
     const obj = {};
@@ -175,6 +179,8 @@ function PrimaryHolder({ methods }) {
     let panValue = IsPan === true ? 'Y' : 'N';
 
     delete obj.taxRecords;
+
+   
 
     const submitObj = {
       // ...primeHolderObj,
@@ -210,11 +216,9 @@ function PrimaryHolder({ methods }) {
       fatcaDetail: {
         taxResidencyFlag: obj.taxResidencyFlag,
         birthCity: obj.birthCity,
-        birthCountry: obj.taxResidencyFlag === 'Y' ? obj.birthCountry : 'India',
-        citizenshipCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.citizenshipCountry : 'India',
-        nationalityCountry:
-          obj.taxResidencyFlag === 'Y' ? obj.nationalityCountry : 'India',
+        birthCountry: obj.birthCountry,
+        citizenshipCountry: obj.citizenshipCountry,
+        nationalityCountry: obj.nationalityCountry,
         taxRecords: {
           taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
           taxReferenceNo:
@@ -234,8 +238,6 @@ function PrimaryHolder({ methods }) {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
-
-  console.log(form);
 
   return (
     <Container>
@@ -264,6 +266,7 @@ function PrimaryHolder({ methods }) {
           setIsPan={setIsPan}
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
+          investorCategory={canCriteriaObj?.investorCategory}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

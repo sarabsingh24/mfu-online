@@ -33,19 +33,18 @@ function BankAccountSection({
   errors,
   setValue,
   watch,
+  bankProof,
 }) {
   let accountCount = count === 0 ? 'Default' : count === 1 ? 'Second' : 'Third';
 
   useEffect(() => {
- 
-      setValue(`${accountCount}-accountNo`, formObj?.accountNo );
-      setValue(`${accountCount}-reAccountNo`, formObj?.reAccountNo);
-      setValue(`${accountCount}-accountType`, formObj?.accountType);
-      setValue(`${accountCount}-bankId`, formObj?.bankId);
-      setValue(`${accountCount}-micrCode`, formObj?.micrCode);
-      setValue(`${accountCount}-ifscCode`, formObj?.ifscCode);
-      setValue(`${accountCount}-bankProof`, formObj?.bankProof);
-    
+    setValue(`${accountCount}-accountNo`, formObj?.accountNo);
+    setValue(`${accountCount}-reAccountNo`, formObj?.reAccountNo);
+    setValue(`${accountCount}-accountType`, formObj?.accountType);
+    setValue(`${accountCount}-bankId`, formObj?.bankId);
+    setValue(`${accountCount}-micrCode`, formObj?.micrCode);
+    setValue(`${accountCount}-ifscCode`, formObj?.ifscCode);
+    setValue(`${accountCount}-bankProof`, formObj?.bankProof);
   }, []);
 
   let labelName = `${accountCount}-accountNo`;
@@ -124,7 +123,29 @@ function BankAccountSection({
         </Row>
         <Row>
           <Col xs={12} md={4}>
-            <InputTextHook
+            <SelectOptionHook
+              register={register}
+              // name="accountType"
+              name={`${accountCount}-bankId`}
+              label="Bank"
+              reqText="name required"
+              disabled={false}
+              mandatory="*"
+              errorBorder={
+                // !form?.otherDetail?.sourceOfWealth &&
+                errors[`${accountCount}-bankId`]?.message
+              }
+              listOptions={bankProof}
+              // value={form?.otherDetail?.sourceOfWealth || ''}
+              // changeFun={thisAccountHandeler}
+            />
+            <small style={errorFontStyle}>
+              {
+                // !form?.otherDetail?.sourceOfWealth &&
+                errors[`${accountCount}-bankId`]?.message
+              }
+            </small>
+            {/* <InputTextHook
               type="text"
               register={register}
               // name="accountNo"
@@ -140,7 +161,7 @@ function BankAccountSection({
             />
             <small style={errorFontStyle}>
               {errors[`${accountCount}-bankId`]?.message}
-            </small>
+            </small> */}
           </Col>
           <Col xs={12} md={4}>
             <InputTextHook

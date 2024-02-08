@@ -34,7 +34,6 @@ function SelectOptionHook({
           required: reqText,
           disabled: sts ? true : false,
         })}
-        
         onChange={changeFun}
         value={value}
       >

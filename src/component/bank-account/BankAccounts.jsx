@@ -21,9 +21,7 @@ import FooterSection from '../../common/footerSection/FooterSection';
 import { btnHandeler } from '../../common/helper/Helper';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 import { validateForm } from './BankAccountValidation';
-import { createBankAccountOBJ } from './bankaccountSlice';
-
-import { accountsFun } from './bankaccountSlice';
+import { accountsFun,createBankAccountOBJ, getBankProofAsync } from './bankaccountSlice';
 
 const bankRecord= [
     {
@@ -42,7 +40,7 @@ const bankRecord= [
 
 function BankAccounts() {
   const [form, setForm] = useState([]);
-  const [number, setNumber] = useState('0');
+  const [number, setNumber] = useState(1);
   const [btnFun, setBtnFun] = useState({});
   const [errorsOld, setErrors] = useState([]);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
@@ -50,7 +48,7 @@ function BankAccounts() {
   const { user, IslogedIn } = useSelector((state) => state.user);
   const [bankAccount, setBankAccount] = useState([]);
 
-  const { accountCountNum, bankAccountsObj } = useSelector(
+  const { accountCountNum, bankAccountsObj, bankProofList } = useSelector(
     (state) => state.bankAccount
   );
 
@@ -100,6 +98,11 @@ function BankAccounts() {
 
     setForm(newArray);
   };
+
+
+useEffect(()=>{
+dispatch(getBankProofAsync());
+},[])
 
   useEffect(() => {
     // if (+number === 1) {
@@ -190,14 +193,14 @@ function BankAccounts() {
       dispatch(accountsFun(1));
     }
 
-    setNumber(bankAccountsObj?.length);
+    setNumber(bankAccountsObj?.length || 1);
   }, [bankAccountsObj?.length]);
 
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
 
-  console.log(bankAccountsObj);
+  // console.log(bankProofList);
 
   return (
     <Container>
@@ -241,6 +244,7 @@ function BankAccounts() {
               errors={errors}
               setValue={setValue}
               watch={watch}
+              bankProof={bankProofList}
             />
           );
         })}

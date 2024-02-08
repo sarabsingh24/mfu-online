@@ -64,14 +64,14 @@ const errorFontStyle = {
 function CanCriteria() {
   const [form, setForm] = useState({});
   const [errorsOLD, setErrors] = useState({});
-const [IsPan, setIsPan] = useState(false);
+  const [IsPan, setIsPan] = useState(false);
   const [taxList, setTaxList] = useState([]);
   const [investorList, setInvestorList] = useState([]);
   const [btnFun, setBtnFun] = useState({});
   const [selectHolderCount, setSelectHolderCount] = useState([
     {
       value: '0',
-      label: '0',
+      label: 'Select Holders no.',
     },
   ]);
 
@@ -101,6 +101,10 @@ const [IsPan, setIsPan] = useState(false);
     // if (!!errorsOLD[name]) {
     //   setErrors({ ...errorsOLD, [name]: null });
     // }
+
+    if (name === 'taxStatus' && val !== '') {
+      delete errors.taxStatus;
+    }
   };
 
   const tabShoHideHandeler = (tabList, listName) => {
@@ -138,12 +142,17 @@ const [IsPan, setIsPan] = useState(false);
         investorCategory: form.investorCategory || '',
         holderCount: 1,
       });
-      setSelectHolderCount([
-        {
-          value: '1',
-          label: '1',
-        },
-      ]);
+
+      if (form.investorCategory === 'I') {
+        setSelectHolderCount([
+          {
+            value: '1',
+            label: '1',
+          },
+        ]);
+      }
+
+      delete errors.holdingNature;
     } else if (form.holdingNature === 'JO') {
       setInvestorList(jointOptions);
       setTaxList(singleIndividualOptions);
@@ -169,9 +178,25 @@ const [IsPan, setIsPan] = useState(false);
           label: '3',
         },
       ]);
+      delete errors.holdingNature;
     } else if (form.holdingNature === 'AS') {
-      setForm({ ...form, holdingNature: 'AS', investorCategory: 'I' });
       setInvestorList(jointOptions);
+      setForm({
+        ...form,
+        holdingNature: 'AS',
+        investorCategory: form.investorCategory || '',
+      });
+      setSelectHolderCount([
+        {
+          value: '2',
+          label: '2',
+        },
+        {
+          value: '3',
+          label: '3',
+        },
+      ]);
+      delete errors.holdingNature;
     } else {
       setInvestorList([]);
     }
@@ -186,10 +211,26 @@ const [IsPan, setIsPan] = useState(false);
           tabShoHideHandeler(tabsCreater, ['SEC', 'THIR', 'NOMI']);
         }
         tabShoHideHandeler(tabsCreater, ['SEC', 'NOMI']);
+      } else if (form.holdingNature === 'SI') {
+        setSelectHolderCount([
+          {
+            value: '1',
+            label: '1',
+          },
+        ]);
       } else {
         tabShoHideHandeler(tabsCreater, ['NOMI']);
       }
+      delete errors.investorCategory;
     } else if (form.investorCategory === 'M') {
+      if (form.holdingNature === 'SI') {
+        setSelectHolderCount([
+          {
+            value: '2',
+            label: '2',
+          },
+        ]);
+      }
       setTaxList(singleMinorOptions);
       tabShoHideHandeler(tabsCreater, ['GUAR']);
       setForm({
@@ -198,9 +239,19 @@ const [IsPan, setIsPan] = useState(false);
         // investorCategory: form.investorCategory || "",
         holderCount: form.holderCount === 1 ? 2 : 2,
       });
+      delete errors.investorCategory;
     } else if (form.investorCategory === 'S') {
+      if (form.holdingNature === 'SI') {
+        setSelectHolderCount([
+          {
+            value: '1',
+            label: '1',
+          },
+        ]);
+      }
       setTaxList(singleSoleProprietorOptions);
       tabShoHideHandeler(tabsCreater, ['NOMI']);
+      delete errors.investorCategory;
     } else {
       setTaxList([]);
     }
@@ -274,7 +325,7 @@ const [IsPan, setIsPan] = useState(false);
   }, [form?.holderCount]);
 
   const formSubmitHandeler = (data) => {
-    console.log(data)
+    console.log(data);
     dispatch(
       createCanCriteria({
         requestEvent: 'CR',
@@ -287,6 +338,8 @@ const [IsPan, setIsPan] = useState(false);
 
     dispatch(pageCount(stepsCount + 1));
   };
+
+  console.log(errors);
 
   return (
     <Container>
