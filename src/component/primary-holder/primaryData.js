@@ -24,9 +24,13 @@ export const primaryFormFields = {
   'primary-citizenshipCountry': '',
   'primary-nationalityCountry': '',
   // 'primary-sequenceNo': 0,
-  'primary-taxCountry': '',
-  'primary-taxReferenceNo': '',
-  'primary-identityType': '',
+  'primary-taxRecords': [
+    {
+      'taxCountry': 'kk',
+      'taxReferenceNo': 'hh',
+      'identityType': 'll',
+    },
+  ],
 };
 
 

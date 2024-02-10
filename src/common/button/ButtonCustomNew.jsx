@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { BtnStyle, BtnTextStyle, BtnSubmitStyle } from './ButtonCustom-style';
-import { MdArrowBackIosNew } from 'react-icons/md';
-import { MdArrowForwardIos } from 'react-icons/md';
+import { MdArrowBackIosNew,MdArrowForwardIos } from 'react-icons/md';
+
 
 function ButtonCustomNew({ text, backFun }) {
   return (

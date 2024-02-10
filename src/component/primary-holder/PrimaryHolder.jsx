@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
+import { Container } from 'react-bootstrap';
 
 //components
 import Tabs from '../../common/tabs/Tabs';
@@ -11,7 +13,7 @@ import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
 import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
 import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
 import { deleteNomineeAsync } from '../nominees/nomineeSlice';
-import { Container } from 'react-bootstrap';
+
 
 import {
   createPrimaryHolderAsync,
@@ -20,15 +22,22 @@ import {
   changeTaxResidency,
 } from './primarySlice';
 
-import { useSelector, useDispatch } from 'react-redux';
+
 import { primaryFormFields } from './primaryData';
 // import { createPrimaryHolderOBJ } from './primarySlice';
 
 const fieldName = Object.keys(primaryFormFields);
 
+const recordsObj = {
+  taxCountry: '',
+  taxReferenceNo: '',
+  identityType: '',
+};
+
 function PrimaryHolder({ methods }) {
   const [form, setForm] = useState();
   const [errorsOld, setErrors] = useState({});
+  const [textRecords, setTextRecords] = useState([]);
   const [IsmisMatched, setISMisMatched] = useState(false);
 
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
@@ -81,12 +90,18 @@ function PrimaryHolder({ methods }) {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in primeHolderObj[fstLevel]) {
-            if (secLev === 'taxRecords') {
-              for (let thirdLev in primeHolderObj[fstLevel].taxRecords) {
-                newObj[`primary-${thirdLev}`] =
-                  primeHolderObj[fstLevel][secLev][thirdLev];
-              }
-            }
+            // if (secLev === 'taxRecords') {
+            // console.log(primeHolderObj[fstLevel]);
+            // for (let thirdLev in primeHolderObj[fstLevel].taxRecords) {
+            // console.log(
+            //   thirdLev,
+            //   '====',
+            //   primeHolderObj[fstLevel][secLev][thirdLev]
+            // );
+            //   newObj =[...`primary-${thirdLev}`, ]
+            //     primeHolderObj[fstLevel][secLev][thirdLev];
+            // }
+            // }
 
             newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
           }
@@ -98,6 +113,11 @@ function PrimaryHolder({ methods }) {
       setForm(newObj);
     } else {
       setForm(primaryFormFields);
+    }
+    if (primeHolderObj?.fatcaDetail?.taxRecords?.length > 0) {
+      setTextRecords(primeHolderObj?.fatcaDetail?.taxRecords);
+    } else {
+      setTextRecords([{ ...recordsObj }]);
     }
   }, [primeHolderObj]);
 
@@ -163,9 +183,9 @@ function PrimaryHolder({ methods }) {
     }
   }, [primeHolderObj.fatcaDetail?.taxResidencyFlag]);
 
-  const formSubmitHandeler = (data) => {
+  
 
-   
+  const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
 
     const obj = {};
@@ -179,8 +199,6 @@ function PrimaryHolder({ methods }) {
     let panValue = IsPan === true ? 'Y' : 'N';
 
     delete obj.taxRecords;
-
-   
 
     const submitObj = {
       // ...primeHolderObj,
@@ -219,12 +237,14 @@ function PrimaryHolder({ methods }) {
         birthCountry: obj.birthCountry,
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
-        taxRecords: {
-          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
-          taxReferenceNo:
-            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
-          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
-        },
+        taxRecords: textRecords,
+
+        // taxRecords: {
+        //   taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+        //   taxReferenceNo:
+        //     obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+        //   identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
+        // },
       },
     };
 
@@ -238,6 +258,8 @@ function PrimaryHolder({ methods }) {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+ 
 
   return (
     <Container>
@@ -267,6 +289,9 @@ function PrimaryHolder({ methods }) {
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
           investorCategory={canCriteriaObj?.investorCategory}
+          textRecords={textRecords}
+          setTextRecords={setTextRecords}
+          recordsObj={recordsObj}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

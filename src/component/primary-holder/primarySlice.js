@@ -8,7 +8,8 @@ const initialState = {
   isLoading: false,
   message: '',
   canId: '',
-  taxResidency:'N'
+  taxResidency:'N',
+  
 };
 
 export const createPrimaryHolderAsync = createAsyncThunk(
@@ -74,9 +75,11 @@ export const primarySlice = createSlice({
       state.message = '';
     },
     changeTaxResidency: (state, action) => {
-      state.taxResidency = action.payload
+      state.taxResidency = action.payload;
     },
+   
     createPrimaryHolderOBJ: (state, action) => {
+      console.log(action.payload.fatcaDetail.taxRecords);
       state.primeHolderObj = {
         holderType: 'PR',
         residencePhoneNo: '',
@@ -115,12 +118,13 @@ export const primarySlice = createSlice({
           birthCountry: action.payload.fatcaDetail.birthCountry,
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
-          taxRecords: {
-            taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
-            taxReferenceNo:
-              action.payload.fatcaDetail.taxRecords.taxReferenceNo,
-            identityType: action.payload.fatcaDetail.taxRecords.identityType,
-          },
+          taxRecords: action.payload.fatcaDetail.taxRecords,
+          // taxRecords: {
+          //   taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
+          //   taxReferenceNo:
+          //     action.payload.fatcaDetail.taxRecords.taxReferenceNo,
+          //   identityType: action.payload.fatcaDetail.taxRecords.identityType,
+          // }
         },
       };
     },

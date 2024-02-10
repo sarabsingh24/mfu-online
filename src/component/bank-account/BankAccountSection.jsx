@@ -49,7 +49,7 @@ function BankAccountSection({
 
   let labelName = `${accountCount}-accountNo`;
   const accountNo = watch(labelName);
-
+ 
   return (
     <Section heading={`${accountCount} Bank Account details`}>
       <GridCustom>

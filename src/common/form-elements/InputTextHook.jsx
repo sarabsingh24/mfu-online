@@ -20,6 +20,8 @@ function InputTextHook({
   value,
   depend,
   sts,
+
+  changeFun,
 }) {
   return (
     <Form.Group className="mb-1">
@@ -68,6 +70,7 @@ function InputTextHook({
           className={` ${
             errorBorder ? 'border border-1 border-danger rounded-1' : null
           }`}
+          
           onClick={clickFun && clickFun}
           value={value && value}
           {...register(name, {

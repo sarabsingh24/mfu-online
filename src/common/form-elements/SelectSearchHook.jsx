@@ -26,6 +26,10 @@ function SelectSearchHook({
   sts,
   depend,
   selectFieldName,
+  rowIndex,
+  fildsObj,
+  textRecords,
+  setTextRecords,
 }) {
   const [isCountryList, setIsCountryList] = useState(false);
   const [countryList, setCountryList] = useState([]);
@@ -48,9 +52,9 @@ function SelectSearchHook({
     setCountryList(filterLst);
   };
 
-  const selectCountryHandeler = (inputFieldName, name) => {
-    console.log(selectFieldName + '-' + inputFieldName, name);
-    setValue(inputFieldName, name);
+  const selectCountryHandeler = (inputFieldName, countryName) => {
+    console.log(selectFieldName + '-' + inputFieldName, countryName);
+    setValue(inputFieldName || name, countryName);
 
     if (
       inputFieldName === 'birthCountry' ||
@@ -59,31 +63,35 @@ function SelectSearchHook({
     ) {
       setForm({
         ...form,
-        [selectFieldName+'-'+inputFieldName]: name,
+        [selectFieldName + '-' + inputFieldName]: countryName,
         // fatcaDetail: {
         //   ...form.fatcaDetail,
         //   [inputFieldName]: name,
         // },
       });
     } else {
-      setForm({
-        ...form,
-        [selectFieldName + '-' + inputFieldName]: name,
-        
-        // [selectFieldName + '-taxRecords']:
-        //     {...form[selectFieldName + '-taxRecords'],
-        //     [selectFieldName + '-' + inputFieldName]: name,}
-
-        // [{ ...form.taxRecords[0], [selectFieldName+'-'+inputFieldName]: name }],
-
-        // taxRecords: [
-        //   { ...form.taxRecords[0], [inputFieldName]: name },
-        // ],
+     
+      const orgName = name.split('-')[1];
+      let updateRecords = textRecords.map((items, ind) => {
+        if (ind === rowIndex) {
+          return { ...items, [orgName]: countryName };
+        }
+        return items;
       });
+      
+      setTextRecords(updateRecords);
+      // setForm({
+      //   ...form,
+      //   [selectFieldName + '-taxRecords']: [
+      //     {
+      //       ...form[selectFieldName + '-taxRecords'][rowIndex],
+      //       [name]: countryName,
+      //     },
+      //   ],
+      // });
     }
 
-
-    setCountryName(name);
+    setCountryName(countryName);
     setIsCountryList(false);
     setCountryList(options);
     setBlanket(false);
@@ -93,8 +101,6 @@ function SelectSearchHook({
       setIsCountryList(false);
     }
   }, [blanket]);
-
-  
 
   return (
     <article

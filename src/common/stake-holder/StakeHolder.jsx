@@ -4,6 +4,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useSelector, useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 //components
 import InputTextHook from '../form-elements/InputTextHook';
 import SelectOptionHook from '../form-elements/SelectOptionHook';
@@ -13,6 +14,7 @@ import SelectSearchOption from '../form-elements/SelectSearchOption';
 import Section from '../section/Section';
 import InputText from '../form-elements/InputText';
 import GridCustom from '../grid-custom/GridCustom';
+import NonIndianResidence from './NonIndianResidence';
 
 import FooterSection from '../footerSection/FooterSection';
 import { btnHandeler } from '../helper/Helper';
@@ -57,6 +59,9 @@ function StakeHolder({
   taxResidency,
   changeTaxResidency,
   investorCategory,
+  textRecords,
+  setTextRecords,
+  recordsObj,
 }) {
   const [btnFun, setBtnFun] = useState({});
   const [isOtherSourceOfWealth, setIsOtherSourceOfWealth] = useState(true);
@@ -64,6 +69,7 @@ function StakeHolder({
   const [notIndian, setNotIndian] = useState(true);
   const [IsTextCountry, setIsTextCountry] = useState(false);
   const [test, setTest] = useState(false);
+  const [nonIndianList, setNonIndianList] = useState([]);
 
   const { stepsCount } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
@@ -140,7 +146,9 @@ function StakeHolder({
       } else {
         setNotIndian(true);
         setIsTextCountry(false);
+        setTextRecords([{...recordsObj}]);
         dispatch(changeTaxResidency('N'));
+
       }
     }
 
@@ -215,9 +223,20 @@ function StakeHolder({
     if (sliceData.panPekrnNo) {
       setValue('confirmpanPekrnNo', sliceData.panPekrnNo);
     }
-  }, []);
+  }, [form]);
 
-console.log(form['primary-taxRecords']);
+  const addRecordRow = () => {
+    setTextRecords([...textRecords, recordsObj]);
+  };
+
+  const removeRecordRow = (ind) => {
+    const filterRow = textRecords.filter((_, index) => index !== ind);
+    
+      setTextRecords(filterRow);
+    
+  };
+
+  
 
   return (
     <React.Fragment>
@@ -780,94 +799,37 @@ console.log(form['primary-taxRecords']);
               </small>
             </Col>
           </Row>
-          {taxResidency === 'Y' && (
-            <Row>
-              <Col xs={12} md={3}>
-                <SelectSearchHook
-                  register={register}
-                  // name="taxCountry"
-                  name={fieldName[21]}
+          {taxResidency === 'Y' &&
+            textRecords.map((fildsObj, ind) => {
+              return (
+                <NonIndianResidence
+                  key={ind}
+                  rowIndex={ind}
                   selectFieldName={fieldName[21].split('-')[0]}
-                  label="Countries of Tax Residency"
-                  reqText="Countries of Tax Residency required"
-                  mandatory="*"
-                  errorBorder={
-                    !form?.fatcaDetail?.taxRecords?.taxCountry &&
-                    errors[fieldName[21]]?.message
-                  }
-                  options={countryListOptions}
-                  // value={form?.fatcaDetail?.taxRecords[0]?.taxCountry || ''}
-                  value={
-                    form?.[fieldName[21].split('-')[0] + '-taxCountry'] || ''
-                  }
+                  register={register}
+                  fildsObj={fildsObj}
+                  form={form}
+                  sts={taxResidency === 'Y'}
+                  setForm={setForm}
+                  setValue={setValue}
                   setBlanket={setBlanket}
                   blanket={blanket}
-                  flag={form?.fatcaDetail?.taxResidencyFlag}
-                  form={form}
-                  setForm={setForm}
-                  // changeFun={formHandeler}
-                  setValue={setValue}
-                  sts={taxResidency === 'Y'}
-                  depend={fieldName[21]}
-                />
-                <small style={errorFontStyle}>
-                  {!form?.fatcaDetail?.taxRecords?.taxCountry &&
-                    errors[fieldName[21]]?.message}
-                </small>
-              </Col>
-              <Col xs={12} md={3}>
-                <InputTextHook
-                  register={register}
-                  // name="taxReferenceNo"
-                  name={fieldName[22]}
-                  label="Tax Identification Numbers"
-                  reqText="please enter Tax Identification Numbers"
-                  disabled={false}
-                  errorBorder={errors[fieldName[22]]?.message}
-                  mandatory="*"
-                  sts={taxResidency === 'N'}
-                  depend={[1, 2, 3]}
-                  // value={form?.fatcaDetail?.taxRecords[0]?.taxReferenceNo || ''}
-                  // changeFun={formHandeler}
-                />
-                <small style={errorFontStyle}>
-                  {errors[fieldName[22]]?.message}
-                </small>
-              </Col>
-              <Col xs={12} md={3}>
-                <SelectSearchHook
-                  register={register}
-                  // name="identityType"
-                  name={fieldName[23]}
-                  selectFieldName={fieldName[23].split('-')[0]}
-                  label="Tax Identification Types"
-                  reqText="Tax Identification Types required"
-                  mandatory="*"
-                  errorBorder={
-                    !form?.fatcaDetail?.taxRecords[0]?.identityType &&
-                    errors[fieldName[23]]?.message
-                  }
                   options={countryListOptions}
-                  value={
-                    form?.[fieldName[21].split('-')[0] + '-identityType'] || ''
-                  }
-                  setBlanket={setBlanket}
-                  blanket={blanket}
-                  flag={form?.fatcaDetail?.taxResidencyFlag}
-                  form={form}
-                  setForm={setForm}
-                  // changeFun={formHandeler}
-                  setValue={setValue}
-                  sts={taxResidency === 'Y'}
-                  depend="identityType"
+                  errors={errors}
+                  errorStyle={errorFontStyle}
+                  taxResidency={taxResidency}
+                  removeRecordRow={removeRecordRow}
+                  setTextRecords={setTextRecords}
+                  textRecords={textRecords}
+                  watch={watch}
+                  getValues={getValues}
                 />
-                <small style={errorFontStyle}>
-                  {!form?.fatcaDetail?.taxRecords[0]?.identityType &&
-                    errors[fieldName[23]]?.message}
-                </small>
-              </Col>
-            </Row>
-          )}
+              );
+            })}
+
+          {taxResidency === 'Y' && <Button size="sm" onClick={addRecordRow}>
+            Add More
+          </Button>}
         </GridCustom>
       </Section>
       <br></br>
