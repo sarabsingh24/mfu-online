@@ -22,10 +22,7 @@ import FooterSection from '../../common/footerSection/FooterSection';
 import { btnHandeler } from '../../common/helper/Helper';
 import useCommonReducer from '../../common/customComp/useCommonReducer';
 import { pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import {
-  createAccount,
-  reset,
-} from '../../reducer/Reducer/account/accountSlice';
+
 
 function UploadSection({ bankName, recCanID, proofUploadObj, key }) {
   const [btnFun, setBtnFun] = useState({});

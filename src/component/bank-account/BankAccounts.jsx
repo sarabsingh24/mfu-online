@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../Style.css';
 import { useFormContext } from 'react-hook-form';
-import useFormPersist from 'react-hook-form-persist';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from 'react-bootstrap';
 
@@ -20,23 +19,26 @@ import BankAccountSection from './BankAccountSection';
 import FooterSection from '../../common/footerSection/FooterSection';
 import { btnHandeler } from '../../common/helper/Helper';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import { validateForm } from './BankAccountValidation';
-import { accountsFun,createBankAccountOBJ, getBankProofAsync } from './bankaccountSlice';
 
-const bankRecord= [
-    {
-      sequenceNo: '1',
-      defaultAccountFlag: true,
-      accountNo: '',
-      accountType: '',
-      bankId: '',
-      micrCode: '',
-      ifscCode: '',
-      bankProof: '',
-      reAccountNo: '',
-    },
-  ]
+import {
+  accountsFun,
+  createBankAccountOBJ,
+  getBankProofAsync,
+} from './bankaccountSlice';
 
+const bankRecord = [
+  {
+    sequenceNo: '1',
+    defaultAccountFlag: true,
+    accountNo: '',
+    accountType: '',
+    bankId: '',
+    micrCode: '',
+    ifscCode: '',
+    bankProof: '',
+    reAccountNo: '',
+  },
+];
 
 function BankAccounts() {
   const [form, setForm] = useState([]);
@@ -44,8 +46,7 @@ function BankAccounts() {
   const [btnFun, setBtnFun] = useState({});
   const [errorsOld, setErrors] = useState([]);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+
   const [bankAccount, setBankAccount] = useState([]);
 
   const { accountCountNum, bankAccountsObj, bankProofList } = useSelector(
@@ -68,7 +69,7 @@ function BankAccounts() {
   const numberHandeler = (e) => {
     let val = e.target.value;
 
-    console.log(val)
+    console.log(val);
     setNumber(val);
     dispatch(accountsFun(val));
   };
@@ -99,10 +100,9 @@ function BankAccounts() {
     setForm(newArray);
   };
 
-
-useEffect(()=>{
-dispatch(getBankProofAsync());
-},[])
+  useEffect(() => {
+    dispatch(getBankProofAsync());
+  }, []);
 
   useEffect(() => {
     // if (+number === 1) {
@@ -132,15 +132,8 @@ dispatch(getBankProofAsync());
     setBtnFun(btnHandeler(dispatch, pageCount, stepsCount));
   }, [dispatch, stepsCount]);
 
-  // useEffect(() => {
-  //   if (Object.keys(bankAccountsObj).length) {
-  //     setForm(bankAccountsObj);
-  //   }
-  // }, [bankAccountsObj]);
-
   const formSubmitHandeler = (data) => {
-
-    console.log("data bank acount", data)
+    // console.log("data bank acount", data)
     let newObj = [];
 
     for (let k in data) {
@@ -173,7 +166,7 @@ dispatch(getBankProofAsync());
         };
       }
     }
-    console.log('bank account',newObj);
+    // console.log('bank account',newObj);
 
     setBankAccount(newObj);
 
@@ -183,7 +176,6 @@ dispatch(getBankProofAsync());
   };
 
   useEffect(() => {
- 
     setValue('accounts', bankAccountsObj?.length || bankRecord?.length);
   }, []);
 

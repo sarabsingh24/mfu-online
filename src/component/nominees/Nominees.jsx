@@ -18,12 +18,11 @@ import { btnHandeler } from '../../common/helper/Helper';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
 import AddNominee from './AddNominee';
-import { validateForm } from './NomineeValidation';
-import { nomineesForm } from '../../reducer/Reducer/account/accountSlice';
+
+
 import {
   nomineeCountAction,
-  createNomineeAsync,
-  updateNomineeAsync,
+
   createNomineeOBJ,
 } from '../nominees/nomineeSlice';
 
@@ -64,7 +63,7 @@ export default function Nominees() {
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
 
-  const { user, IslogedIn } = useSelector((state) => state.user);
+  // const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {
@@ -94,76 +93,15 @@ export default function Nominees() {
     } else {
       setValue('nomineeOptedFlag', 'N');
       setIsNominee(false);
-      // dispatch(
-      //   updateNomineeAsync({
-      //     ...nomineeObj,
-      //     nomineeOption: 'N',
-      //     nomineeDetail: [],
-      //   })
-      // )
-      // dispatch(nomineesForm([]));
+    
       setForm([]);
-      // setNumber(0);
+      
     }
   };
 
-  // const newFun = (name, count) => {
-  //   let newError = errorsOLD.map((item, index) => {
-  //     if (index + 1 === +count) {
-  //       if (!!item[name]) {
-  //         // console.log("ggg");
-  //         return { ...item, [name]: null };
-  //       }
-  //     }
-  //     return item;
-  //   });
-  //   setErrors(newError);
-  // };
-
-  // const thisAccountHandeler = (e) => {
-  //   let name = e.target.name;
-  //   let value = e.target.value;
-  //   let count = e.target.dataset.count;
-
-  //   let newArray = form.map((obj) => {
-  //     if (obj.sequenceNo === count) {
-  //       newFun(name, count);
-  //       return { ...obj, [name]: value };
-  //     }
-  //     return obj;
-  //   });
-
-  //   setForm(newArray);
-  // };
-
-  // useEffect(() => {
-
-  //   if (+number === 1) {
-  //     setForm([...form.slice(0, 1)]);
-  //   }
-  //   if (+number === 2) {
-  //     if (form.length > 2) {
-  //       setForm([...form.slice(0, 2)]);
-  //     } else {
-  //       setForm([...form, { ...nomineeCompObj, sequenceNo: '2' }]);
-  //     }
-  //   }
-  //   if (+number === 3) {
-  //     if (form.length === 2) {
-  //       setForm([...form, { ...nomineeCompObj, sequenceNo: '3' }]);
-  //     } else {
-  //       setForm([
-  //         ...form,
-  //         { ...nomineeCompObj, sequenceNo: '2' },
-  //         { ...nomineeCompObj, sequenceNo: '3' },
-  //       ]);
-  //     }
-  //   }
-  // }, [number]);
+  
 
   const formSubmitHandeler = (data) => {
- console.log('data nominee ', data);
-
     let newObj = [];
 
     for (let k in data) {
@@ -189,7 +127,7 @@ export default function Nominees() {
         return total;
       }, 0);
 
-    console.log('nominee',newObj);
+    console.log('nominee', newObj);
     if (isNominee) {
       if (checkPercentage === 100) {
         dispatch(
@@ -213,30 +151,6 @@ export default function Nominees() {
       setpercentSts(false);
       dispatch(pageCount(stepsCount + 1));
     }
-
-    // const formErrors = validateForm(form, nomineeSelected);
-    // const account = (e) => {
-    //   if (!Object.keys(e).length) {
-    //     return true;
-    //   }
-    //   return false;
-    // };
-    // let isAccount = formErrors.every(account);
-
-    // if (!isAccount) {
-    //   // alert("error");
-    //   setErrors(formErrors);
-    // } else {
-    //   // alert("success");
-
-    //   let obj = {
-    //     nomineeOptedFlag: nomineeSelected,
-    //     nomineeRecords: form,
-    //   };
-
-    // dispatch(nomineesForm(obj));
-
-    // }
   };
 
   useEffect(() => {
@@ -249,8 +163,8 @@ export default function Nominees() {
     setIsNominee(nomineeObj.nomineeOptedFlag === 'N' ? false : true);
     setForm(nomineeObj.nomineeRecords);
 
-    console.log(nomineeObj.nomineeDetail);
-    console.log(nomineeObj?.nomineeOptedFlag);
+    // console.log(nomineeObj.nomineeDetail);
+    // console.log(nomineeObj?.nomineeOptedFlag);
 
     setValue(
       'nomineeCount',
@@ -265,8 +179,6 @@ export default function Nominees() {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
-
- 
 
   return (
     <Container>

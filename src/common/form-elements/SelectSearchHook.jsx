@@ -53,7 +53,7 @@ function SelectSearchHook({
   };
 
   const selectCountryHandeler = (inputFieldName, countryName) => {
-    console.log(selectFieldName + '-' + inputFieldName, countryName);
+    // console.log(selectFieldName + '-' + inputFieldName, countryName);
     setValue(inputFieldName || name, countryName);
 
     if (

@@ -20,7 +20,7 @@ export const tabSlice = createSlice({
       state.tabsCreater = action.payload;
     },
     pageCount: (state, action) => {
-      console.log(action.payload);
+     
       state.stepsCount = action.payload;
     },
     nextSection: (state, action) => {

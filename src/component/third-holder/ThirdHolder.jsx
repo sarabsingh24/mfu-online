@@ -36,8 +36,7 @@ const [textRecords, setTextRecords] = useState([]);
   );
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+ 
   const dispatch = useDispatch();
   const {
     register,

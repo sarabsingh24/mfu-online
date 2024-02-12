@@ -3,7 +3,7 @@ import bankAccountAPI from './bankAccountAPI';
 
 const initialState = {
   bankAccountsObj: [],
-  bankProofList:[],
+  bankProofList: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -12,68 +12,11 @@ const initialState = {
   accountCountNum: 1,
 };
 
-
-
 export const getBankProofAsync = createAsyncThunk(
   'bankAccount/getproof',
   async (obj, thunkAPI) => {
     try {
       return await bankAccountAPI.getBankProof(obj);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-
-export const createBankAccountAsync = createAsyncThunk(
-  'bankAccount/create',
-  async (obj, thunkAPI) => {
-   
-    try {
-      return await bankAccountAPI.createBankAccount(obj);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const getBankAccountAsync = createAsyncThunk(
-  'bankAccount/get',
-  async (userId, thunkAPI) => {
-    
-    try {
-      return await bankAccountAPI.getBankAccount(userId);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const updateBankAccountAsync = createAsyncThunk(
-  'bankAccount/update',
-  async (obj, thunkAPI) => {
-   
-    try {
-      return await bankAccountAPI.updateBankAccount(obj);
     } catch (error) {
       const message =
         (error.response &&
@@ -102,60 +45,13 @@ export const bankAccountSlice = createSlice({
     accountsFun: (state, action) => {
       state.accountCountNum = action.payload;
     },
-    createBankAccountOBJ :(state, action)=>{
-      console.log(action.payload)
+    createBankAccountOBJ: (state, action) => {
       state.bankAccountsObj = action.payload;
-
     },
   },
   extraReducers: (builder) => {
     builder
-      //create bank account
-      .addCase(createBankAccountAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createBankAccountAsync.fulfilled, (state, action) => {
-        console.log('aa', action.payload);
-        state.isLoading = false;
-        state.bankAccountsObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(createBankAccountAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      //get bank account
-      .addCase(getBankAccountAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getBankAccountAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.bankAccountsObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(getBankAccountAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      //update bank account
-      .addCase(updateBankAccountAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateBankAccountAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.bankAccountsObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(updateBankAccountAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
+     
       //get bank proof
       .addCase(getBankProofAsync.pending, (state) => {
         state.isLoading = true;

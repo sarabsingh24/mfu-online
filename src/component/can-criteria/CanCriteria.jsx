@@ -19,21 +19,9 @@ import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import SelectOptionHook from '../../common/form-elements/SelectOptionHook';
 import GridCustom from '../../common/grid-custom/GridCustom';
 import Section from '../../common/section/Section';
-import InputText from '../../common/form-elements/InputText';
-import SelectOption from '../../common/form-elements/SelectOption';
-import FooterSection from '../../common/footerSection/FooterSection';
-import { btnHandeler } from '../../common/helper/Helper';
 
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import {
-  criteriaForm,
-  primeHolderForm,
-  secondHolderForm,
-  thirdHolderForm,
-  guardianHolderForm,
-  nomineesForm,
-} from '../../reducer/Reducer/account/accountSlice';
-import { validateForm } from './CanCriteriaValidation';
+
 import {
   natureOptions,
   investorOptions,
@@ -63,11 +51,10 @@ const errorFontStyle = {
 
 function CanCriteria() {
   const [form, setForm] = useState({});
-  const [errorsOLD, setErrors] = useState({});
-  const [IsPan, setIsPan] = useState(false);
+
   const [taxList, setTaxList] = useState([]);
   const [investorList, setInvestorList] = useState([]);
-  const [btnFun, setBtnFun] = useState({});
+
   const [selectHolderCount, setSelectHolderCount] = useState([
     {
       value: '0',
@@ -77,8 +64,7 @@ function CanCriteria() {
 
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   const {
@@ -96,11 +82,6 @@ function CanCriteria() {
     let val = e.target.value;
 
     setForm({ ...form, [name]: val });
-    // errors[name].message = '';
-
-    // if (!!errorsOLD[name]) {
-    //   setErrors({ ...errorsOLD, [name]: null });
-    // }
 
     if (name === 'taxStatus' && val !== '') {
       delete errors.taxStatus;
@@ -325,7 +306,7 @@ function CanCriteria() {
   }, [form?.holderCount]);
 
   const formSubmitHandeler = (data) => {
-    console.log(data);
+    
     dispatch(
       createCanCriteria({
         requestEvent: 'CR',
@@ -338,8 +319,6 @@ function CanCriteria() {
 
     dispatch(pageCount(stepsCount + 1));
   };
-
-  
 
   return (
     <Container>

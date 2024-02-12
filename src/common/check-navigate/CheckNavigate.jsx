@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import useCommonReducer from '../customComp/useCommonReducer';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -12,7 +12,7 @@ function CheckNavigate() {
   const { stepsCount, tabsCreater, openForm } = useSelector(
     (state) => state.tab
   );
-  const { IslogedIn } = useSelector((state) => state.user);
+ 
   const location = useLocation();
   useEffect(() => {
     let filterTabs = tabsCreater.filter((tab) => tab.show === true);

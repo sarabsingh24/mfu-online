@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import primaryAPI from './primaryAPI';
 
 const initialState = {
   primeHolderObj: {},
@@ -8,60 +7,8 @@ const initialState = {
   isLoading: false,
   message: '',
   canId: '',
-  taxResidency:'N',
-  
+  taxResidency: 'N',
 };
-
-export const createPrimaryHolderAsync = createAsyncThunk(
-  'primary/create',
-  async (obj, thunkAPI) => {
-    try {
-      return await primaryAPI.createPrimaryHolder(obj);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const getPrimaryHolderAsync = createAsyncThunk(
-  'primary/get',
-  async (userId, thunkAPI) => {
-    try {
-      return await primaryAPI.getPrimaryHolder(userId);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const updatePrimaryHolderAsync = createAsyncThunk(
-  'primary/update',
-  async (obj, thunkAPI) => {
-    try {
-      return await primaryAPI.updatePrimaryHolder(obj);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 export const primarySlice = createSlice({
   name: 'primary',
@@ -77,9 +24,8 @@ export const primarySlice = createSlice({
     changeTaxResidency: (state, action) => {
       state.taxResidency = action.payload;
     },
-   
+
     createPrimaryHolderOBJ: (state, action) => {
-      
       state.primeHolderObj = {
         holderType: 'PR',
         residencePhoneNo: '',
@@ -119,58 +65,9 @@ export const primarySlice = createSlice({
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
           taxRecords: action.payload.fatcaDetail.taxRecords,
-         
         },
       };
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      //create primary form
-      .addCase(createPrimaryHolderAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createPrimaryHolderAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.primeHolderObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(createPrimaryHolderAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      //get primary form
-      .addCase(getPrimaryHolderAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getPrimaryHolderAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.primeHolderObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(getPrimaryHolderAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      //update primary form
-      .addCase(updatePrimaryHolderAsync.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updatePrimaryHolderAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.primeHolderObj = action.payload;
-        state.isError = false;
-        state.message = '';
-      })
-      .addCase(updatePrimaryHolderAsync.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      });
   },
 });
 

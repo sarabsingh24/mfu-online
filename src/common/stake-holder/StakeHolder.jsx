@@ -74,7 +74,7 @@ function StakeHolder({
 
   const { stepsCount } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+  // const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [blanket, setBlanket] = useState(false);

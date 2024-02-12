@@ -9,10 +9,9 @@ import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import useCommonReducer from '../../common/customComp/useCommonReducer';
+
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
-import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
-import { guardianHolderForm } from '../../reducer/Reducer/account/accountSlice';
+
 import {
   
   createGuardianHolderOBJ,
@@ -41,8 +40,7 @@ function GuardianHolder() {
   );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
 
-  // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+ 
   const dispatch = useDispatch();
 
   const {

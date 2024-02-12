@@ -11,7 +11,6 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import tabReducer from "./Reducer/tab/tabSlice";
-import accountReducer from "./Reducer/account/accountSlice";
 import criteriaReducer from "../component/can-criteria/canCriteriaSlice"
 import primaryReducer from '../component/primary-holder/primarySlice'
 import secondSlice from '../component/second-holder/SecondSlice'
@@ -20,7 +19,7 @@ import bankAccountReducer from '../component/bank-account/bankaccountSlice'
 import nomineeObj from '../component/nominees/nomineeSlice'
 import proofReducer from '../component/proof-upload/proofSlice'
 import guardianReducer from '../component/guardian-holder/gurdianSlice'
-import authReducer from '../component/auth/authSlice'
+
 
 const persistConfig = {
   key: 'root',
@@ -29,7 +28,7 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
-  user:authReducer,
+
   tab: tabReducer,
   // account: accountReducer,
   criteria: criteriaReducer,
@@ -55,14 +54,5 @@ export const store = configureStore({
     }),
 });
 
-// export const store = configureStore({
-//   reducer: {
-//     tab: tabReducer,
-//     account: accountSlice,
-//   },
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: false,
-//     }),
-// });
+
 

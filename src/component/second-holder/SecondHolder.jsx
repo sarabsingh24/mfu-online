@@ -34,8 +34,7 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
     (state) => state.second
   );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-  // const { userId } = useSelector((state) => state.account);
-  const { user, IslogedIn } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
 
   const {

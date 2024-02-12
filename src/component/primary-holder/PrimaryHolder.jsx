@@ -9,10 +9,12 @@ import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
-import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
-import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
-import { deleteNomineeAsync } from '../nominees/nomineeSlice';
+
+import { deleteSecondHolderObj } from '../second-holder/SecondSlice';
+import { deleteThirdHolderObj } from '../third-holder/thirdSlice';
+import { deleteGuardianHolderObj } from '../guardian-holder/gurdianSlice';
+import { deleteNomineeObj } from '../nominees/nomineeSlice';
+
 import { createPrimaryHolderOBJ, changeTaxResidency } from './primarySlice';
 import { primaryFormFields } from './primaryData';
 // import { createPrimaryHolderOBJ } from './primarySlice';
@@ -29,24 +31,20 @@ function PrimaryHolder({ methods }) {
   const [form, setForm] = useState({});
   const [errorsOld, setErrors] = useState({});
   const [textRecords, setTextRecords] = useState([]);
-  const [IsmisMatched, setISMisMatched] = useState(false);
-
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
 
-  const { primeHolderObj, isSuccess, taxResidency } = useSelector(
+  const { primeHolderObj, taxResidency } = useSelector(
     (state) => state.primary
   );
   const { stepsCount, tabsCreater } = useSelector((state) => state.tab);
-
   const { canCriteriaObj } = useSelector((state) => state.criteria);
   const { secondHolderObj } = useSelector((state) => state.second);
   const { thirdHolderObj } = useSelector((state) => state.third);
   const { guardianHolderObj } = useSelector((state) => state.guardian);
   const { nomineeObj } = useSelector((state) => state.nominee);
 
-  const { user, IslogedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const {
     register,
@@ -81,26 +79,13 @@ function PrimaryHolder({ methods }) {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in primeHolderObj[fstLevel]) {
-            // if (secLev === 'taxRecords') {
-            // console.log(primeHolderObj[fstLevel]);
-            // for (let thirdLev in primeHolderObj[fstLevel].taxRecords) {
-            // console.log(
-            //   thirdLev,
-            //   '====',
-            //   primeHolderObj[fstLevel][secLev][thirdLev]
-            // );
-            //   newObj =[...`primary-${thirdLev}`, ]
-            //     primeHolderObj[fstLevel][secLev][thirdLev];
-            // }
-            // }
-
             newObj[`primary-${secLev}`] = primeHolderObj[fstLevel][secLev];
           }
         } else {
           newObj[`primary-${fstLevel}`] = primeHolderObj[fstLevel];
         }
       }
-console.log(newObj);
+
       setForm(newObj);
     } else {
       setForm(primaryFormFields);
@@ -121,46 +106,26 @@ console.log(newObj);
         canCriteriaObj?.investorCategory === 'I') ||
       canCriteriaObj?.holdingNature === 'AS'
     ) {
-      if (secondHolderObj?.id) {
-        dispatch(deleteSecondHolderAsync(secondHolderObj?.id));
-      }
-      if (thirdHolderObj?.id) {
-        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
-      }
-
-      if (guardianHolderObj?.id) {
-        dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
-      }
+      dispatch(deleteSecondHolderObj(secondHolderObj));
+      dispatch(deleteThirdHolderObj(thirdHolderObj));
+      dispatch(deleteGuardianHolderObj(guardianHolderObj));
 
       // console.log('remove second, third, guardian');
     } else if (
       canCriteriaObj?.holdingNature === 'SI' &&
       canCriteriaObj?.investorCategory === 'M'
     ) {
-      if (secondHolderObj?.id) {
-        console.log('in');
-        dispatch(deleteSecondHolderAsync(secondHolderObj?.id));
-      }
-      if (thirdHolderObj?.id) {
-        console.log('in');
-        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
-      }
-
-      if (nomineeObj?.id) {
-        dispatch(deleteNomineeAsync(nomineeObj?.id));
-      }
+      
+      dispatch(deleteSecondHolderObj(secondHolderObj));
+      dispatch(deleteThirdHolderObj(thirdHolderObj));
+      dispatch(deleteNomineeObj(nomineeObj));
 
       ///console.log('remove second, third, nominee');
     } else if (canCriteriaObj?.holdingNature === 'JO') {
-      if (thirdHolderObj?.id) {
-        dispatch(deleteThirdHolderAsync(thirdHolderObj?.id));
-      }
-
-      if (guardianHolderObj?.id) {
-        dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
-      }
+      dispatch(deleteThirdHolderObj(thirdHolderObj));
+      dispatch(deleteGuardianHolderObj(guardianHolderObj));
     }
-  }, []);
+  }, [canCriteriaObj]);
 
   useEffect(() => {
     if (
@@ -175,8 +140,6 @@ console.log(newObj);
   }, [primeHolderObj.fatcaDetail?.taxResidencyFlag]);
 
   const formSubmitHandeler = (data) => {
-    // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
-
     const obj = {};
 
     for (let k in data) {
@@ -227,8 +190,6 @@ console.log(newObj);
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
         taxRecords: textRecords,
-
-        
       },
     };
 
