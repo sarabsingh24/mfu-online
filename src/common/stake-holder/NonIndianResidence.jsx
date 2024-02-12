@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {  MdDelete } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 import Button from 'react-bootstrap/Button';
 
 //component
 import SelectSearchHook from '../form-elements/SelectSearchHook';
 import InputTextHook from '../form-elements/InputTextHook';
-
 
 const NonIndianResidence = ({
   register,
@@ -35,27 +34,31 @@ const NonIndianResidence = ({
     setValue(`${rowIndex}-taxReferenceNo`, fildsObj.taxReferenceNo);
     setValue(`${rowIndex}-identityType`, fildsObj[`${rowIndex}-identityType`]);
   }, [textRecords]);
-  
 
   let labelName = `${rowIndex}-taxReferenceNo`;
   const refNumber = watch(labelName);
 
   useEffect(() => {
-    let updateRecords = textRecords.map((items, ind) => {
-      if (ind === rowIndex) {
-        return {
-          ...items,
-          taxReferenceNo: getValues(`${rowIndex}-taxReferenceNo`),
-        };
-      }
-      return items;
-    });
+    const records = () => {
+      let updateRecords = textRecords.map((items, ind) => {
+        if (ind === rowIndex) {
+          return {
+            ...items,
+            taxReferenceNo: getValues(`${rowIndex}-taxReferenceNo`),
+          };
+        }
+        return items;
+      });
 
-    setTextRecords(updateRecords);
-    console.log(getValues(`${rowIndex}-taxReferenceNo`));
+      setTextRecords(updateRecords);
+    };
+
+    const timer = setTimeout(() => {
+      records();
+    }, 1500);
+
+    return () => clearTimeout(timer);
   }, [refNumber]);
-
- 
 
   return (
     <Row>
@@ -144,17 +147,18 @@ const NonIndianResidence = ({
       </Col>
 
       <Col xs={12} md={3}>
-        {textRecords.length > 1 && (<div
-          style={{ marginTop: '35px' }}
-          onClick={() => {
-            removeRecordRow(rowIndex);
-          }}
-        >
-          <Button size="sm" variant="outline-danger">
-            Remove
-          </Button>
-        </div>)}
-        
+        {textRecords.length > 1 && (
+          <div
+            style={{ marginTop: '35px' }}
+            onClick={() => {
+              removeRecordRow(rowIndex);
+            }}
+          >
+            <Button size="sm" variant="outline-danger">
+              Remove
+            </Button>
+          </div>
+        )}
       </Col>
 
       {/* <Col xs={12} md={3}>

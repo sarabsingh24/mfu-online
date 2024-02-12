@@ -133,12 +133,7 @@ export const thirdSlice = createSlice({
           birthCountry: action.payload.fatcaDetail.birthCountry,
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
-          taxRecords: {
-            taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
-            taxReferenceNo:
-              action.payload.fatcaDetail.taxRecords.taxReferenceNo,
-            identityType: action.payload.fatcaDetail.taxRecords.identityType,
-          },
+          taxRecords: action.payload.fatcaDetail.taxRecords,
         },
       };
     },

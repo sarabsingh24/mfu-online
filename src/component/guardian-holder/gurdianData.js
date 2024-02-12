@@ -24,7 +24,11 @@ export const gurdianFormFields = {
   'gurdian-citizenshipCountry': '',
   'gurdian-nationalityCountry': '',
   // 'gurdian-sequenceNo': 0,
-  'gurdian-taxCountry': '',
-  'gurdian-taxReferenceNo': '',
-  'gurdian-identityType': '',
+  'gurdian-taxRecords': [
+    {
+      'taxCountry': 'kk',
+      'taxReferenceNo': 'hh',
+      'identityType': 'll',
+    },
+  ],
 };

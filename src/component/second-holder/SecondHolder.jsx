@@ -3,22 +3,28 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from 'react-bootstrap';
+
 //components
 import Tabs from '../../common/tabs/Tabs';
 import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
-
 import { commonFormField } from '../../common/stake-holder/stakeHolderData';
-import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
 import { createSecondHolderOBJ, changeTaxResidency } from './SecondSlice';
 import { secondaryFormFields } from './secondaryData';
 
 const fieldName = Object.keys(secondaryFormFields);
 
+const recordsObj = {
+  taxCountry: '',
+  taxReferenceNo: '',
+  identityType: '',
+};
+
 function SecondHolder() {
   const [form, setForm] = useState(commonFormField);
   const [errorsOld, setErrors] = useState({});
+   const [textRecords, setTextRecords] = useState([]);
   const [networthRadio, setNetworthRadio] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
@@ -70,22 +76,28 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in secondHolderObj[fstLevel]) {
-            if (secLev === 'taxRecords') {
-              for (let thirdLev in secondHolderObj[fstLevel].taxRecords) {
-                newObj[`secondary-${thirdLev}`] =
-                  secondHolderObj[fstLevel][secLev][thirdLev];
-              }
-            }
+            // if (secLev === 'taxRecords') {
+            //   for (let thirdLev in secondHolderObj[fstLevel].taxRecords) {
+            //     newObj[`secondary-${thirdLev}`] =
+            //       secondHolderObj[fstLevel][secLev][thirdLev];
+            //   }
+            // }
             newObj[`secondary-${secLev}`] = secondHolderObj[fstLevel][secLev];
           }
         } else {
           newObj[`secondary-${fstLevel}`] = secondHolderObj[fstLevel];
         }
       }
-      console.log(newObj);
+     
       setForm(newObj);
     } else {
       setForm(secondaryFormFields);
+    }
+
+    if (secondHolderObj?.fatcaDetail?.taxRecords?.length > 0) {
+      setTextRecords(secondHolderObj?.fatcaDetail?.taxRecords);
+    } else {
+      setTextRecords([{ ...recordsObj }]);
     }
   }, [secondHolderObj]);
 
@@ -99,7 +111,7 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
     } else {
       dispatch(changeTaxResidency('Y'));
     }
-  }, []);
+  }, [secondHolderObj.fatcaDetail?.taxResidencyFlag]);
 
   const formSubmitHandeler = (data) => {
     // console.log('secondary', data);
@@ -152,12 +164,13 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
         birthCountry: obj.birthCountry,
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
-        taxRecords: {
-          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
-          taxReferenceNo:
-            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
-          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
-        },
+        taxRecords: textRecords,
+        // taxRecords: {
+        //   taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
+        //   taxReferenceNo:
+        //     obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
+        //   identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
+        // },
       },
     };
 
@@ -168,6 +181,8 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
+
+  
 
   return (
     <Container>
@@ -197,6 +212,9 @@ const { canCriteriaObj } = useSelector((state) => state.criteria);
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
           investorCategory={canCriteriaObj?.investorCategory}
+          textRecords={textRecords}
+          setTextRecords={setTextRecords}
+          recordsObj={recordsObj}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

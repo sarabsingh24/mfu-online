@@ -23,7 +23,11 @@ export const thirdFormFields = {
   'third-citizenshipCountry': '',
   'third-nationalityCountry': '',
   // 'third-sequenceNo': 0,
-  'third-taxCountry': '',
-  'third-taxReferenceNo': '',
-  'third-identityType': '',
+  'third-taxRecords': [
+    {
+      'taxCountry': 'kk',
+      'taxReferenceNo': 'hh',
+      'identityType': 'll',
+    },
+  ],
 };

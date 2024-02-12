@@ -11,17 +11,22 @@ import ButtonCustomNew from '../../common/button/ButtonCustomNew';
 import StakeHolder from '../../common/stake-holder/StakeHolder';
 import { tabUpdate, pageCount } from '../../reducer/Reducer/tab/tabSlice';
 
-import { commonFormField } from '../../common/stake-holder/stakeHolderData';
-import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
+
 import { createThirdHolderOBJ, changeTaxResidency } from './thirdSlice';
 import { thirdFormFields } from './thirdData';
 
 const fieldName = Object.keys(thirdFormFields);
 
+const recordsObj = {
+  taxCountry: '',
+  taxReferenceNo: '',
+  identityType: '',
+};
+
 function ThirdHolder() {
   const [form, setForm] = useState();
   const [errorsOld, setErrors] = useState({});
-
+const [textRecords, setTextRecords] = useState([]);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
   const [networthRadio, setNetworthRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
@@ -68,10 +73,12 @@ function ThirdHolder() {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in thirdHolderObj[fstLevel]) {
-            newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
-          }
-        } else if (fstLevel === 'taxRecords') {
-          for (let secLev in thirdHolderObj[fstLevel]) {
+            // if (secLev === 'taxRecords') {
+            //   for (let thirdLev in thirdHolderObj[fstLevel].taxRecords) {
+            //     newObj[`third-${secLev}`] =
+            //       thirdHolderObj[fstLevel][secLev][thirdLev];
+            //   }
+            // } 
             newObj[`third-${secLev}`] = thirdHolderObj[fstLevel][secLev];
           }
         } else {
@@ -83,6 +90,11 @@ function ThirdHolder() {
     } else {
       console.log('three');
       setForm(thirdFormFields);
+    }
+    if (thirdHolderObj?.fatcaDetail?.taxRecords?.length > 0) {
+      setTextRecords(thirdHolderObj?.fatcaDetail?.taxRecords);
+    } else {
+      setTextRecords([{ ...recordsObj }]);
     }
   }, [thirdHolderObj]);
 
@@ -145,12 +157,7 @@ function ThirdHolder() {
         birthCountry: obj.birthCountry,
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
-        taxRecords: {
-          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
-          taxReferenceNo:
-            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
-          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
-        },
+        taxRecords: textRecords,
       },
     };
 
@@ -191,6 +198,9 @@ function ThirdHolder() {
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
           investorCategory={canCriteriaObj?.investorCategory}
+          textRecords={textRecords}
+          setTextRecords={setTextRecords}
+          recordsObj={recordsObj}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

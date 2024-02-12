@@ -14,8 +14,7 @@ import { commonFormField } from '../../common/stake-holder/stakeHolderData';
 import { validateForm } from '../../common/stake-holder/StakeHolderValidation';
 import { guardianHolderForm } from '../../reducer/Reducer/account/accountSlice';
 import {
-  createGuardianHolderAsync,
-  updateGuardianHolderAsync,
+  
   createGuardianHolderOBJ,
   changeTaxResidency,
 } from './gurdianSlice';
@@ -23,9 +22,16 @@ import { gurdianFormFields } from './gurdianData';
 
 const fieldName = Object.keys(gurdianFormFields);
 
+const recordsObj = {
+  taxCountry: '',
+  taxReferenceNo: '',
+  identityType: '',
+};
+
 function GuardianHolder() {
   const [form, setForm] = useState(commonFormField);
   const [errorsOld, setErrors] = useState({});
+  const [textRecords, setTextRecords] = useState([]);
   const [networthRadio, setNetworthRadio] = useState(false);
   const [IsPan, setIsPan] = useState(false);
   const [grossIncomeRadio, setGrossIncomeRadio] = useState(false);
@@ -70,13 +76,13 @@ function GuardianHolder() {
           }
         } else if (fstLevel === 'fatcaDetail') {
           for (let secLev in guardianHolderObj[fstLevel]) {
-            if (secLev === 'taxRecords') {
-              for (let thirdLev in guardianHolderObj[fstLevel].taxRecords) {
-                newObj[`gurdian-$${thirdLev}`] =
-                  guardianHolderObj[fstLevel][secLev][thirdLev];
-              }
+            // if (secLev === 'taxRecords') {
+            //   for (let thirdLev in guardianHolderObj[fstLevel].taxRecords) {
+            //     newObj[`gurdian-$${thirdLev}`] =
+            //       guardianHolderObj[fstLevel][secLev][thirdLev];
+            //   }
               
-            }
+            // }
             newObj[`gurdian-${secLev}`] = guardianHolderObj[fstLevel][secLev];
           }
         } else {
@@ -87,6 +93,12 @@ function GuardianHolder() {
       setForm(newObj);
     } else {
       setForm(gurdianFormFields);
+    }
+
+    if (guardianHolderObj?.fatcaDetail?.taxRecords?.length > 0) {
+      setTextRecords(guardianHolderObj?.fatcaDetail?.taxRecords);
+    } else {
+      setTextRecords([{ ...recordsObj }]);
     }
   }, [guardianHolderObj]);
 
@@ -100,7 +112,7 @@ function GuardianHolder() {
     } else {
       dispatch(changeTaxResidency('Y'));
     }
-  }, []);
+  }, [guardianHolderObj.fatcaDetail?.taxResidencyFlag]);
 
   const formSubmitHandeler = (data) => {
      console.log(data);
@@ -154,12 +166,7 @@ function GuardianHolder() {
         birthCountry: obj.birthCountry,
         citizenshipCountry: obj.citizenshipCountry,
         nationalityCountry: obj.nationalityCountry,
-        taxRecords: {
-          taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
-          taxReferenceNo:
-            obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
-          identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
-        },
+        taxRecords: textRecords,
       },
     };
 
@@ -203,6 +210,9 @@ function GuardianHolder() {
           taxResidency={taxResidency}
           changeTaxResidency={changeTaxResidency}
           investorCategory={canCriteriaObj?.investorCategory}
+          textRecords={textRecords}
+          setTextRecords={setTextRecords}
+          recordsObj={recordsObj}
         />
         <div className="button-container">
           <ButtonCustomNew backFun={backBtnHandeler} />

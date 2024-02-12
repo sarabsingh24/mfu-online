@@ -24,7 +24,11 @@ export const secondaryFormFields = {
   'secondary-citizenshipCountry': '',
   'secondary-nationalityCountry': '',
   // 'secondary-sequenceNo': 0,
-  'secondary-taxCountry': '',
-  'secondary-taxReferenceNo': '',
-  'secondary-identityType': '',
+  'secondary-taxRecords': [
+    {
+      'taxCountry': 'kk',
+      'taxReferenceNo': 'hh',
+      'identityType': 'll',
+    },
+  ],
 };

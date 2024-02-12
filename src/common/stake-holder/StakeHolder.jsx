@@ -70,6 +70,7 @@ function StakeHolder({
   const [IsTextCountry, setIsTextCountry] = useState(false);
   const [test, setTest] = useState(false);
   const [nonIndianList, setNonIndianList] = useState([]);
+  const [isFormFilled, setFormFilled] = useState(false);
 
   const { stepsCount } = useSelector((state) => state.tab);
   // const { userId } = useSelector((state) => state.account);
@@ -146,9 +147,8 @@ function StakeHolder({
       } else {
         setNotIndian(true);
         setIsTextCountry(false);
-        setTextRecords([{...recordsObj}]);
+        setTextRecords([{ ...recordsObj }]);
         dispatch(changeTaxResidency('N'));
-
       }
     }
 
@@ -215,9 +215,14 @@ function StakeHolder({
   }, []);
 
   useEffect(() => {
-    setValue('name', form?.name);
-    for (let k in form) {
-      setValue(k, form[k]);
+    // setValue('name', form?.name);
+    let formTypeName = fieldName[0].split('-')[0];
+
+    if (form[`${formTypeName}-name`] && !isFormFilled) {
+      for (let k in form) {
+        setValue(k, form[k]);
+      }
+      setFormFilled(true);
     }
 
     if (sliceData.panPekrnNo) {
@@ -231,12 +236,9 @@ function StakeHolder({
 
   const removeRecordRow = (ind) => {
     const filterRow = textRecords.filter((_, index) => index !== ind);
-    
-      setTextRecords(filterRow);
-    
-  };
 
-  
+    setTextRecords(filterRow);
+  };
 
   return (
     <React.Fragment>
@@ -305,9 +307,9 @@ function StakeHolder({
                 // name="panPekrnNo"
                 name={fieldName[2]}
                 // label="PAN/PEKRN no."
-                label={!IsPan ? 'PAN no.' : 'PEKRN no.'}
+                label={IsPan ? 'PAN no.' : 'PEKRN no.'}
                 placeholder="PAN/PEKRN no."
-                reqText={!IsPan ? 'PAN no. required' : 'PEKRN no. required'}
+                reqText={IsPan ? 'PAN no. required' : 'PEKRN no. required'}
                 disabled={false}
                 errorBorder={errors[fieldName[2]]?.message}
                 mandatory="*"
@@ -325,10 +327,10 @@ function StakeHolder({
                 register={register}
                 name="confirmpanPekrnNo"
                 // name={fieldName[3]}
-                label={!IsPan ? 'Re-Enter PAN no.' : 'Re-Enter PEKRN no.'}
+                label={IsPan ? 'Re-Enter PAN no.' : 'Re-Enter PEKRN no.'}
                 placeholder="PAN/PEKRN no."
                 reqText={
-                  !IsPan
+                  IsPan
                     ? 'please Re-Enter PAN no.'
                     : 'please Re-Enter PEKRN no.'
                 }
@@ -800,7 +802,7 @@ function StakeHolder({
             </Col>
           </Row>
           {taxResidency === 'Y' &&
-            textRecords.map((fildsObj, ind) => {
+            textRecords?.map((fildsObj, ind) => {
               return (
                 <NonIndianResidence
                   key={ind}
@@ -827,9 +829,11 @@ function StakeHolder({
               );
             })}
 
-          {taxResidency === 'Y' && <Button size="sm" onClick={addRecordRow}>
-            Add More
-          </Button>}
+          {taxResidency === 'Y' && (
+            <Button size="sm" onClick={addRecordRow}>
+              Add More
+            </Button>
+          )}
         </GridCustom>
       </Section>
       <br></br>

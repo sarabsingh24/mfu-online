@@ -13,16 +13,7 @@ import { deleteSecondHolderAsync } from '../second-holder/SecondSlice';
 import { deleteThirdHolderAsync } from '../third-holder/thirdSlice';
 import { deleteGuardianHolderAsync } from '../guardian-holder/gurdianSlice';
 import { deleteNomineeAsync } from '../nominees/nomineeSlice';
-
-
-import {
-  createPrimaryHolderAsync,
-  updatePrimaryHolderAsync,
-  createPrimaryHolderOBJ,
-  changeTaxResidency,
-} from './primarySlice';
-
-
+import { createPrimaryHolderOBJ, changeTaxResidency } from './primarySlice';
 import { primaryFormFields } from './primaryData';
 // import { createPrimaryHolderOBJ } from './primarySlice';
 
@@ -35,7 +26,7 @@ const recordsObj = {
 };
 
 function PrimaryHolder({ methods }) {
-  const [form, setForm] = useState();
+  const [form, setForm] = useState({});
   const [errorsOld, setErrors] = useState({});
   const [textRecords, setTextRecords] = useState([]);
   const [IsmisMatched, setISMisMatched] = useState(false);
@@ -109,7 +100,7 @@ function PrimaryHolder({ methods }) {
           newObj[`primary-${fstLevel}`] = primeHolderObj[fstLevel];
         }
       }
-
+console.log(newObj);
       setForm(newObj);
     } else {
       setForm(primaryFormFields);
@@ -141,7 +132,7 @@ function PrimaryHolder({ methods }) {
         dispatch(deleteGuardianHolderAsync(guardianHolderObj?.id));
       }
 
-      console.log('remove second, third, guardian');
+      // console.log('remove second, third, guardian');
     } else if (
       canCriteriaObj?.holdingNature === 'SI' &&
       canCriteriaObj?.investorCategory === 'M'
@@ -182,8 +173,6 @@ function PrimaryHolder({ methods }) {
       dispatch(changeTaxResidency('Y'));
     }
   }, [primeHolderObj.fatcaDetail?.taxResidencyFlag]);
-
-  
 
   const formSubmitHandeler = (data) => {
     // Object.keys(data).map((item) => item.split('-')[1]).filter(label => label !== undefined)
@@ -239,12 +228,7 @@ function PrimaryHolder({ methods }) {
         nationalityCountry: obj.nationalityCountry,
         taxRecords: textRecords,
 
-        // taxRecords: {
-        //   taxCountry: obj.taxResidencyFlag === 'Y' ? obj.taxCountry : '',
-        //   taxReferenceNo:
-        //     obj.taxResidencyFlag === 'Y' ? obj.taxReferenceNo : '',
-        //   identityType: obj.taxResidencyFlag === 'Y' ? obj.identityType : '',
-        // },
+        
       },
     };
 
@@ -258,8 +242,6 @@ function PrimaryHolder({ methods }) {
   const backBtnHandeler = () => {
     dispatch(pageCount(stepsCount - 1));
   };
-
- 
 
   return (
     <Container>

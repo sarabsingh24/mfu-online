@@ -79,7 +79,7 @@ export const primarySlice = createSlice({
     },
    
     createPrimaryHolderOBJ: (state, action) => {
-      console.log(action.payload.fatcaDetail.taxRecords);
+      
       state.primeHolderObj = {
         holderType: 'PR',
         residencePhoneNo: '',
@@ -119,12 +119,7 @@ export const primarySlice = createSlice({
           citizenshipCountry: action.payload.fatcaDetail.citizenshipCountry,
           nationalityCountry: action.payload.fatcaDetail.nationalityCountry,
           taxRecords: action.payload.fatcaDetail.taxRecords,
-          // taxRecords: {
-          //   taxCountry: action.payload.fatcaDetail.taxRecords.taxCountry,
-          //   taxReferenceNo:
-          //     action.payload.fatcaDetail.taxRecords.taxReferenceNo,
-          //   identityType: action.payload.fatcaDetail.taxRecords.identityType,
-          // }
+         
         },
       };
     },
